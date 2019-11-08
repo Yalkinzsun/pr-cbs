@@ -40,10 +40,10 @@ public class RecordStorage {
                     "user=12_AGENT_MOB;password=agentmob;");
             connection.connect();
 
-            int[] found = connection.search( "\"T=" + query + "$\"" );
+            int[] found = connection.search("\"T=" + query + "$\"");
 
             if (found.length > 1) {
-                found = Arrays.copyOf(found, 10);
+                found = Arrays.copyOf(found, found.length);
             }
 
             for (int i = 0; i < found.length; i++) {

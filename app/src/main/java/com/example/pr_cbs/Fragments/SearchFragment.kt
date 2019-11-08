@@ -31,7 +31,6 @@ class SearchFragment: Fragment() {
         button2.setOnClickListener {
             val intent = Intent(context, BookSearchResult1::class.java)
             startActivity(intent)
-
         }
     }
 

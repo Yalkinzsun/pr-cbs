@@ -9,5 +9,19 @@ public class BookRecord {
     public String publish;
     public String subjects;
     public String series;
+
+    public BookRecord()
+    {}
+
+    public BookRecord(String title, String ISBN, String description, String author, String year, String publish, String subjects, String series) {
+        this.title = title;
+        this.ISBN = ISBN;
+        this.description = description;
+        this.author = author;
+        this.year = year;
+        this.publish = publish;
+        this.subjects = subjects;
+        this.series = series;
+    }
 }
 

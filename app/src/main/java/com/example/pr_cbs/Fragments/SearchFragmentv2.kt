@@ -39,17 +39,17 @@ class SearchFragmentv2(private val getSearchText: () -> String) : Fragment() {
         }
 
 
-        this.searchBooksAdapter = SearchBooksAdapter(this@SearchFragmentv2.context)
+        searchBooksAdapter = SearchBooksAdapter(this@SearchFragmentv2.context)
         MainBookSearch.layoutManager =
             LinearLayoutManager(this@SearchFragmentv2.context, RecyclerView.VERTICAL, false)
 
-        MainBookSearch.adapter = SearchBooksAdapter(this@SearchFragmentv2.context)
+        MainBookSearch.adapter = searchBooksAdapter
 
         this.loadBooksList()
     }
 
     private fun loadBooksList() {
-        LoadRecordAsyncTask( { this.getSearchText() }, { this.searchBooksAdapter.notifyDataSetChanged() } ).execute()
+        LoadRecordAsyncTask( { this.getSearchText() }, { searchBooksAdapter.notifyDataSetChanged() } ).execute()
     }
 
 

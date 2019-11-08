@@ -51,7 +51,7 @@ class SearchBooksAdapter(private val context: Context?) :
             itemView.book_tittle.text = book.title
             itemView.book_subjects.text = book.subjects
             itemView.book_publisher.text = book.publish
-            itemView.book_series.text = "series"
+            itemView.book_series.text = book.series
             itemView.book_year.text = book.year
 //            itemView.book_cover.setBackgroundResource(book.cover)
 
