@@ -74,11 +74,9 @@ class MainActivity : AppCompatActivity() {
         }
 
         loadFragment(HomeFragment())
-
-
-
-
         navView.setOnNavigationItemSelectedListener(onNavigationItemSelectedListener)
+
+        toolbar.imageViewSearch.setOnClickListener { navView.selectedItemId = R.id.navigation_catalog }
     }
 
 

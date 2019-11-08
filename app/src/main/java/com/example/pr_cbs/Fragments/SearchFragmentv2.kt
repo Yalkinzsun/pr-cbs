@@ -49,12 +49,28 @@ class SearchFragmentv2(private val getSearchText: () -> String) : Fragment() {
     }
 
     private fun loadBooksList() {
-        LoadRecordAsyncTask( { this.getSearchText() }, { searchBooksAdapter.notifyDataSetChanged() } ).execute()
+        LoadRecordAsyncTask(
+            { this.getSearchText() },
+            { searchBooksAdapter.notifyDataSetChanged() }).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
     }
 
 
-    class LoadRecordAsyncTask( private var getSearchText: () -> String, private var notifyDataSetChanged: () -> Unit): AsyncTask<Unit, Unit, Unit>() {
+    class LoadRecordAsyncTask(
+        private var getSearchText: () -> String,
+        private var notifyDataSetChanged: () -> Unit
+    ) : AsyncTask<Unit, Unit, Unit>() {
+
+        override fun onPreExecute() {
+            super.onPreExecute()
+        }
+
+        override fun onCancelled() {
+            super.onCancelled()
+        }
+
         override fun doInBackground(vararg p0: Unit?) {
+            RecordStorage.Instance().clear()
+            notifyDataSetChanged()
             RecordStorage.Instance().fetchRecordsByQuery(this.getSearchText())
         }
 
