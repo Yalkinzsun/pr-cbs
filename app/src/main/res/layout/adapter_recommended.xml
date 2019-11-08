@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+    <androidx.cardview.widget.CardView
+            android:id="@+id/cardViewRecommendedBook"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="15dp"
+            android:layout_marginEnd="10dp"
+            app:cardCornerRadius="3dp"
+            app:cardElevation="0dp">
+
+        <ImageView
+                android:id="@+id/imgV_recommended"
+                android:src="@drawable/for_reccom_1"
+                android:scaleType="centerCrop"
+                android:layout_width="108dp"
+                android:layout_height="171dp"/>
+
+
+    </androidx.cardview.widget.CardView>
+
+    <TextView
+            android:id="@+id/tvTittleRecommended"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            tools:text="Title"
+            android:textSize="13sp"
+            android:ellipsize="end"
+            android:lines="2"
+            android:padding="5dp"/>
+
+</LinearLayout>

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+<FrameLayout
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             tools:context=".Fragments.HomeFragment">
+
+   <LinearLayout
+           android:layout_width="match_parent"
+           android:layout_height="match_parent"
+           android:orientation="vertical">
+
+        <TextView
+                android:id="@+id/tv1_home_fragment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Последние поступления"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:layout_marginTop="5dp"
+                android:layout_marginStart="15dp"
+                android:paddingBottom="10dp"/>
+
+        <com.yarolegovich.discretescrollview.DiscreteScrollView
+                android:id="@+id/infinite_carousel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:dsv_orientation="horizontal">
+
+        </com.yarolegovich.discretescrollview.DiscreteScrollView>
+
+        <TextView
+                android:id="@+id/tv2_home_fragment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Наши рекомендации"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:layout_marginTop="5dp"
+                android:layout_marginStart="15dp"
+                android:paddingBottom="10dp"/>
+
+       <androidx.recyclerview.widget.RecyclerView
+               android:id="@+id/recyclerViewRecommendedBooks"
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:layout_marginStart="15dp"
+               android:layout_marginTop="12dp"
+               android:layout_marginBottom="15dp"/>
+   </LinearLayout>
+</FrameLayout>
+</ScrollView>
