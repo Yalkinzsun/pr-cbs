@@ -14,7 +14,8 @@
         <activity android:name=".ResultMainSearch"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
-        <activity android:name=".FilterSearchActivity" />
+        <activity android:name=".AdvancedSearchActivity"
+                  android:theme="@style/AppTheme.NoActionBar"/>
         <activity
                 android:name=".BookSearchResult2"
                 android:label="@string/title_activity_book_search_result2"
@@ -25,8 +26,9 @@
                 android:theme="@style/AppTheme.NoActionBar" />
         <activity
                 android:name=".BookSearchResult1"
-                android:label="Резельтат поиска"
+                android:label="Резeльтат поиска"
                 android:theme="@style/AppTheme.NoActionBar" />
+
         <activity
                 android:name=".MainActivity"
                 android:label="@string/app_name"

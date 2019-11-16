@@ -9,11 +9,12 @@ public class BookRecord {
     public String publish;
     public String subjects;
     public String series;
+    public Integer link;
 
-    public BookRecord()
+    BookRecord()
     {}
 
-    public BookRecord(String title, String ISBN, String description, String author, String year, String publish, String subjects, String series) {
+    BookRecord(String title, String ISBN, String description, String author, String year, String publish, String subjects, String series) {
         this.title = title;
         this.ISBN = ISBN;
         this.description = description;

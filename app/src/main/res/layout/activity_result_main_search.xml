@@ -26,5 +26,12 @@
 
     </androidx.appcompat.widget.Toolbar>
 
+    <TextView
+            android:id="@+id/card_book_name_text_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="TextView"
+            android:textSize="30sp" />
+
 
 </LinearLayout>

@@ -5,6 +5,9 @@ import androidx.appcompat.app.AppCompatActivity
 
 
 import android.content.Intent
+import com.example.pr_cbs.RecordStorage.BookRecord
+import com.example.pr_cbs.RecordStorage.RecordStorage
+import com.example.pr_cbs.RecordStorage.RecordStorageFake
 import kotlinx.android.synthetic.main.activity_result_main_search.*
 
 
@@ -23,11 +26,9 @@ class ResultMainSearch : AppCompatActivity() {
 
         val intent = intent
 
-        search_res_toolbar.text = intent.getStringExtra("msn")
-
-
-
-
+        val book = RecordStorageFake.Instance().getRecordById(intent.getIntExtra("Id", 0))
+        search_res_toolbar.text = book.ISBN
+        card_book_name_text_view.text = book.title
     }
     override fun onSupportNavigateUp(): Boolean {
         onBackPressed()
