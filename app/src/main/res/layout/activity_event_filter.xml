@@ -1,0 +1,323 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/advanced_search_activity"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+    <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar_event_filter"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:textAlignment="center">
+
+
+    </androidx.appcompat.widget.Toolbar>
+
+    <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginEnd="30dp"
+            android:scrollbars="none">
+
+
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+
+            <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Название мероприятия"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+            <EditText
+                    android:id="@+id/event_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:ems="10"
+                    android:hint="Название"
+                    android:inputType="text"
+                    android:textSize="20sp" />
+
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="15dp"
+                        android:text="Дата события"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="15dp">
+
+                    <TextView
+                            android:id="@+id/event_fromYears"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="От"
+                            android:textSize="18sp"
+                            android:textStyle="bold"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintVertical_bias="0.0" />
+
+                    <TextView
+                            android:id="@+id/event_toYears"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:text="До"
+                            android:textSize="18sp"
+                            android:textStyle="bold"
+
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintHorizontal_bias="0.6"
+                            app:layout_constraintStart_toEndOf="@+id/event_fromYears"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+
+                    <ImageView
+                            android:id="@+id/IV_event_1"
+                            android:layout_width="26dp"
+                            android:layout_height="26dp"
+                            android:src="@drawable/ic_event_date_range"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/event_fromYears" />
+
+
+                    <EditText
+                            android:id="@+id/event_edtFrom"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:hint="01.01.2001"
+                            android:inputType="date"
+                            android:textIsSelectable="true"
+                            app:layout_constraintStart_toEndOf="@id/IV_event_1"
+                            app:layout_constraintTop_toBottomOf="@id/event_fromYears"
+                            app:layout_constraintVertical_bias="0.0" />
+
+                    <ImageView
+                            android:id="@+id/IV_event_2"
+                            android:layout_width="26dp"
+                            android:layout_height="26dp"
+                            android:src="@drawable/ic_event_date_range"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toStartOf="@id/event_toYears"
+                            app:layout_constraintTop_toBottomOf="@id/event_fromYears" />
+
+                    <EditText
+                            android:id="@+id/event_edtTo"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:hint="31.01.2020"
+                            android:inputType="date"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toEndOf="@id/IV_event_2"
+                            app:layout_constraintTop_toBottomOf="@id/event_toYears" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="15dp"
+                        android:text="Библиотеки"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+
+                <CheckBox
+                        android:id="@+id/checkBox_event_centerPushkin"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="15dp"
+                        android:text="Центральная районная библиотека им. А. С. Пушкина"
+                        android:textSize="17sp" />
+
+                <CheckBox
+                        android:id="@+id/checkBox_event_center"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="Центральная районная детская библиотека"
+                        android:textSize="17sp" />
+
+                <CheckBox
+                        android:id="@+id/checkBox_event_kirov"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="Библиотека Кировских островов"
+                        android:textSize="17sp" />
+
+                <CheckBox
+                        android:id="@+id/checkBox_event_lavreneva"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="Библиотека им. Б. А. Лавренева"
+                        android:textSize="17sp" />
+
+                <CheckBox
+                        android:id="@+id/checkBox_event_gaidar"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="Юношеская библиотека им. А. П. Гайдара"
+                        android:textSize="17sp" />
+
+                <CheckBox
+                        android:id="@+id/checkBox_event_2lib"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="2-я детская библиотека"
+                        android:textSize="17sp" />
+
+                <CheckBox
+                        android:id="@+id/checkBox_event_3Lib"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="3-я районная библиотека"
+                        android:textSize="17sp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="15dp"
+                        android:text="Категория"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+
+                <CheckBox
+                        android:id="@+id/checkBox_event_lesson"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="15dp"
+                        android:text="Обучающее занятие"
+                        android:textSize="17sp" />
+
+                <CheckBox
+                        android:id="@+id/checkBox_event_culture_programme"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="Культурно-развлекательная программа"
+                        android:textSize="17sp" />
+
+                <CheckBox
+                        android:id="@+id/checkBox_event_club_meeting"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="Заседание клуба"
+                        android:textSize="17sp" />
+
+                <CheckBox
+                        android:id="@+id/checkBox_event_cinema"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="Кинопоказ"
+                        android:textSize="17sp" />
+
+                <CheckBox
+                        android:id="@+id/checkBox_event_game"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="Игра"
+                        android:textSize="17sp" />
+
+                <CheckBox
+                        android:id="@+id/checkBox_event_meeting"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="Встречи"
+                        android:textSize="17sp" />
+
+                <CheckBox
+                        android:id="@+id/checkBox_event_concert"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="Концерт"
+                        android:textSize="17sp" />
+
+                <CheckBox
+                        android:id="@+id/checkBox_event_excursion"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="Экскурсия"
+                        android:textSize="17sp" />
+
+                <CheckBox
+                        android:id="@+id/checkBox_event_reading"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="Чтения"
+                        android:textSize="17sp" />
+
+                <CheckBox
+                        android:id="@+id/checkBox_event_street"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="Уличное мероприятие"
+                        android:textSize="17sp" />
+
+                <CheckBox
+                        android:id="@+id/checkBox_event_another"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="30dp"
+                        android:text="Другое"
+                        android:textSize="17sp" />
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+
+    </ScrollView>
+
+</LinearLayout>

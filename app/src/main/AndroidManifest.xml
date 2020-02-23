@@ -11,27 +11,44 @@
             android:roundIcon="@mipmap/ic_launcher_round"
             android:supportsRtl="true"
             android:theme="@style/AppTheme">
-        <activity android:name=".ResultMainSearch"
-            android:theme="@style/AppTheme.NoActionBar">
-        </activity>
-        <activity android:name=".AdvancedSearchActivity"
-                  android:theme="@style/AppTheme.NoActionBar"/>
+
         <activity
-                android:name=".BookSearchResult2"
-                android:label="@string/title_activity_book_search_result2"
+            android:name=".LatestBookInfo"
+            android:theme="@style/AppTheme.NoActionBar" />
+
+        <activity
+                android:name=".RecommendedBookInfo"
                 android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+                android:name=".TakenBooksActivity"
+                android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+                android:name=".HowToBecomeAReaderActivity"
+                android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+                android:name=".EventFullInfo"
+                android:theme="@style/AppTheme.NoActionBar"
+                android:windowSoftInputMode="stateHidden" />
+        <activity
+                android:name=".EventFilterActivity"
+                android:theme="@style/AppTheme.NoActionBar"
+                android:windowSoftInputMode="stateHidden" />
+        <activity
+                android:name=".ResultMainSearch"
+                android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+                android:name=".AdvancedSearchActivity"
+                android:theme="@style/AppTheme.NoActionBar"
+                android:windowSoftInputMode="stateHidden" />
         <activity
                 android:name=".AboutActivity"
-                android:label="@string/title_activity_about"
-                android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-                android:name=".BookSearchResult1"
-                android:label="Резeльтат поиска"
                 android:theme="@style/AppTheme.NoActionBar" />
 
         <activity
                 android:name=".MainActivity"
-                android:label="@string/app_name"
+                android:launchMode="singleTop"
+                android:noHistory="false"
+                android:screenOrientation="portrait"
                 android:theme="@style/AppTheme.NoActionBar"
                 android:windowSoftInputMode="stateHidden">
             <intent-filter>
@@ -40,9 +57,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-                android:name=".RecommendedBookResult"
-                android:theme="@style/AppTheme.NoActionBar" />
+
     </application>
 
 </manifest>

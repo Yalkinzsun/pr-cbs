@@ -6,9 +6,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.pr_cbs.R
 import com.example.pr_cbs.RecordStorage.BookRecord
-import com.example.pr_cbs.RecordStorage.RecordStorageFake
+import com.example.pr_cbs.RecordStorage.BookStorage
 import com.example.pr_cbs.ResultMainSearch
 import kotlinx.android.synthetic.main.adapter_main_search_item.view.*
 
@@ -24,13 +25,14 @@ class SearchBooksAdapter(private val context: Context?) :
 
 
     override fun getItemCount(): Int {
-        return RecordStorageFake.Instance().availableRecordsCount
+        return BookStorage.Instance().availableRecordsCount
     }
 
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val book = RecordStorageFake.Instance().getRecordById(position)
+        val book = BookStorage.Instance().getRecordById(position)
         holder.setData(book, position)
+
     }
 
 
@@ -53,11 +55,17 @@ class SearchBooksAdapter(private val context: Context?) :
             itemView.book_publisher.text = book.publish
             itemView.book_series.text = book.series
             itemView.book_year.text = book.year
-            itemView.book_cover.setBackgroundResource(R.drawable.book_cover_1)
 
+            if (book.link == "nullnull") {
+                itemView.book_cover.setBackgroundResource(R.drawable.book_cover_1)
+            } else {
+                if (context != null) {
+
+                   Glide.with(context).load(book.link).into(itemView.book_cover)
+                }
+            }
             this.currentPosition = pos
         }
-
 
 
     }

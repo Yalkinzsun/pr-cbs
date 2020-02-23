@@ -6,21 +6,21 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.pr_cbs.Models.LatestModel
 
 
-import com.example.pr_cbs.RecommendedBookResult
 import kotlinx.android.synthetic.main.carousel_latest_item.view.*
 
 
 import android.content.Context
+import com.bumptech.glide.Glide
+import com.example.pr_cbs.LatestBookInfo
 import com.example.pr_cbs.R
+import com.example.pr_cbs.RecordStorage.BookRecord
+import com.example.pr_cbs.RecordStorage.LatestBookStorage
 
 
-class CarouselLatestAdapter(
-    private val context: Context?,
-    private val mutableList: ArrayList<LatestModel>
-) : RecyclerView.Adapter<CarouselLatestAdapter.MyViewHolder>() {
+
+class CarouselLatestAdapter(private val context: Context?) : RecyclerView.Adapter<CarouselLatestAdapter.MyViewHolder>() {
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
@@ -29,31 +29,47 @@ class CarouselLatestAdapter(
         return MyViewHolder(view)
     }
 
+
+
     override fun getItemCount(): Int {
-        return mutableList.size
+        return LatestBookStorage.Instance().availableRecordsCount
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        holder.bindView(mutableList[position])
+     //   holder.bindView(mutableList[position])
+        val latestBook = LatestBookStorage.Instance().getRecordById(position)
+        holder.setData(latestBook, position)
     }
 
 
     inner class MyViewHolder(itemView: View?) : RecyclerView.ViewHolder(itemView!!) {
-
+        private var currentPosition: Int = 0
 
         init {
             itemView!!.setOnClickListener {
 
-                val intent = Intent(context, RecommendedBookResult::class.java)
+                val intent = Intent(context, LatestBookInfo::class.java)
+                intent.putExtra("Id", currentPosition)
                 context!!.startActivity(intent)
 
             }
         }
 
-        fun bindView(myItem: LatestModel) {
-            itemView.my_title.text = myItem.title
-            //itemView.imgV_recommended.setBackgroundResource(book.img_file)
-            // Glide.with(itemView.context).load(myItem.thumbnail).into(itemView.my_iv)
+        fun setData(book: BookRecord, pos: Int) {
+
+            itemView.latest_book_title.text = book.title
+
+            if (book.link == "nullnull") {
+                itemView.latest_book_cover.setBackgroundResource(R.drawable.book_cover_1)
+            } else {
+                if (context != null) {
+
+                  Glide.with(context).load(book.link).into(itemView.latest_book_cover)
+                }
+            }
+            this.currentPosition = pos
+
+
         }
     }
 }

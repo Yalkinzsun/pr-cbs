@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/advanced_search_activity"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
@@ -8,129 +9,303 @@
     <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar_advanced_search"
             android:layout_width="match_parent"
-            android:layout_height="40dp"
+            android:layout_height="wrap_content"
             android:background="@android:color/transparent"
             android:textAlignment="center">
 
         <TextView
                 android:id="@+id/search_res_toolbar"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:fontFamily="arial"
-                android:gravity="start"/>
+                android:layout_height="wrap_content" />
 
     </androidx.appcompat.widget.Toolbar>
 
     <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginStart="35dp"
+            android:layout_marginEnd="35dp">
 
-        <androidx.cardview.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:cardCornerRadius="5dp"
-                app:cardElevation="0dp"
-                android:layout_margin="15dp">
 
         <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="15dp"
                 android:orientation="vertical">
 
             <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Название"
+                    android:layout_marginBottom="15dp"
+                    android:text="Расширенный поиск"
                     android:textSize="20sp"
-                    android:textColor="@color/colorPrimary">
+                    android:textStyle="bold" />
 
-            </TextView>
-
-            <EditText
+            <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:text="Название"
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="20sp" />
+
+            <EditText
                     android:id="@+id/advanced_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:ems="10"
+                    android:hint="За Путина!"
                     android:inputType="text"
-                    android:textSize="18sp"
-                    android:hint="За Путина!"/>
+                    android:textSize="18sp" />
 
 
             <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Автор"
-                    android:textSize="20sp"
-                    android:textColor="@color/colorPrimary">
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="20sp">
 
             </TextView>
 
             <EditText
+                    android:id="@+id/advanced_author"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/advanced_author"
                     android:ems="10"
+                    android:hint="Бродский"
                     android:inputType="text"
-                    android:textSize="18sp"
-                    android:hint="Бродский" />
+                    android:textSize="18sp" />
 
             <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Тематика"
-                    android:textSize="20sp"
-                    android:textColor="@color/colorPrimary">
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="20sp">
 
             </TextView>
 
             <EditText
+                    android:id="@+id/advanced_subjects"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/advanced_"
                     android:ems="10"
+                    android:hint="Военная проза"
                     android:inputType="text"
-                    android:textSize="18sp"
-                    android:hint="Военная проза" />
+                    android:textSize="18sp" />
 
             <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Серия"
-                    android:textSize="20sp"
-                    android:textColor="@color/colorPrimary">
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="20sp">
 
             </TextView>
 
             <EditText
+                    android:id="@+id/advanced_series"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/advanced_series"
                     android:ems="10"
+                    android:hint="Серия ФФФ"
                     android:inputType="text"
-                    android:textSize="18sp"
-                    android:hint="Серия ФФФ"/>
+                    android:textSize="18sp" />
 
             <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Персоналия"
-                    android:textSize="20sp"
-                    android:textColor="@color/colorPrimary">
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="20sp">
 
             </TextView>
 
             <EditText
+                    android:id="@+id/advanced_person"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/advanced_person"
                     android:ems="10"
+                    android:hint="Персоналия"
                     android:inputType="text"
-                    android:textSize="18sp"
-                    android:hint="Персоналия"/>
+                    android:textSize="18sp" />
+
+
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="15dp"
+                        android:layout_marginBottom="15dp"
+                        android:text="Наличие"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+
+                <CheckBox
+                        android:id="@+id/checkBox_advanced_available"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Только в наличии"
+                        android:textSize="18sp"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="15dp"
+                        android:layout_marginBottom="15dp"
+                        android:text="Библиотеки"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+
+                <CheckBox
+                        android:id="@+id/checkBox_advanced_centerPushkin"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginBottom="8dp"
+                        android:text="Центральная районная библиотека им. А. С. Пушкина"
+                        android:textSize="16sp" />
+
+                <CheckBox
+                        android:id="@+id/checkBox_advanced_center"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginBottom="8dp"
+                        android:text="Центральная районная детская библиотека"
+                        android:textSize="16sp" />
+
+                <CheckBox
+                        android:id="@+id/checkBox_advanced_kirov"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginBottom="8dp"
+                        android:text="Библиотека Кировских островов"
+                        android:textSize="16sp" />
+
+                <CheckBox
+                        android:id="@+id/checkBox_advanced_lavreneva"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginBottom="8dp"
+                        android:text="Библиотека им. Б. А. Лавренева"
+                        android:textSize="16sp" />
+
+                <CheckBox
+                        android:id="@+id/checkBox_advanced_gaidar"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginBottom="8dp"
+                        android:text="Юношеская библиотека им. А. П. Гайдара"
+                        android:textSize="16sp" />
+
+                <CheckBox
+                        android:id="@+id/checkBox_advanced_2lib"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginBottom="8dp"
+                        android:text="2-я детская библиотека"
+                        android:textSize="16sp" />
+
+                <CheckBox
+                        android:id="@+id/checkBox_advanced_3Lib"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:text="3-я районная библиотека"
+                        android:textSize="16sp" />
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="25dp"
+                    android:orientation="vertical">
+
+                <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="15dp"
+                        android:layout_marginBottom="15dp"
+                        android:text="Год выпуска"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="8dp">
+
+                    <TextView
+                            android:id="@+id/tv_advanced_fromYears"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="От"
+                            android:textSize="18sp"
+                            android:textStyle="bold"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintVertical_bias="0.0" />
+
+                    <TextView
+                            android:id="@+id/tv_advanced_toYears"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:text="До"
+                            android:textSize="18sp"
+                            android:textStyle="bold"
+
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintHorizontal_bias="0.5"
+                            app:layout_constraintStart_toEndOf="@+id/tv_advanced_fromYears"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                    <EditText
+                            android:id="@+id/edtFrom"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:hint="1881"
+                            android:inputType="date"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/tv_advanced_fromYears"
+                            app:layout_constraintVertical_bias="0.0" />
+
+                    <EditText
+                            android:id="@+id/edtTo"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:hint="2019"
+                            android:inputType="date"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintHorizontal_bias="0.5"
+                            app:layout_constraintStart_toEndOf="@id/edtFrom"
+                            app:layout_constraintTop_toBottomOf="@id/tv_advanced_toYears" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </LinearLayout>
 
         </LinearLayout>
-        </androidx.cardview.widget.CardView>
+
+
     </ScrollView>
 
 </LinearLayout>

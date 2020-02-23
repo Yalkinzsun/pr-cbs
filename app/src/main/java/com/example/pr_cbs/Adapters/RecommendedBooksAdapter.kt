@@ -7,14 +7,18 @@ import android.view.View
 import android.view.ViewGroup
 
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.pr_cbs.R
-import com.example.pr_cbs.Models.RecommendedBook
-import com.example.pr_cbs.RecommendedBookResult
+import com.example.pr_cbs.RecommendedBookInfo
+import com.example.pr_cbs.RecordStorage.BookRecord
+import com.example.pr_cbs.RecordStorage.RecommendedBookStorage
+import com.example.pr_cbs.ResultMainSearch
 import kotlinx.android.synthetic.main.adapter_recommended.view.*
 
 
+class RecommendedBooksAdapter(private val context: Context?) :
+    RecyclerView.Adapter<RecommendedBooksAdapter.ViewHolder>() {
 
-class RecommendedBooksAdapter(private val context: Context?, private val bookList: ArrayList<RecommendedBook>) : RecyclerView.Adapter<RecommendedBooksAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val v = LayoutInflater.from(context).inflate(R.layout.adapter_recommended, parent, false)
@@ -23,47 +27,43 @@ class RecommendedBooksAdapter(private val context: Context?, private val bookLis
 
 
     override fun getItemCount(): Int {
-        return bookList.size
+        return RecommendedBookStorage.Instance().availableRecordsCount
     }
 
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-
-        val book = bookList[position]
-        holder.setData(book, position)
-
-//        holder.name?.text = bookList[p1].name
-//        p0.count?.text = bookList[p1].count.toString()
+        val latestBook = RecommendedBookStorage.Instance().getRecordById(position)
+        holder.setData(latestBook, position)
     }
 
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-
-        var currentBook: RecommendedBook? = null
-        var currentPosition: Int = 0
+        private var currentPosition: Int = 0
 
 
         init {
             itemView.setOnClickListener {
 
-                val intent = Intent(context, RecommendedBookResult::class.java)
+                val intent = Intent(context, RecommendedBookInfo::class.java)
+                intent.putExtra("Id", currentPosition)
                 context!!.startActivity(intent)
             }
         }
 
-        fun setData(book: RecommendedBook?, pos:Int){
 
-            itemView.tvTittleRecommended.text = book!!.name
-            itemView.imgV_recommended.setBackgroundResource(book.img_file)
+        fun setData(book: BookRecord, pos: Int) {
 
-//            itemView.cl_for_book_cover.background = drawable
+            itemView.tv_recommended_title.text = book.title
 
-            this.currentBook = book
+            if (book.link == "nullnull") {
+                itemView.iv_recommended_cover.setBackgroundResource(R.drawable.book_cover_1)
+            } else {
+                if (context != null) {
+
+                    Glide.with(context).load(book.link).into(itemView.iv_recommended_cover)
+                }
+            }
             this.currentPosition = pos
         }
-
-//        val name = itemView.findViewById<TextView>(R.id.tvName)
-//        val count = itemView.findViewById<TextView>(R.id.tvCount)
-
     }
 }

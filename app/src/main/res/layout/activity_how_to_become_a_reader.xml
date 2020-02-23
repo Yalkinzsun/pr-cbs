@@ -1,0 +1,646 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:context="com.example.pr_cbs.HowToBecomeAReaderActivity">
+
+    <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar_how_to_become_a_reader"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/main_color"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:textAlignment="center"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:orientation="vertical">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginEnd="15dp">
+
+                <TextView
+                        android:id="@+id/tv_reader_activity_text_1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:text="Нужно ли записываться в библиотеку, чтобы воспользоваться ее услугами?"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="18sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/iv_become_a_reader_1"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                        android:id="@+id/iv_become_a_reader_1"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_margin="10dp"
+                        android:src="@drawable/ic_arrow_down_black_24dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+
+                        app:layout_constraintTop_toTopOf="parent" />
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <View
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginBottom="15dp"
+                    android:background="@color/colorPrimary" />
+
+
+            <RelativeLayout
+                    android:id="@+id/rl_become_a_reader_1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone">
+
+                <TextView
+                        android:id="@+id/textView_reader_activity_1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="15dp"
+                        android:layout_marginEnd="15dp"
+                        android:text="Обязательная регистрация (запись) в Библиотеку необходима в том случае если Вы хотите брать библиотечные книги и журналы домой, а также если Вы хотите пользоваться платными услугами, посидеть в интернете за компьютером или воспользоваться нашим Wi-fi. Если же Вы хотите просто побыть в интерьерах библиотеки или посетить любое мероприятие в стенах библиотеки, то становиться постоянным читателем нет необходимости."
+                        android:textSize="16sp"
+                        android:textStyle="normal" />
+
+                <View
+                        android:layout_width="match_parent"
+                        android:layout_height="2dp"
+                        android:layout_below="@+id/textView_reader_activity_1"
+                        android:layout_marginTop="15dp"
+                        android:layout_marginBottom="15dp"
+                        android:background="@color/colorPrimary" />
+
+
+            </RelativeLayout>
+
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginEnd="15dp">
+
+                <TextView
+                        android:id="@+id/tv_reader_activity_text_2"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:text="Для кого библиотеки Петроградского района предоставляют свои услуги?"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="18sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/iv_become_a_reader_2"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                        android:id="@+id/iv_become_a_reader_2"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_margin="10dp"
+                        android:src="@drawable/ic_arrow_down_black_24dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+
+                        app:layout_constraintTop_toTopOf="parent" />
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <View
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginBottom="15dp"
+                    android:background="@color/colorPrimary" />
+
+
+            <RelativeLayout
+                    android:id="@+id/rl_become_a_reader_2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone">
+
+                <TextView
+                        android:id="@+id/textView_reader_activity_2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="15dp"
+                        android:layout_marginEnd="15dp"
+                        android:text="Библиотечные услуги в Петроградском районе предоставляются любому человеку, вне зависимости от пола, возраста, национальности и гражданства."
+                        android:textSize="16sp"
+                        android:textStyle="normal" />
+
+                <View
+                        android:layout_width="match_parent"
+                        android:layout_height="2dp"
+                        android:layout_below="@+id/textView_reader_activity_2"
+                        android:layout_marginTop="15dp"
+                        android:layout_marginBottom="15dp"
+                        android:background="@color/colorPrimary" />
+
+            </RelativeLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginEnd="15dp">
+
+                <TextView
+                        android:id="@+id/tv_reader_activity_text_3"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:text="Как стать читателем и записаться в библиотеку? "
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="18sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/iv_become_a_reader_3"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                        android:id="@+id/iv_become_a_reader_3"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_margin="10dp"
+                        android:src="@drawable/ic_arrow_down_black_24dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+
+                        app:layout_constraintTop_toTopOf="parent" />
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <View
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginBottom="15dp"
+                    android:background="@color/colorPrimary" />
+
+
+            <RelativeLayout
+                    android:id="@+id/rl_become_a_reader_3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone">
+
+                <TextView
+                        android:id="@+id/textView_reader_activity_3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="15dp"
+                        android:layout_marginEnd="15dp"
+                        android:text="Для записи в библиотеку Вам необходимо иметь при себе паспорт гражданина Российской федерации, паспорт иностранного гражданина (удостоверение беженца или свидетельство о предоставлении временного убежища на территории РФ) или разрешение на временное проживание, вид на жительство. Если у Вас нет регистрации в Санкт-Петербурге и Ленинградской области или срок регистрации истекает менее чем через 3 месяца, книги на дом не выдаются. Библиотечные книги можно читать только в помещениях библиотеки.Дети до 14 лет записываются в библиотеку одним из родителей, или совершеннолетним представителем, сопровождающим ребенка, на основании документов, удостоверяющих личность (родителя или сопровождающего).При записи в библиотеку с читателем заключается «Договор обслуживания» и выдается электронный читательский билет."
+                        android:textSize="16sp"
+                        android:textStyle="normal" />
+
+                <View
+                        android:layout_width="match_parent"
+                        android:layout_height="2dp"
+                        android:layout_below="@+id/textView_reader_activity_3"
+                        android:layout_marginTop="15dp"
+                        android:layout_marginBottom="15dp"
+                        android:background="@color/colorPrimary" />
+
+            </RelativeLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginEnd="15dp">
+
+                <TextView
+                        android:id="@+id/tv_reader_activity_text_4"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:text="Для чего необходим электронный читательский билет (ЭЧБ)?"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="18sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/iv_become_a_reader_4"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                        android:id="@+id/iv_become_a_reader_4"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_margin="10dp"
+                        android:src="@drawable/ic_arrow_down_black_24dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+
+                        app:layout_constraintTop_toTopOf="parent" />
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <View
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginBottom="15dp"
+                    android:background="@color/colorPrimary" />
+
+
+            <RelativeLayout
+                    android:id="@+id/rl_become_a_reader_4"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone">
+
+                <TextView
+                        android:id="@+id/textView_reader_activity_4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="15dp"
+                        android:layout_marginEnd="15dp"
+                        android:text="ЭЧБ похож на банковскую пластиковую карту. В нем записана вся Ваша читательская биография с момента получения ЭЧБ. С помощью ЭЧБ Вы сможете всегда видеть какие книги Вы брали и в каких библиотеках, что у Вас еще на руках, когда Вам необходимо вернуть книги. Без ЭЧБ будет крайне сложно получить книги в библиотеке.
+Электронный читательский билет является персональным и его не рекомендуется передавать другим читателям. ЭЧБ дает право его владельцу пользоваться услугами всех публичных библиотек Санкт-Петербурга в полном объеме. При этом не нужно проходить процедуру записи каждый раз вновь, а достаточно единожды заполнить Договор и стать обладателем ЭЧБ. ЭЧБ необходим в каждом случае когда Вы хотите взять книги домой или сдать их обратно."
+                        android:textSize="16sp"
+                        android:textStyle="normal" />
+
+                <View
+                        android:layout_width="match_parent"
+                        android:layout_height="2dp"
+                        android:layout_below="@+id/textView_reader_activity_4"
+                        android:layout_marginTop="15dp"
+                        android:layout_marginBottom="15dp"
+                        android:background="@color/colorPrimary" />
+
+            </RelativeLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginEnd="15dp">
+
+                <TextView
+                        android:id="@+id/tv_reader_activity_text_5"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:text="На какой срок выдаются книги?"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="18sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/iv_become_a_reader_5"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                        android:id="@+id/iv_become_a_reader_5"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_margin="10dp"
+                        android:src="@drawable/ic_arrow_down_black_24dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+
+                        app:layout_constraintTop_toTopOf="parent" />
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <View
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginBottom="15dp"
+                    android:background="@color/colorPrimary" />
+
+
+            <RelativeLayout
+                    android:id="@+id/rl_become_a_reader_5"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone">
+
+                <TextView
+                        android:id="@+id/textView_reader_activity_5"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="15dp"
+                        android:layout_marginEnd="15dp"
+                        android:text="Все издания (книги, журналы, электронные издания) выдаются читателям на 30 дней. В случае необходимости Вы всегда можете продлить срок пользования на 14 дней по телефону, через страницу ВКонтакте или на нашем сайте.
+Если Вы несвоевременно вернете ранее взятые издания, Вам придется заплатить компенсацию за несвоевременный возврат документов в 1 руб. в день за каждый экземпляр."
+                        android:textSize="16sp"
+                        android:textStyle="normal" />
+
+                <View
+                        android:layout_width="match_parent"
+                        android:layout_height="2dp"
+                        android:layout_below="@+id/textView_reader_activity_5"
+                        android:layout_marginTop="15dp"
+                        android:layout_marginBottom="15dp"
+                        android:background="@color/colorPrimary" />
+
+            </RelativeLayout>
+
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginEnd="15dp">
+
+                <TextView
+                        android:id="@+id/tv_reader_activity_text_6"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:text="Как продлить срок пользования изданиями?"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="18sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/iv_become_a_reader_6"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                        android:id="@+id/iv_become_a_reader_6"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_margin="10dp"
+                        android:src="@drawable/ic_arrow_down_black_24dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+
+                        app:layout_constraintTop_toTopOf="parent" />
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <View
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginBottom="15dp"
+                    android:background="@color/colorPrimary" />
+
+
+            <RelativeLayout
+                    android:id="@+id/rl_become_a_reader_6"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone">
+
+                <TextView
+                        android:id="@+id/textView_reader_activity_6"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="15dp"
+                        android:layout_marginEnd="15dp"
+                        android:text="В случае необходимости Вы всегда можете продлить срок пользования на 14 дней по телефону, по электронной почте, через страницу ВКонтакте или на нашем сайте."
+                        android:textSize="16sp"
+                        android:textStyle="normal" />
+
+                <!--              <TextView-->
+                <!--                      android:layout_width="match_parent"-->
+                <!--                      android:layout_height="wrap_content"-->
+                <!--                      android:text="Продлить срок"/>-->
+
+
+                <View
+                        android:layout_width="match_parent"
+                        android:layout_height="2dp"
+                        android:layout_below="@+id/textView_reader_activity_6"
+                        android:layout_marginTop="15dp"
+                        android:layout_marginBottom="15dp"
+                        android:background="@color/colorPrimary" />
+
+            </RelativeLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginEnd="15dp">
+
+                <TextView
+                        android:id="@+id/tv_reader_activity_text_7"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:text="Что делать в случае утраты или порчи библиотечной книги?"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="18sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/iv_become_a_reader_7"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                        android:id="@+id/iv_become_a_reader_7"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_margin="10dp"
+                        android:src="@drawable/ic_arrow_down_black_24dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+
+                        app:layout_constraintTop_toTopOf="parent" />
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <View
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginBottom="15dp"
+                    android:background="@color/colorPrimary" />
+
+
+            <RelativeLayout
+                    android:id="@+id/rl_become_a_reader_7"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone">
+
+                <TextView
+                        android:id="@+id/textView_reader_activity_7"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="15dp"
+                        android:layout_marginEnd="15dp"
+                        android:text="В случае утери или порчи документов, читатель обязан заменить его идентичным, признанным библиотекой равноценным, или изданным за последние 3 года, стоимостью не меньше стоимости утраченного. Денежная компенсация за ущерб, причинённый библиотеке, в размере стоимости утерянных документов не взимается."
+                        android:textSize="16sp"
+                        android:textStyle="normal" />
+
+
+                <View
+                        android:layout_width="match_parent"
+                        android:layout_height="2dp"
+                        android:layout_below="@+id/textView_reader_activity_7"
+                        android:layout_marginTop="15dp"
+                        android:layout_marginBottom="15dp"
+                        android:background="@color/colorPrimary" />
+
+            </RelativeLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginEnd="15dp">
+
+                <TextView
+                        android:id="@+id/tv_reader_activity_text_8"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:text="Как я могу забронировать книгу?"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="18sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/iv_become_a_reader_8"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                        android:id="@+id/iv_become_a_reader_8"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_margin="10dp"
+                        android:src="@drawable/ic_arrow_down_black_24dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+
+                        app:layout_constraintTop_toTopOf="parent" />
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <View
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginBottom="15dp"
+                    android:background="@color/colorPrimary" />
+
+
+            <RelativeLayout
+                    android:id="@+id/rl_become_a_reader_8"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone">
+
+                <TextView
+                        android:id="@+id/textView_reader_activity_8"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="15dp"
+                        android:layout_marginEnd="15dp"
+                        android:text="Если Вы знаете все данные о нужной книге (автор и заглавие) то Вы можете позвонить в библиотеку или написать по электронной почте с просьбой уточнить наличие этой книги. Если эта книга в наличии – забронировать ее и сказать когда Вы за ней придете.
+Вы можете забронировать издание на нашем сайте в разделе «Забронировать книгу», после этого в течение рабочего дня Вам на почту придет ответ.
+Если Вы не наш читатель и у Вас нет ЭЧБ, то Вы сможете записаться в библиотеку когда придёте за заказанной книгой."
+                        android:textSize="16sp"
+                        android:textStyle="normal" />
+
+                <View
+                        android:layout_width="match_parent"
+                        android:layout_height="2dp"
+                        android:layout_below="@+id/textView_reader_activity_8"
+                        android:layout_marginTop="15dp"
+                        android:layout_marginBottom="15dp"
+                        android:background="@color/colorPrimary" />
+            </RelativeLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginEnd="15dp">
+
+                <TextView
+                        android:id="@+id/tv_reader_activity_text_9"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:text="Я потерял(а) электронный читательский билет, что мне делать?"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="18sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/iv_become_a_reader_9"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                        android:id="@+id/iv_become_a_reader_9"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_margin="10dp"
+                        android:src="@drawable/ic_arrow_down_black_24dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+
+                        app:layout_constraintTop_toTopOf="parent" />
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <View
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginBottom="15dp"
+                    android:background="@color/colorPrimary" />
+
+
+            <RelativeLayout
+                    android:id="@+id/rl_become_a_reader_9"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone">
+
+                <TextView
+                        android:id="@+id/textView_reader_activity_9"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="15dp"
+                        android:layout_marginEnd="15dp"
+                        android:text="Как можно скорее по возможности нужно сообщить об этом в любую библиотеку. При следующем визите в библиотеку Вы получите новый ЭЧБ."
+                        android:textSize="16sp"
+                        android:textStyle="normal" />
+
+                <View
+                        android:layout_width="match_parent"
+                        android:layout_height="2dp"
+                        android:layout_below="@+id/textView_reader_activity_9"
+                        android:layout_marginTop="15dp"
+                        android:layout_marginBottom="15dp"
+                        android:background="@color/colorPrimary" />
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
+
+    </ScrollView>
+
+
+</LinearLayout>

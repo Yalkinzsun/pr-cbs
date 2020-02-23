@@ -17,8 +17,7 @@
             app:cardElevation="0dp">
 
         <ImageView
-                android:id="@+id/imgV_recommended"
-                android:src="@drawable/for_reccom_1"
+                android:id="@+id/iv_recommended_cover"
                 android:scaleType="centerCrop"
                 android:layout_width="108dp"
                 android:layout_height="171dp"/>
@@ -27,7 +26,7 @@
     </androidx.cardview.widget.CardView>
 
     <TextView
-            android:id="@+id/tvTittleRecommended"
+            android:id="@+id/tv_recommended_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAlignment="center"
