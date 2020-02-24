@@ -85,6 +85,8 @@ class SearchFragmentv2() : Fragment() {
 
         searchBooksAdapter = SearchBooksAdapter(this@SearchFragmentv2.context)
 
+        // TODO
+        searchBooksAdapter.setHasStableIds(true)
 
 
         MainBookSearch.layoutManager =

@@ -30,7 +30,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 public class EventStorage {
-    //  private String link;
+
     private ArrayList<EventRecord> localEventRecords;
     private ArrayList<Integer> localMFNs;
     private int currentPage = 0;
@@ -48,9 +48,6 @@ public class EventStorage {
         this.localMFNs = localMFNs;
     }
 
-    public EventRecord test (int position) {
-        return localEventRecords.get(position);
-    }
 
     public static EventStorage Instance() {
         if (storage == null)
@@ -187,7 +184,7 @@ public class EventStorage {
                         localMFNs.add(mfn);
                 }
 
-                Log.v("Tag", Integer.toString(localMFNs.size()) );
+                Log.v("Tag", Integer.toString(localMFNs.size()));
 
             }
 
@@ -201,7 +198,7 @@ public class EventStorage {
                 EventRecord eventRecord = new EventRecord();
                 MarcRecord record = connect.readRecord(mfn);
 
-                String link = record.fm(107, 'P') + record.fm(107, 'F') ;
+                String link = record.fm(107, 'P') + record.fm(107, 'F');
                 eventRecord.link = link;
                 contentValues.put(DBHelper.KEY_LINK, link);
 
@@ -405,7 +402,7 @@ public class EventStorage {
                 }
             }
 
-            eventRecord.link = record.fm(107, 'p') + record.fm(107, 'f') ;
+            eventRecord.link = record.fm(107, 'p') + record.fm(107, 'f');
         }
         return eventRecord;
     }

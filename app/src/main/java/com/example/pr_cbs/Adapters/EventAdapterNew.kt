@@ -98,7 +98,7 @@ class EventAdapterNew(private val context: Context?) :
             this.currentPosition = pos
         }
 
-        fun shortenedDate(oldDate: String): String {
+        private fun shortenedDate(oldDate: String): String {
             var mountDecryption = "января"
             val parts = oldDate.split(".")
 
