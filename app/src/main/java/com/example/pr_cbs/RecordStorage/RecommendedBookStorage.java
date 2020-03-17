@@ -175,7 +175,7 @@ public class RecommendedBookStorage {
         bookRecord.description = description;
         contentValues.put(DBHelper.KEY_DESCRIPTION, description);
 
-        String publish = record.fm(210, 'A') + record.fm(210, 'C');
+        String publish = record.fm(210, 'C') + " (" + record.fm(210, 'A') + ")";
         bookRecord.publish = publish;
         contentValues.put(DBHelper.KEY_PUBLISHER, publish);
 

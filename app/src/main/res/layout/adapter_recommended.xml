@@ -19,8 +19,8 @@
         <ImageView
                 android:id="@+id/iv_recommended_cover"
                 android:scaleType="centerCrop"
-                android:layout_width="108dp"
-                android:layout_height="171dp"/>
+                android:layout_width="120dp"
+                android:layout_height="190dp"/>
 
 
     </androidx.cardview.widget.CardView>
@@ -31,7 +31,7 @@
             android:layout_height="wrap_content"
             android:textAlignment="center"
             tools:text="Title"
-            android:textSize="13sp"
+            android:textSize="14sp"
             android:ellipsize="end"
             android:lines="2"
             android:padding="5dp"/>

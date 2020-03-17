@@ -56,7 +56,12 @@ class RecommendedBooksAdapter(private val context: Context?) :
             itemView.tv_recommended_title.text = book.title
 
             if (book.link == "nullnull") {
-                itemView.iv_recommended_cover.setBackgroundResource(R.drawable.book_cover_1)
+
+                when ((0..2).random()){
+                    0 ->  itemView.iv_recommended_cover.setBackgroundResource(R.drawable.book_cover_1)
+                    1 ->  itemView.iv_recommended_cover.setBackgroundResource(R.drawable.book_cover_2)
+                    2 ->  itemView.iv_recommended_cover.setBackgroundResource(R.drawable.book_cover_3)
+                }
             } else {
                 if (context != null) {
 

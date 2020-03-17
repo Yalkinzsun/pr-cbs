@@ -2,17 +2,24 @@ package com.example.pr_cbs
 
 import android.content.Context
 import android.content.Intent
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import android.os.AsyncTask
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.example.pr_cbs.AsynTasks.LoadEventShortListAsyncTask
-import com.example.pr_cbs.AsynTasks.LoadLatestBookAsyncTask
-import com.example.pr_cbs.AsynTasks.LoadRecommendedBookAsyncTask
+import android.view.View.*
+import android.widget.Toast
+import com.example.pr_cbs.AsyncTasks.LoadEventShortListAsyncTask
+import com.example.pr_cbs.AsyncTasks.LoadLatestBookAsyncTask
+import com.example.pr_cbs.AsyncTasks.LoadRecommendedBookAsyncTask
 import com.example.pr_cbs.Database.DBHelper
 import kotlinx.android.synthetic.main.activity_splash_screen.*
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
+import kotlin.collections.ArrayList
+
 
 class SplashScreen : AppCompatActivity(), LoadLatestBookAsyncTask.LatestATFinished,
     LoadRecommendedBookAsyncTask.RecommendedATFinished,
@@ -21,34 +28,101 @@ class SplashScreen : AppCompatActivity(), LoadLatestBookAsyncTask.LatestATFinish
     private val APP_PREFERENCES = "pref_settings"
     private val APP_PREFERENCES_LATEST_BOOK_UPDATE_DATE = "latest_book_update_date"
     private val APP_PREFERENCES_RECOMMENDED_BOOK_UPDATE_DATE = "recommended_book_update_date"
-    private val APP_PREFERENCES_EVENT_UPDATE_DATE = "event_update_date"
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash_screen)
 
+        val versionName = "версия ${BuildConfig.VERSION_NAME}"
+        splash_screen_program_version.text = versionName
 
-        button_pop.setOnClickListener {
-            val intent = Intent(this, MainActivity::class.java)
-            startActivity(intent)
+
+
+
+        if (isNetworkConnected(this)) {
+            Toast.makeText(this@SplashScreen, "Интернет подключен", Toast.LENGTH_SHORT).show()
+            startDownloading()
+        } else {
+
+            val dataCheck = isAnyData()
+            if (dataCheck[0] != 0 && dataCheck[1] != 0 &&  dataCheck[2] != 0) {
+                startDownloading()
+                Toast.makeText(this@SplashScreen, "Вы не подключены к Интернету", Toast.LENGTH_LONG).show()
+                val intent = Intent(this, MainActivity::class.java)
+                startActivity(intent)
+
+            } else {
+
+                splash_screen_reload_button.visibility = VISIBLE
+                splash_screen_no_internet_text.visibility = VISIBLE
+                splash_screen_progressBar.visibility = INVISIBLE
+                splash_screen_downloading.visibility = INVISIBLE
+            }
         }
 
-        val currentDate = SimpleDateFormat("dd.MM.yyyy HH:mm").format(Calendar.getInstance().time)
-        val sPref = this.getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE)
 
+        splash_screen_reload_button.setOnClickListener {
+            if (isNetworkConnected(this)) {
+                splash_screen_progressBar.visibility = VISIBLE
+                splash_screen_downloading.visibility = VISIBLE
+                startDownloading()
+                splash_screen_reload_button.visibility = GONE
+                splash_screen_no_internet_text.visibility = GONE
+
+            } else Toast.makeText(
+                this@SplashScreen,
+                "Подключитесь к Интернету",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
+    }
+
+
+    private fun isAnyData(): IntArray {
+        val list = IntArray(3) { i -> 0 }
+
+        val dbHelper = DBHelper(this)
+        val database = dbHelper.writableDatabase
+
+
+        val cursorFirst =
+            database.query(DBHelper.TABLE_LATEST, null, null, null, null, null, null)
+
+        if (cursorFirst != null && cursorFirst.count > 0)     list[0] = 1
+
+        cursorFirst.close()
+
+        val cursorSecond = database.query(DBHelper.TABLE_EVENTS, null, null, null, null, null, null)
+
+        if (cursorSecond != null && cursorSecond.count > 0)     list[1] = 1
+
+        cursorSecond.close()
+
+        val cursorThird = database.query(DBHelper.TABLE_RECOMMENDED, null, null, null, null, null, null)
+
+        if (cursorThird != null && cursorThird.count > 0)     list[2] = 1
+
+        cursorThird.close()
+
+        return list
+    }
+
+
+    private fun startDownloading() {
+        val sPref = this.getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE)
         if (sPref.contains(APP_PREFERENCES_LATEST_BOOK_UPDATE_DATE)) {
 
             val latestBookUpdateDate =
                 sPref.getString(APP_PREFERENCES_LATEST_BOOK_UPDATE_DATE, "").toString()
 
-            if (isTheDateRelevant(currentDate, latestBookUpdateDate)) {
+            if (isTheDateRelevant(latestBookUpdateDate)) {
 
                 val dbHelper = DBHelper(this)
                 val database = dbHelper.writableDatabase
 
                 val cursor =
-                    database.query(DBHelper.TABLE_EVENTS, null, null, null, null, null, null)
+                    database.query(DBHelper.TABLE_LATEST, null, null, null, null, null, null)
 
                 if (cursor != null && cursor.count > 0) {
                     cursor.close()
@@ -60,24 +134,23 @@ class SplashScreen : AppCompatActivity(), LoadLatestBookAsyncTask.LatestATFinish
 
         } else this.loadLatestBook(false)
 
-
     }
 
+
     override fun fromFirstATtoSecond() {
-        val currentDate = SimpleDateFormat("dd.MM.yyyy HH:mm").format(Calendar.getInstance().time)
         val sPref = this.getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE)
         if (sPref.contains(APP_PREFERENCES_RECOMMENDED_BOOK_UPDATE_DATE)) {
 
             val recommendedBookUpdateDate =
                 sPref.getString(APP_PREFERENCES_RECOMMENDED_BOOK_UPDATE_DATE, "").toString()
 
-            if (isTheDateRelevant(currentDate, recommendedBookUpdateDate)) {
+            if (isTheDateRelevant(recommendedBookUpdateDate)) {
 
                 val dbHelper = DBHelper(this)
                 val database = dbHelper.writableDatabase
 
                 val cursor =
-                    database.query(DBHelper.TABLE_EVENTS, null, null, null, null, null, null)
+                    database.query(DBHelper.TABLE_RECOMMENDED, null, null, null, null, null, null)
 
                 if (cursor != null && cursor.count > 0) {
                     cursor.close()
@@ -91,23 +164,50 @@ class SplashScreen : AppCompatActivity(), LoadLatestBookAsyncTask.LatestATFinish
     }
 
     override fun fromSecondATtoThird() {
-      this.loadEventShortList(false)
+        this.loadEventShortList()
     }
 
     override fun afterLastATFinished() {
         val intent = Intent(this, MainActivity::class.java)
-            startActivity(intent)
+        startActivity(intent)
     }
 
 
-    private fun isTheDateRelevant(currentDate: String, savedDate: String): Boolean {
+    private fun isTheDateRelevant(savedDate: String): Boolean {
         val isTheDateRelevant: Boolean
+        val currentDate = SimpleDateFormat("dd.MM.yyyy HH:mm").format(Calendar.getInstance().time)
         val currentDateLatest: Date? = SimpleDateFormat("dd.MM.yyyy HH:mm").parse(currentDate)
         val savedDateLatest: Date? = SimpleDateFormat("dd.MM.yyyy HH:mm").parse(savedDate)
         val diff = currentDateLatest!!.time - savedDateLatest!!.time
         val hours = TimeUnit.MILLISECONDS.toHours(diff)
         isTheDateRelevant = hours < 24
         return isTheDateRelevant
+    }
+
+
+    private fun isNetworkConnected(context: Context): Boolean {
+        var result = false
+        val cm = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            val capabilities = cm.getNetworkCapabilities(cm.activeNetwork)
+            if (capabilities != null) {
+                if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)) {
+                    result = true
+                } else if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)) {
+                    result = true
+                }
+            }
+        } else {
+            val activeNetwork = cm.activeNetworkInfo
+            if (activeNetwork != null) {
+                if (activeNetwork.getType() === ConnectivityManager.TYPE_WIFI) {
+                    result = true
+                } else if (activeNetwork.getType() === ConnectivityManager.TYPE_MOBILE) {
+                    result = true
+                }
+            }
+        }
+        return result
     }
 
 
@@ -121,12 +221,11 @@ class SplashScreen : AppCompatActivity(), LoadLatestBookAsyncTask.LatestATFinish
 
     }
 
-    private fun loadEventShortList(reload: Boolean) {
-
+    private fun loadEventShortList() {
         LoadEventShortListAsyncTask(
             this,
             this,
-            reload,
+            false,
             {}).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
 
     }

@@ -60,7 +60,12 @@ class CarouselLatestAdapter(private val context: Context?) : RecyclerView.Adapte
             itemView.latest_book_title.text = book.title
 
             if (book.link == "nullnull") {
-                itemView.latest_book_cover.setBackgroundResource(R.drawable.book_cover_1)
+
+                when ((0..2).random()){
+                    0 ->  itemView.latest_book_cover.setBackgroundResource(R.drawable.book_cover_1)
+                    1 ->  itemView.latest_book_cover.setBackgroundResource(R.drawable.book_cover_2)
+                    2 ->  itemView.latest_book_cover.setBackgroundResource(R.drawable.book_cover_3)
+                }
             } else {
                 if (context != null) {
 

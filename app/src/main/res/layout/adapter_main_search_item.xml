@@ -35,10 +35,33 @@
 
 
             <LinearLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="15dp"
                     android:orientation="vertical">
+
+                <TextView
+                        android:id="@+id/main_search_available_copies"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingStart="4dp"
+                        android:paddingEnd="4dp"
+                        android:paddingTop="2dp"
+                        android:paddingBottom="2dp"
+                        android:textSize="14sp"
+                        android:textStyle="normal"
+                        android:text="14"
+                        android:textColor="@color/main_color"
+                        android:background="@drawable/copies_info_green"/>
+
+
+                <TextView
+                        android:id="@+id/book_tittle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="19sp"
+                        android:text="Tittle"
+                        android:textStyle="bold"/>
 
                 <TextView
                         android:id="@+id/book_author"
@@ -48,13 +71,6 @@
                         android:textSize="16sp"
                         android:textStyle="normal" />
 
-                <TextView
-                        android:id="@+id/book_tittle"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textSize="19sp"
-                        android:text="Tittle"
-                        android:textStyle="bold"/>
 
 
             </LinearLayout>

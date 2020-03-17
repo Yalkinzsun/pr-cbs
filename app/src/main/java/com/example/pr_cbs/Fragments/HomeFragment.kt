@@ -25,7 +25,7 @@ import com.yarolegovich.discretescrollview.InfiniteScrollAdapter.wrap
 import kotlinx.android.synthetic.main.home_fragment.*
 import com.example.pr_cbs.Adapters.CarouselLatestAdapter
 import com.example.pr_cbs.Adapters.ShortEventAdapter
-
+import com.example.pr_cbs.Database.DBHelper
 
 
 class HomeFragment: Fragment(),
@@ -69,10 +69,6 @@ class HomeFragment: Fragment(),
             LinearLayoutManager(this@HomeFragment.context, RecyclerView.HORIZONTAL, false)
         recyclerViewRecommendedBooks.adapter = RecommendedBooksAdapter(this@HomeFragment.context)
 
-        // Элемент RecyclerView по центру
-        val snapHelper = LinearSnapHelper()
-        snapHelper.attachToRecyclerView(recyclerViewRecommendedBooks)
-
 
         //Ближайшие мероприятия
         this.mShortEventAdapter = ShortEventAdapter(this@HomeFragment.context)
@@ -83,30 +79,26 @@ class HomeFragment: Fragment(),
         recyclerViewShortEvents.adapter = this.mShortEventAdapter
 
 
-        //Последние поступления
-        this.mLatestAdapterMain = CarouselLatestAdapter(this@HomeFragment.context)
-
-        // Бесконечное прокручивание
-        this.mInfiniteScrollWrapper = wrap(this.mLatestAdapterMain)
-        infinite_carousel.adapter = mInfiniteScrollWrapper
-
-        // Трансформирование элемента
-        this.infinite_carousel.setItemTransformer(InfiniteCarouselTransformer())
-
-        this.infinite_carousel.addOnItemChangedListener(this)
 
 
+
+
+            //Последние поступления
+            this.mLatestAdapterMain = CarouselLatestAdapter(this@HomeFragment.context)
+
+            // Бесконечное прокручивание
+            this.mInfiniteScrollWrapper = wrap(this.mLatestAdapterMain)
+            infinite_carousel.adapter = mInfiniteScrollWrapper
+
+            // Трансформирование элемента
+            this.infinite_carousel.setItemTransformer(InfiniteCarouselTransformer())
+
+            this.infinite_carousel.addOnItemChangedListener(this)
+        }
 
     }
 
 
-
-
-
-
-
-
-}
 
 
 

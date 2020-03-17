@@ -8,7 +8,8 @@
     <string name="title_notifications">Notifications</string>
     <string name="title_activity_about">AboutActivity</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="title_activity_book_search_result2">BookSearchResult2</string>
+    <string name="map_key" translatable="false">
+       AIzaSyCzBdN_i-PkzZEXdeMWyCH0FtJtvioKonU
+   </string>
+
 </resources>

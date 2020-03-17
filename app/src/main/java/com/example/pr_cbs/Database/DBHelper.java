@@ -9,14 +9,14 @@ public class DBHelper extends SQLiteOpenHelper {
 
     private static DBHelper mInstance = null;
 
-    public static final int DATABASE_VERSION = 2;
-    public static final String DATABASE_NAME = "eventDB";
+    private static final int DATABASE_VERSION = 3;
+    private static final String DATABASE_NAME = "eventDB";
     public static final String TABLE_EVENTS = "events";
     public static final String TABLE_LATEST = "latest";
     public static final String TABLE_RECOMMENDED = "recommended";
 
     //константы заголовков таблицы
-    public static final String KEY_ID = "_id";
+    private static final String KEY_ID = "_id";
     public static final String KEY_START_DATE = "start_date";
     public static final String KEY_END_DATE = "end_date";
     public static final String KEY_START_TIME = "start_time";
@@ -31,17 +31,17 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String KEY_PHONE_NUMBER = "phone_number";
     public static final String KEY_LINK = "link";
 
-    public static final String KEY_TITLE       = "title";
-    public static final String KEY_ISBN        = "isbn";
+    public static final String KEY_TITLE = "title";
+    public static final String KEY_ISBN = "isbn";
     public static final String KEY_DESCRIPTION = "description";
-    public static final String KEY_AUTHOR      = "author";
-    public static final String KEY_YEAR        = "year";
-    public static final String KEY_PUBLISHER   = "publish";
-    public static final String KEY_SUBJECTS    = "subjects";
-    public static final String KEY_SERIES      = "series";
-    public static final String KEY_BOOK_LINK   = "link";
-    public static final String KEY_SIZE        = "size";
-    public static final String KEY_LANG        = "lang";
+    public static final String KEY_AUTHOR = "author";
+    public static final String KEY_YEAR = "year";
+    public static final String KEY_PUBLISHER = "publish";
+    public static final String KEY_SUBJECTS = "subjects";
+    public static final String KEY_SERIES = "series";
+    public static final String KEY_BOOK_LINK = "link";
+    public static final String KEY_SIZE = "size";
+    public static final String KEY_LANG = "lang";
 
 
     public static DBHelper getInstance(Context activityContext) {

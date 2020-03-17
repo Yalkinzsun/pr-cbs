@@ -18,12 +18,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="15dp"
-                android:layout_marginTop="5dp"
+                android:layout_marginTop="15dp"
                 android:text="Последние поступления"
-                android:textSize="18sp"
+                android:textSize="20sp"
                 android:textStyle="bold" />
 
         <RelativeLayout
+                android:layout_marginTop="15dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
@@ -38,6 +39,7 @@
         </RelativeLayout>
 
         <LinearLayout
+                android:layout_marginTop="15dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
@@ -48,10 +50,11 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Ближайшие мероприятия"
-                    android:textSize="18dp"
+                    android:textSize="20dp"
                     android:textStyle="bold" />
 
             <androidx.recyclerview.widget.RecyclerView
+                    android:layout_marginEnd="10dp"
                     android:id="@+id/recyclerViewShortEvents"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
@@ -65,19 +68,20 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="15dp"
+                android:layout_marginTop="15dp"
                 android:text="Наши рекомендации"
-                android:textSize="18sp"
+                android:textSize="20sp"
                 android:textStyle="bold" />
 
 
         <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="15dp"
                 android:layout_marginStart="15dp">
 
 
         <androidx.recyclerview.widget.RecyclerView
+                android:layout_marginTop="15dp"
                 android:id="@+id/recyclerViewRecommendedBooks"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />

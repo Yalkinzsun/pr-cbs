@@ -48,35 +48,43 @@ public class LatestBookStorage {
     }
 
     public boolean downloadLatestBooks(Boolean canDownloadFromDatabase, Context context) {
-
+        SQLiteDatabase database = DBHelper.getInstance(context).getWritableDatabase();
         boolean emptyDatabase = true;
         if (canDownloadFromDatabase) {
-            SQLiteDatabase database = DBHelper.getInstance(context).getWritableDatabase();
+
             Cursor cursor = database.query(DBHelper.TABLE_LATEST, null, null, null, null, null, null);
 
             if (cursor != null && cursor.getCount() > 0) {
                 emptyDatabase = false;
-                downloadLatestBooksFromDatabase(context);
+                downloadLatestBooksFromDatabase(database);
                 cursor.close();
             }
 
         }
 
-        if (!canDownloadFromDatabase || emptyDatabase){
+        if (!canDownloadFromDatabase || emptyDatabase) {
             clear();
-            SQLiteDatabase database = DBHelper.getInstance(context).getWritableDatabase();
-            //Очистка содержимого таблицы events
+
             database.execSQL("delete from latest");
+
 
             try {
                 IrbisConnection connection = getIrbisConnection();
-                int[] found = connection.search("\"T=" + "Microsoft" + "$\"");
+                int[] found = connection.search("\"T=" + "Google" + "$\"");
 
 
                 if (found.length != 0) {
                     for (int mfn : found) {
-                        localRecords.add(downloadBookRecord(mfn, connection, context));
+                        localRecords.add(downloadBookRecord(mfn, connection, database));
                     }
+
+                    String currentDate = new SimpleDateFormat("dd.MM.yyyy HH:mm").format(Calendar.getInstance().getTime());
+
+                    SharedPreferences sPref = context.getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sPref.edit();
+                    editor.putString(APP_PREFERENCES_LATEST_BOOK_UPDATE_DATE, currentDate);
+                    editor.apply();
+
                 } else return false;
 
                 connection.disconnect();
@@ -85,15 +93,16 @@ public class LatestBookStorage {
                 //Log.e(...)
                 return false;
             }
+
         }
+
+        database.close();
+
         return true;
     }
 
-    public void downloadLatestBooksFromDatabase(Context context) {
+    private void downloadLatestBooksFromDatabase(SQLiteDatabase database) {
 
-
-        dbHelper = new DBHelper(context);
-        SQLiteDatabase database = dbHelper.getWritableDatabase();
         Cursor cursor = database.query(DBHelper.TABLE_LATEST, null, null, null, null, null, null);
 
         if (cursor.moveToFirst()) {
@@ -120,7 +129,7 @@ public class LatestBookStorage {
                 latestBookRecord.publish = cursor.getString(publisherIndex);
                 latestBookRecord.subjects = cursor.getString(subjectsIndex);
                 latestBookRecord.series = cursor.getString(seriesIndex);
-                latestBookRecord.link= cursor.getString(bookLinkIndex);
+                latestBookRecord.link = cursor.getString(bookLinkIndex);
                 latestBookRecord.size = cursor.getString(sizeIndex);
                 latestBookRecord.lang = cursor.getString(langIndex);
 
@@ -141,20 +150,8 @@ public class LatestBookStorage {
         return localRecords.get(id);
     }
 
-    private BookRecord downloadBookRecord(int mfn, IrbisConnection connection, Context context) throws
+    private BookRecord downloadBookRecord(int mfn, IrbisConnection connection, SQLiteDatabase database) throws
             IOException, IrbisException {
-
-
-        String currentDate = new SimpleDateFormat("dd.MM.yyyy HH:mm").format(Calendar.getInstance().getTime());
-
-        SharedPreferences sPref = context.getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sPref.edit();
-        editor.putString(APP_PREFERENCES_LATEST_BOOK_UPDATE_DATE, currentDate);
-        editor.apply();
-
-
-        SQLiteDatabase database = DBHelper.getInstance(context).getWritableDatabase();
-
 
         // класс для добавления новых строк в таблицу БД
         ContentValues contentValues = new ContentValues();

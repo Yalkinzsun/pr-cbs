@@ -56,6 +56,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="ISBN: "
+                        android:textColor="@color/colorPrimaryDark"
                         android:textSize="16sp"
                         android:textStyle="bold" />
 
@@ -81,7 +82,7 @@
                         app:cardElevation="0dp">
 
                     <ImageView
-                            android:id="@+id/book_cover"
+                            android:id="@+id/main_search_result_book_cover"
                             android:layout_width="130dp"
                             android:layout_height="200dp"
                             android:scaleType="centerCrop"
@@ -102,6 +103,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="Издательство"
+                            android:textColor="@color/colorPrimaryDark"
                             android:textSize="16sp"
                             android:textStyle="bold" />
 
@@ -109,13 +111,13 @@
                             android:id="@+id/main_final_book_publish"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Publish"
                             android:textSize="16sp" />
 
                     <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="Серия "
+                            android:textColor="@color/colorPrimaryDark"
                             android:textSize="16sp"
                             android:textStyle="bold" />
 
@@ -123,7 +125,6 @@
                             android:id="@+id/main_final_book_series"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Series"
                             android:textSize="16sp" />
 
                     <LinearLayout
@@ -135,6 +136,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Год издания: "
+                                android:textColor="@color/colorPrimaryDark"
                                 android:textSize="16sp"
                                 android:textStyle="bold" />
 
@@ -142,7 +144,6 @@
                                 android:id="@+id/main_final_book_year"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Year"
                                 android:textSize="16sp" />
 
                     </LinearLayout>
@@ -156,6 +157,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Объём: "
+                                android:textColor="@color/colorPrimaryDark"
                                 android:textSize="16sp"
                                 android:textStyle="bold" />
 
@@ -163,7 +165,6 @@
                                 android:id="@+id/main_final_book_size"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Size"
                                 android:textSize="16sp" />
 
                     </LinearLayout>
@@ -177,6 +178,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Язык: "
+                                android:textColor="@color/colorPrimaryDark"
                                 android:textSize="16sp"
                                 android:textStyle="bold" />
 
@@ -184,7 +186,6 @@
                                 android:id="@+id/main_final_book_language"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Language"
                                 android:textSize="16sp" />
 
                     </LinearLayout>
@@ -209,6 +210,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Полное библиографическое описание"
+                            android:textColor="@color/colorPrimaryDark"
                             android:textSize="18sp"
                             android:textStyle="bold" />
 
@@ -216,7 +218,6 @@
                             android:id="@+id/main_final_book_description"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Description"
                             android:textSize="16sp" />
                 </LinearLayout>
 
@@ -230,19 +231,216 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Наличие в библиотеках"
+                            android:textColor="@color/colorPrimaryDark"
                             android:textSize="18sp"
                             android:textStyle="bold" />
 
                     <TextView
-                            android:id="@+id/main_final_book_availability"
+                            android:id="@+id/main_search_result_not_found"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:layout_marginBottom="50dp"
+                            android:text="Нет в наличии ни в одной из библиотек"
+                            android:textColor="@color/colorPrimary"
+                            android:textSize="16sp"
+                            android:visibility="gone" />
+
+
+                    <LinearLayout
+                            android:id="@+id/ll_f1"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Наличие в библиотеках "
-                            android:textSize="16sp" />
+                            android:layout_marginTop="5dp"
+                            android:orientation="vertical">
+
+                        <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Библиотека им. В. И. Ленина"
+                                android:textSize="16sp" />
+
+                        <TextView
+                                android:id="@+id/f1_num_of_copies"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="16sp"
+                                android:textColor="@color/colorPrimary"
+                                android:textStyle="bold" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                            android:id="@+id/ll_f2"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:orientation="vertical">
+
+                        <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Библиотека им. Б. А. Лавренева"
+
+                                android:textSize="16sp" />
+
+                        <TextView
+                                android:id="@+id/f2_num_of_copies"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="16sp"
+                                android:textColor="@color/colorPrimary"
+                                android:textStyle="bold" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                            android:id="@+id/ll_f3"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:orientation="vertical">
+
+                        <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Юношеская библиотека им. А. П. Гайдара"
+
+                                android:textSize="16sp" />
+
+                        <TextView
+                                android:id="@+id/f3_num_of_copies"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="16sp"
+                                android:textColor="@color/colorPrimary"
+                                android:textStyle="bold" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                            android:id="@+id/ll_f4"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:orientation="vertical">
+
+                        <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="3-я районная библиотека"
+
+                                android:textSize="16sp" />
+
+                        <TextView
+                                android:id="@+id/f4_num_of_copies"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="16sp"
+                                android:textColor="@color/colorPrimary"
+                                android:textStyle="bold" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                            android:id="@+id/ll_f5"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:orientation="vertical">
+
+                        <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Библиотека Кировский островов"
+
+                                android:textSize="16sp" />
+
+                        <TextView
+                                android:id="@+id/f5_num_of_copies"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="16sp"
+                                android:textColor="@color/colorPrimary"
+                                android:textStyle="bold" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                            android:id="@+id/ll_f6"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:orientation="vertical">
+
+                        <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="2-я детская библиотека"
+
+                                android:textSize="16sp" />
+
+                        <TextView
+                                android:id="@+id/f6_num_of_copies"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="16sp"
+                                android:textColor="@color/colorPrimary"
+                                android:textStyle="bold" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                            android:id="@+id/ll_do"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:orientation="vertical">
+
+                        <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Центральная районная десткая библиотека"
+                                android:textSize="16sp" />
+
+                        <TextView
+                                android:id="@+id/do_num_of_copies"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="16sp"
+                                android:textStyle="bold"
+                                android:textColor="@color/colorPrimary"/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                            android:id="@+id/ll_crb"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:orientation="vertical">
+
+                        <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="ЦРБ им. А. С. Пушкина"
+                                android:textSize="16sp" />
+
+                        <TextView
+                                android:id="@+id/crb_num_of_copies"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="16sp"
+                                android:textColor="@color/colorPrimary"
+                                android:textStyle="bold" />
+
+                    </LinearLayout>
+
                 </LinearLayout>
 
 
                 <LinearLayout
+                        android:id="@+id/main_search_result_ll_book_or_deliver"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center_horizontal"
@@ -251,9 +449,9 @@
                     <androidx.cardview.widget.CardView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="50dp"
+                            android:layout_marginStart="40dp"
                             android:layout_marginTop="25dp"
-                            android:layout_marginEnd="50dp"
+                            android:layout_marginEnd="40dp"
                             android:layout_marginBottom="35dp"
                             app:cardCornerRadius="5dp"
                             app:cardElevation="0dp">
@@ -274,7 +472,7 @@
                                     android:text="Забронировать"
                                     android:textAlignment="center"
                                     android:textColor="@color/main_color"
-                                    android:textSize="16sp" />
+                                    android:textSize="18sp" />
 
 
                             <TextView
@@ -286,7 +484,7 @@
                                     android:text="Заказать доставку"
                                     android:textAlignment="center"
                                     android:textColor="@color/main_color"
-                                    android:textSize="16sp" />
+                                    android:textSize="18sp" />
 
                             <TextView
                                     android:layout_width="match_parent"

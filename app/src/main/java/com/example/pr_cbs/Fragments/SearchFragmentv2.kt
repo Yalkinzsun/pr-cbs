@@ -3,9 +3,11 @@ package com.example.pr_cbs.Fragments
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.net.ConnectivityManager
 import android.os.AsyncTask
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.*
@@ -21,9 +23,12 @@ import com.example.pr_cbs.R
 import com.example.pr_cbs.RecordStorage.BookStorage
 import kotlinx.android.synthetic.main.search_fragmentv2.*
 import android.widget.*
+import com.example.pr_cbs.AsyncTasks.LoadMoreBookRecordsAsyncTask
+import com.example.pr_cbs.RecordStorage.BookRecord
+import kotlin.math.abs
 
 
-class SearchFragmentv2() : Fragment() {
+class SearchFragmentv2() : Fragment(), LoadMoreBookRecordsAsyncTask.LoadMoreBookRecordsFinished {
 
     private lateinit var searchBooksAdapter: SearchBooksAdapter
     private lateinit var mProgressBar: ProgressBar
@@ -34,6 +39,7 @@ class SearchFragmentv2() : Fragment() {
     private lateinit var mSearchTextView: TextView
     private var bookCount: String = "0"
     private var mSearchCombination: String = ""
+    private var isDataLoading = false
 
     lateinit var sPref: SharedPreferences
     // имя файла настроек
@@ -85,8 +91,6 @@ class SearchFragmentv2() : Fragment() {
 
         searchBooksAdapter = SearchBooksAdapter(this@SearchFragmentv2.context)
 
-        // TODO
-        searchBooksAdapter.setHasStableIds(true)
 
 
         MainBookSearch.layoutManager =
@@ -94,25 +98,43 @@ class SearchFragmentv2() : Fragment() {
 
         MainBookSearch.adapter = searchBooksAdapter
 
-        MainBookSearch.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+        MainBookSearch.setHasFixedSize(false)
 
+        MainBookSearch.addOnScrollListener(object : RecyclerView.OnScrollListener() {
 
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 super.onScrollStateChanged(recyclerView, newState)
-
                 val layoutManager = recyclerView.layoutManager as LinearLayoutManager
-                val visibleItemCount = layoutManager.childCount
-                val totalItemCount = layoutManager.itemCount
-                val pastVisibleItems = layoutManager.findFirstCompletelyVisibleItemPosition()
 
-                if (pastVisibleItems + visibleItemCount >= totalItemCount) {
-                    if (BookStorage.Instance().canLoadMore())
-                        LoadMoreRecordsAsyncTask(mProgressBar2) {
-                            searchBooksAdapter.notifyDataSetChanged()
-                        }.executeOnExecutor(
-                            AsyncTask.THREAD_POOL_EXECUTOR
-                        )
+//               // кол-во элементов на экране
+//                val visibleItemCount = layoutManager.childCount
+//                // кол-во элементов всего
+//
+//                val firstVisibleItem =
+//                    layoutManager.findFirstVisibleItemPosition()
+
+                val currentVisibleItem =
+                    layoutManager.findLastCompletelyVisibleItemPosition()//какая позиция первого элемента
+                val totalItemCount = layoutManager.itemCount
+
+
+                if (!isDataLoading) {
+                    if (currentVisibleItem == totalItemCount - 1) {
+                        if (BookStorage.Instance().canLoadMore()) {
+                            isDataLoading = true
+                            // Toast.makeText(this@SearchFragmentv2.context, currentVisibleItem.toString(), Toast.LENGTH_SHORT).show()
+
+                            LoadMoreBookRecordsAsyncTask(
+                                this@SearchFragmentv2,
+                                currentVisibleItem,
+                                mProgressBar2
+                            ).executeOnExecutor(
+                                AsyncTask.THREAD_POOL_EXECUTOR
+                            )
+                        }
+                    }
                 }
+
             }
         })
 
@@ -128,7 +150,9 @@ class SearchFragmentv2() : Fragment() {
 
         val flag1: Boolean = (activity as MainActivity).isSearchIconPressed()
         val flag2: Boolean = (activity as MainActivity).isKeyboardSearchIconPressed()
+
         if (flag1) {
+
             this.loadBooksList(false)
             (activity as MainActivity).isPressed = false
         }
@@ -136,6 +160,21 @@ class SearchFragmentv2() : Fragment() {
             this.loadBooksList(false)
             (activity as MainActivity).keyboardSearchIconPressed = false
         }
+    }
+
+
+    override fun moreBooksLoaded(position: Int) {
+        val moreBooks: ArrayList<BookRecord> = BookStorage.Instance().localRecords
+        val size = BookStorage.Instance().localRecords.size
+
+        Toast.makeText(this@SearchFragmentv2.context, moreBooks.size.toString(), Toast.LENGTH_SHORT)
+            .show()
+
+        for (i in position + 1..size) {
+            searchBooksAdapter.notifyItemChanged(i)
+        }
+        isDataLoading = false
+
     }
 
 
@@ -161,7 +200,9 @@ class SearchFragmentv2() : Fragment() {
             }
         }
 
+
     }
+
 
 
     private fun loadBooksList(advanced_flag: Boolean) {
@@ -181,7 +222,8 @@ class SearchFragmentv2() : Fragment() {
                 {
                     mSearchImage.visibility = VISIBLE
                     mSearchTextView.visibility = VISIBLE
-                    val errorText = "К сожалению, по запросу\n\"${(activity as MainActivity).getSearchText()}\" \nничего не найдено"
+                    val errorText =
+                        "К сожалению, по запросу\n\"${(activity as MainActivity).getSearchText()}\"\nничего не найдено"
                     mSearchTextView.text = errorText
                     (activity as MainActivity).setSearchText("")
                 }).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
@@ -232,7 +274,7 @@ class SearchFragmentv2() : Fragment() {
             } else this.hasResult = BookStorage.Instance().fetchMFNsByQuery(this.getSearchText())
 
 
-            BookStorage.Instance().loadNextPage()
+            BookStorage.Instance().loadNextPage(0)
         }
 
         override fun onPostExecute(result: Unit?) {
@@ -265,26 +307,4 @@ class SearchFragmentv2() : Fragment() {
         }
     }
 
-
-
-    class LoadMoreRecordsAsyncTask(
-        var mProgressBar2: ProgressBar,
-        private var notifyDataSetChanged: () -> Unit
-    ) : AsyncTask<Unit, Unit, Unit>() {
-
-        override fun onPreExecute() {
-            super.onPreExecute()
-            mProgressBar2.visibility = VISIBLE
-        }
-
-        override fun doInBackground(vararg p0: Unit?) {
-            BookStorage.Instance().loadNextPage()
-        }
-
-        override fun onPostExecute(result: Unit?) {
-            super.onPostExecute(result)
-            notifyDataSetChanged()
-            mProgressBar2.visibility = GONE
-        }
-    }
 }

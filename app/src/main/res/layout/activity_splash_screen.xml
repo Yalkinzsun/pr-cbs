@@ -4,15 +4,86 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:orientation="vertical"
         tools:context="com.example.pr_cbs.SplashScreen">
 
+
+    <ImageView
+            android:id="@+id/splash_screen_logo"
+            android:layout_width="wrap_content"
+            android:layout_height="150dp"
+            android:layout_marginTop="100dp"
+            android:src="@drawable/ic_start_logo"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+            android:id="@+id/splash_screen_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Библиотеки\n Петроградской стороны"
+            android:textAlignment="center"
+            android:textColor="@color/colorPrimary"
+            app:layout_constraintTop_toBottomOf="@id/splash_screen_logo" />
+
+
+    <ProgressBar
+            android:id="@+id/splash_screen_progressBar"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="80dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/splash_screen_name" />
+
+    <TextView
+            android:id="@+id/splash_screen_downloading"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:text="загружаются актуальные данные\nэто может занять некоторое время"
+            android:textAlignment="center"
+            android:textColor="@color/colorPrimaryDark"
+            app:layout_constraintTop_toBottomOf="@id/splash_screen_progressBar" />
+
+
     <Button
-            android:id="@+id/button_pop"
+            android:id="@+id/splash_screen_reload_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Button"
-           app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"/>
+            android:layout_marginBottom="20dp"
+            android:background="@color/colorAccent"
+            android:drawableStart="@drawable/ic_reload_black_24dp"
+            android:paddingStart="15dp"
+            android:paddingEnd="15dp"
+            android:text="Повторить"
+            app:layout_constraintBottom_toTopOf="@id/splash_screen_no_internet_text"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:visibility="gone"/>
+
+    <TextView
+            android:id="@+id/splash_screen_no_internet_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:text="Вы не подключены к Интернету"
+            android:textAlignment="center"
+            android:textColor="@color/colorPrimary"
+            app:layout_constraintBottom_toTopOf="@id/splash_screen_program_version"
+            android:visibility="gone"/>
+
+
+    <TextView
+            android:id="@+id/splash_screen_program_version"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:textAlignment="center"
+            android:textColor="@color/colorPrimaryDark"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

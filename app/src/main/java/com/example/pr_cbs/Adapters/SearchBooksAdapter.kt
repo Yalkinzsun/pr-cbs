@@ -14,8 +14,13 @@ import com.example.pr_cbs.ResultMainSearch
 import kotlinx.android.synthetic.main.adapter_main_search_item.view.*
 
 
+
+
+
 class SearchBooksAdapter(private val context: Context?) :
     RecyclerView.Adapter<SearchBooksAdapter.ViewHolder>() {
+
+
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val v =
@@ -28,12 +33,19 @@ class SearchBooksAdapter(private val context: Context?) :
         return BookStorage.Instance().availableRecordsCount
     }
 
+    override fun getItemId(position: Int) = position.toLong()
+
+    override fun getItemViewType(position: Int) = position
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+
+
         val book = BookStorage.Instance().getRecordById(position)
         holder.setData(book, position)
 
     }
+
+
 
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -49,7 +61,8 @@ class SearchBooksAdapter(private val context: Context?) :
         }
 
         fun setData(book: BookRecord, pos: Int) {
-            itemView.book_author.text = book.author
+//            itemView.book_author.text = book.author
+            itemView.book_author.text = pos.toString()
             itemView.book_tittle.text = book.title
             itemView.book_subjects.text = book.subjects
             itemView.book_publisher.text = book.publish
@@ -57,13 +70,32 @@ class SearchBooksAdapter(private val context: Context?) :
             itemView.book_year.text = book.year
 
             if (book.link == "nullnull") {
-                itemView.book_cover.setBackgroundResource(R.drawable.book_cover_1)
+
+                if (itemView.book_cover.drawable == null) {
+
+                    when ((0..2).random()) {
+                        0 -> itemView.book_cover.setBackgroundResource(R.drawable.book_cover_1)
+                        1 -> itemView.book_cover.setBackgroundResource(R.drawable.book_cover_2)
+                        2 -> itemView.book_cover.setBackgroundResource(R.drawable.book_cover_3)
+                    }
+                }
+
             } else {
                 if (context != null) {
 
                    Glide.with(context).load(book.link).into(itemView.book_cover)
                 }
             }
+
+            if (book.num_of_all_available_copies != "0") {
+                val text = "доступно ${book.num_of_all_available_copies} экз."
+                itemView.main_search_available_copies.text = text
+                itemView.main_search_available_copies.setBackgroundResource(R.drawable.copies_info_green)
+            } else {
+                itemView.main_search_available_copies.text = "нет в наличии"
+                itemView.main_search_available_copies.setBackgroundResource(R.drawable.copies_info_grey)
+            }
+
             this.currentPosition = pos
         }
 
