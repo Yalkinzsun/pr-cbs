@@ -28,7 +28,8 @@ class SplashScreen : AppCompatActivity(), LoadLatestBookAsyncTask.LatestATFinish
     private val APP_PREFERENCES = "pref_settings"
     private val APP_PREFERENCES_LATEST_BOOK_UPDATE_DATE = "latest_book_update_date"
     private val APP_PREFERENCES_RECOMMENDED_BOOK_UPDATE_DATE = "recommended_book_update_date"
-
+    private var latestError: Boolean = true
+    private var recommendedError: Boolean = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,25 +40,21 @@ class SplashScreen : AppCompatActivity(), LoadLatestBookAsyncTask.LatestATFinish
 
 
 
-
         if (isNetworkConnected(this)) {
             Toast.makeText(this@SplashScreen, "Интернет подключен", Toast.LENGTH_SHORT).show()
             startDownloading()
         } else {
-
+            splash_screen_downloading.visibility = INVISIBLE
+            splash_screen_no_internet_text.visibility = VISIBLE
             val dataCheck = isAnyData()
-            if (dataCheck[0] != 0 && dataCheck[1] != 0 &&  dataCheck[2] != 0) {
+
+            if (dataCheck[0] != 0 || dataCheck[1] != 0 || dataCheck[2] != 0) {
                 startDownloading()
-                Toast.makeText(this@SplashScreen, "Вы не подключены к Интернету", Toast.LENGTH_LONG).show()
-                val intent = Intent(this, MainActivity::class.java)
-                startActivity(intent)
 
             } else {
 
                 splash_screen_reload_button.visibility = VISIBLE
-                splash_screen_no_internet_text.visibility = VISIBLE
                 splash_screen_progressBar.visibility = INVISIBLE
-                splash_screen_downloading.visibility = INVISIBLE
             }
         }
 
@@ -80,7 +77,7 @@ class SplashScreen : AppCompatActivity(), LoadLatestBookAsyncTask.LatestATFinish
 
 
     private fun isAnyData(): IntArray {
-        val list = IntArray(3) { i -> 0 }
+        val list = IntArray(3) { 0 }
 
         val dbHelper = DBHelper(this)
         val database = dbHelper.writableDatabase
@@ -89,19 +86,20 @@ class SplashScreen : AppCompatActivity(), LoadLatestBookAsyncTask.LatestATFinish
         val cursorFirst =
             database.query(DBHelper.TABLE_LATEST, null, null, null, null, null, null)
 
-        if (cursorFirst != null && cursorFirst.count > 0)     list[0] = 1
+        if (cursorFirst != null && cursorFirst.count > 0) list[0] = 1
 
         cursorFirst.close()
 
         val cursorSecond = database.query(DBHelper.TABLE_EVENTS, null, null, null, null, null, null)
 
-        if (cursorSecond != null && cursorSecond.count > 0)     list[1] = 1
+        if (cursorSecond != null && cursorSecond.count > 0) list[1] = 1
 
         cursorSecond.close()
 
-        val cursorThird = database.query(DBHelper.TABLE_RECOMMENDED, null, null, null, null, null, null)
+        val cursorThird =
+            database.query(DBHelper.TABLE_RECOMMENDED, null, null, null, null, null, null)
 
-        if (cursorThird != null && cursorThird.count > 0)     list[2] = 1
+        if (cursorThird != null && cursorThird.count > 0) list[2] = 1
 
         cursorThird.close()
 
@@ -137,7 +135,9 @@ class SplashScreen : AppCompatActivity(), LoadLatestBookAsyncTask.LatestATFinish
     }
 
 
-    override fun fromFirstATtoSecond() {
+    override fun fromFirstATtoSecond(latestResult: Boolean) {
+        latestError = latestResult
+
         val sPref = this.getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE)
         if (sPref.contains(APP_PREFERENCES_RECOMMENDED_BOOK_UPDATE_DATE)) {
 
@@ -150,7 +150,15 @@ class SplashScreen : AppCompatActivity(), LoadLatestBookAsyncTask.LatestATFinish
                 val database = dbHelper.writableDatabase
 
                 val cursor =
-                    database.query(DBHelper.TABLE_RECOMMENDED, null, null, null, null, null, null)
+                    database.query(
+                        DBHelper.TABLE_RECOMMENDED,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null
+                    )
 
                 if (cursor != null && cursor.count > 0) {
                     cursor.close()
@@ -163,17 +171,29 @@ class SplashScreen : AppCompatActivity(), LoadLatestBookAsyncTask.LatestATFinish
         } else this.loadRecommendedBooks(false)
     }
 
-    override fun fromSecondATtoThird() {
+
+    override fun fromSecondATtoThird(recommendedResult: Boolean) {
+        recommendedError = recommendedResult
         this.loadEventShortList()
     }
 
-    override fun afterLastATFinished() {
+
+    override fun afterLastATFinished(hasResult: Boolean) {
+        var status = 0
+        if (!isNetworkConnected(this)) status = 1
         val intent = Intent(this, MainActivity::class.java)
+        intent.putExtra("connection_status", status)
+        intent.putExtra("event_storage_downloading_error", hasResult)
+        intent.putExtra("latest_storage_downloading_error", latestError)
+        intent.putExtra("recommended_storage_downloading_error", recommendedError)
         startActivity(intent)
+
     }
 
 
     private fun isTheDateRelevant(savedDate: String): Boolean {
+
+        if (!isNetworkConnected(this)) return true
         val isTheDateRelevant: Boolean
         val currentDate = SimpleDateFormat("dd.MM.yyyy HH:mm").format(Calendar.getInstance().time)
         val currentDateLatest: Date? = SimpleDateFormat("dd.MM.yyyy HH:mm").parse(currentDate)
@@ -207,6 +227,7 @@ class SplashScreen : AppCompatActivity(), LoadLatestBookAsyncTask.LatestATFinish
                 }
             }
         }
+
         return result
     }
 
@@ -216,10 +237,11 @@ class SplashScreen : AppCompatActivity(), LoadLatestBookAsyncTask.LatestATFinish
         LoadLatestBookAsyncTask(
             this,
             this,
-            canDownloadLatestBooksFromDatabase,
-            {}).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+            canDownloadLatestBooksFromDatabase
+        ).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
 
     }
+
 
     private fun loadEventShortList() {
         LoadEventShortListAsyncTask(
@@ -230,12 +252,13 @@ class SplashScreen : AppCompatActivity(), LoadLatestBookAsyncTask.LatestATFinish
 
     }
 
+
     private fun loadRecommendedBooks(canDownloadRecommendedBooksFromDatabase: Boolean) {
         LoadRecommendedBookAsyncTask(
             this,
             this,
-            canDownloadRecommendedBooksFromDatabase,
-            {}).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+            canDownloadRecommendedBooksFromDatabase
+        ).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
 
     }
 

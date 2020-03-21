@@ -23,7 +23,7 @@
                                 <PersistentState>
                                   <option name="values">
                                     <map>
-                                      <entry key="url" value="jar:file:/private/var/folders/px/pw3ghzcn3094g4448pwchcc40000gn/T/AppTranslocation/4CE5FAEA-3614-466E-AF9D-68477D439CA0/d/Android%20Studio.app/Contents/plugins/android/lib/android.jar!/images/material_design_icons/action/ic_autorenew_black_24dp.xml" />
+                                      <entry key="url" value="jar:file:/private/var/folders/px/pw3ghzcn3094g4448pwchcc40000gn/T/AppTranslocation/BB309081-51AD-4E95-A685-A35D04B9BA87/d/Android%20Studio.app/Contents/plugins/android/lib/android.jar!/images/material_design_icons/device/ic_signal_wifi_off_black_24dp.xml" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -34,8 +34,8 @@
                         <option name="values">
                           <map>
                             <entry key="color" value="5e3349" />
-                            <entry key="outputName" value="ic_autorenew_purple_24dp" />
-                            <entry key="sourceFile" value="$USER_HOME$/Desktop/start_logo.svg" />
+                            <entry key="outputName" value="ic_signal_wifi_off_purple" />
+                            <entry key="sourceFile" value="$PROJECT_DIR$/app/src/main/res/drawable/server_error.svg" />
                           </map>
                         </option>
                       </PersistentState>

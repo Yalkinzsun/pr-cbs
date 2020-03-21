@@ -16,7 +16,6 @@ public class BookStorage {
     private static String[] libs = new String[]{"1ф", "2ф", "3ф", "4ф", "5ф", "6ф", "do", "црб"};
 
 
-
     private BookStorage(ArrayList<BookRecord> localRecords, ArrayList<Integer> localMFNs) {
         this.localRecords = localRecords;
         this.localMFNs = localMFNs;
@@ -48,9 +47,11 @@ public class BookStorage {
         localMFNs.clear();
     }
 
-    public boolean fetchMFNsByQuery(String query) {
+    public int fetchMFNsByQuery(String query, Boolean internetConnection) {
+        if (!internetConnection) return 3;
+
         if (query == null || query.isEmpty())
-            return false;
+            return 1;
 
         else {
 
@@ -67,22 +68,23 @@ public class BookStorage {
                         localMFNs.add(mfn);
 
                     }
-                } else return false;
+                } else return 1;
 
 
             } catch (Exception e) {
-                //Log.e(...)
-                // TODO
-                return false;
+
+                return 2;
             }
 
-            return true;
+            return 0;
         }
     }
 
-    public boolean fetchMFNsByQueryAdvanced(String query) {
+    public int fetchMFNsByQueryAdvanced(String query, Boolean internetConnection) {
+        if (!internetConnection) return 3;
+
         if (query == null || query.isEmpty())
-            return false;
+            return 1;
 
         else {
 
@@ -98,15 +100,13 @@ public class BookStorage {
                         localMFNs.add(mfn);
 
                     }
-                } else return false;
-
+                } else return 1;
 
             } catch (Exception e) {
-                //Log.e(...)
-                return false;
+                return 2;
             }
 
-            return true;
+            return 0;
         }
     }
 
@@ -204,7 +204,7 @@ public class BookStorage {
                 if (Arrays.asList(libs).contains(lib)) {
 
                     copies = getNumOfCopies(part);
-                     allCopies += copies;
+                    allCopies += copies;
 
                     switch (lib) {
 

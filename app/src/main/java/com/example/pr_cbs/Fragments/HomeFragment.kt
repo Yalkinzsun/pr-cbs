@@ -25,11 +25,11 @@ import com.yarolegovich.discretescrollview.InfiniteScrollAdapter.wrap
 import kotlinx.android.synthetic.main.home_fragment.*
 import com.example.pr_cbs.Adapters.CarouselLatestAdapter
 import com.example.pr_cbs.Adapters.ShortEventAdapter
-import com.example.pr_cbs.Database.DBHelper
+import com.example.pr_cbs.MainActivity
 
 
-class HomeFragment: Fragment(),
-    DiscreteScrollView.OnItemChangedListener<CarouselLatestAdapter.MyViewHolder>  {
+class HomeFragment : Fragment(),
+    DiscreteScrollView.OnItemChangedListener<CarouselLatestAdapter.MyViewHolder> {
 
 
     private lateinit var mInfiniteScrollWrapper: InfiniteScrollAdapter<*>
@@ -62,26 +62,7 @@ class HomeFragment: Fragment(),
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
-        //Рекомендуемые книги
-        this.mRecommendedAdapterMain = RecommendedBooksAdapter(this@HomeFragment.context)
-        recyclerViewRecommendedBooks.layoutManager =
-            LinearLayoutManager(this@HomeFragment.context, RecyclerView.HORIZONTAL, false)
-        recyclerViewRecommendedBooks.adapter = RecommendedBooksAdapter(this@HomeFragment.context)
-
-
-        //Ближайшие мероприятия
-        this.mShortEventAdapter = ShortEventAdapter(this@HomeFragment.context)
-
-        recyclerViewShortEvents.layoutManager =
-            LinearLayoutManager(this@HomeFragment.context, RecyclerView.VERTICAL, false)
-
-        recyclerViewShortEvents.adapter = this.mShortEventAdapter
-
-
-
-
-
+        if ((activity as MainActivity).getInfoAboutLatestError()) {
 
             //Последние поступления
             this.mLatestAdapterMain = CarouselLatestAdapter(this@HomeFragment.context)
@@ -94,9 +75,51 @@ class HomeFragment: Fragment(),
             this.infinite_carousel.setItemTransformer(InfiniteCarouselTransformer())
 
             this.infinite_carousel.addOnItemChangedListener(this)
+
+        } else {
+
+            home_latest_error_block.visibility = VISIBLE
+            infinite_carousel.visibility = GONE
+
         }
 
+        if ((activity as MainActivity).getInfoAboutEventError()) {
+
+
+            //Ближайшие мероприятия
+            this.mShortEventAdapter = ShortEventAdapter(this@HomeFragment.context)
+
+            recyclerViewShortEvents.layoutManager =
+                LinearLayoutManager(this@HomeFragment.context, RecyclerView.VERTICAL, false)
+
+            recyclerViewShortEvents.adapter = this.mShortEventAdapter
+
+
+        } else {
+            home_event_error_block.visibility = VISIBLE
+            recyclerViewShortEvents.visibility = GONE
+
+        }
+
+
+        if ((activity as MainActivity).getInfoAboutRecommendedError()) {
+
+            //Рекомендуемые книги
+            this.mRecommendedAdapterMain = RecommendedBooksAdapter(this@HomeFragment.context)
+            recyclerViewRecommendedBooks.layoutManager =
+                LinearLayoutManager(this@HomeFragment.context, RecyclerView.HORIZONTAL, false)
+            recyclerViewRecommendedBooks.adapter =
+                RecommendedBooksAdapter(this@HomeFragment.context)
+
+        } else {
+            home_recommended_error_block.visibility = VISIBLE
+            recyclerViewRecommendedBooks.visibility = GONE
+        }
+
+
     }
+
+}
 
 
 

@@ -7,8 +7,8 @@ import com.example.pr_cbs.RecordStorage.LatestBookStorage
 class LoadLatestBookAsyncTask(
     private val callback: LatestATFinished,
     var context: Context,
-    var downloadLatestBooksFromDatabase: Boolean,
-    private var onNoResultsFound: () -> Unit
+    var downloadLatestBooksFromDatabase: Boolean
+
 
 ) : AsyncTask<Unit, Unit, Unit>() {
 
@@ -29,17 +29,11 @@ class LoadLatestBookAsyncTask(
     override fun onPostExecute(result: Unit?) {
         super.onPostExecute(result)
 
-        if (!this.hasResult) {
-            onNoResultsFound()
-        } else {
-            //TODO
 
-        }
-
-        callback.fromFirstATtoSecond()
+        callback.fromFirstATtoSecond(hasResult)
     }
 
     interface LatestATFinished {
-        fun fromFirstATtoSecond()
+        fun fromFirstATtoSecond(latestResult: Boolean)
     }
 }

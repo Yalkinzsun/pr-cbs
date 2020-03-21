@@ -23,6 +23,9 @@ import com.example.pr_cbs.RecordStorage.EventStorage
 import kotlinx.android.synthetic.main.event_fragment.*
 import androidx.recyclerview.widget.LinearSnapHelper
 import androidx.recyclerview.widget.SnapHelper
+import com.example.pr_cbs.AsyncTasks.EventsLoadMFNsAsyncTask
+import com.example.pr_cbs.AsyncTasks.EventsLoadMoreRecordsAsyncTask
+import com.example.pr_cbs.AsyncTasks.LoadAllActualEventsAsyncTask
 import com.example.pr_cbs.EventFilterActivity
 import java.text.SimpleDateFormat
 import java.util.*
@@ -87,9 +90,8 @@ class EventFragment : Fragment() {
 
         //проверка адаптера на наличие элеметов
         if (searchEventAdapter.itemCount == 0) {
-            this.loadAllActualEvents(false)
+                this.loadAllActualEvents(false)
         }
-
 
         EventRecyclerView.layoutManager =
             LinearLayoutManager(this@EventFragment.context, RecyclerView.HORIZONTAL, false)
@@ -100,8 +102,6 @@ class EventFragment : Fragment() {
         // Элемент RecyclerView по центру
         val snapHelper = LinearSnapHelper()
         snapHelper.attachToRecyclerView(EventRecyclerView)
-
-        // val layoutManager = recyclerView.layoutManager as LinearLayoutManager
 
         event_arrow_back.setOnClickListener {
             EventRecyclerView.smoothScrollToPosition(0)
@@ -153,14 +153,14 @@ class EventFragment : Fragment() {
 
 
         event_reload_icon.setOnClickListener {
-            actualEvents = true
-            this.loadAllActualEvents(true)
+                actualEvents = true
+                this.loadAllActualEvents(true)
         }
 
 
         event_search_icon.setOnClickListener {
-            actualEvents = false
-            this.loadEventsList()
+                actualEvents = false
+                this.loadEventsList()
         }
     }
 
@@ -195,6 +195,8 @@ class EventFragment : Fragment() {
     }
 
 
+
+
     private fun loadEventsList() {
 
         EventsLoadMFNsAsyncTask(
@@ -214,123 +216,6 @@ class EventFragment : Fragment() {
 
     }
 
-
-    class LoadAllActualEventsAsyncTask(
-        var mContext: Context,
-        var reload: Boolean,
-        var mProgressBar: ProgressBar,
-        private var notifyDataSetChanged: () -> Unit,
-        private var onNoResultsFound: () -> Unit
-    ) : AsyncTask<Unit, Unit, Unit>() {
-
-        private var hasResult: Boolean = true
-
-
-        override fun onPreExecute() {
-            super.onPreExecute()
-            mProgressBar.visibility = VISIBLE
-
-            EventStorage.Instance().clear()
-            notifyDataSetChanged()
-        }
-
-        override fun doInBackground(vararg p0: Unit?) {
-
-
-            this.hasResult = true
-
-            // TODO разобраться с этим
-            if (hasResult)
-                EventStorage.Instance().loadAllActualEvents(mContext, reload)
-        }
-
-        override fun onPostExecute(result: Unit?) {
-            super.onPostExecute(result)
-
-            mProgressBar.visibility = GONE
-            notifyDataSetChanged()
-
-
-            //  mFound.visibility = VISIBLE
-            //  mNumberOfBooks.visibility = VISIBLE
-
-            if (!this.hasResult) {
-                onNoResultsFound()
-            } else {
-//                mSearchImage.visibility = INVISIBLE
-//                mSearchTextView.visibility = INVISIBLE
-            }
-        }
-    }
-
-
-    class EventsLoadMFNsAsyncTask(
-        var mSearchLine: String,
-        var mErrorImage: ImageView,
-        var mErrorText: TextView,
-        var mProgressBar: ProgressBar,
-        private var notifyDataSetChanged: () -> Unit,
-        private var onNoResultsFound: () -> Unit
-    ) : AsyncTask<Unit, Unit, Unit>() {
-
-        private var hasResult: Boolean = true
-
-
-        override fun onPreExecute() {
-            super.onPreExecute()
-
-            mErrorImage.visibility = INVISIBLE
-            mErrorText.visibility = INVISIBLE
-            mProgressBar.visibility = VISIBLE
-
-            EventStorage.Instance().clear()
-            notifyDataSetChanged()
-        }
-
-        override fun doInBackground(vararg p0: Unit?) {
-
-            this.hasResult = EventStorage.Instance()
-                .fetchMFNsByQuery(mSearchLine)
-
-            EventStorage.Instance().loadNextPage()
-        }
-
-        override fun onPostExecute(result: Unit?) {
-            super.onPostExecute(result)
-
-            mProgressBar.visibility = GONE
-            notifyDataSetChanged()
-
-            if (!this.hasResult) {
-                onNoResultsFound()
-            } else {
-                mErrorImage.visibility = INVISIBLE
-                mErrorText.visibility = INVISIBLE
-            }
-        }
-    }
-
-    class EventsLoadMoreRecordsAsyncTask(
-        private var mProgressBar2: ProgressBar,
-        private var notifyDataSetChanged: () -> Unit
-    ) : AsyncTask<Unit, Unit, Unit>() {
-
-
-        override fun onPreExecute() {
-            super.onPreExecute()
-            mProgressBar2.visibility = VISIBLE
-        }
-
-        override fun doInBackground(vararg p0: Unit?) {
-            EventStorage.Instance().loadNextPage()
-        }
-
-        override fun onPostExecute(result: Unit?) {
-            super.onPostExecute(result)
-            notifyDataSetChanged()
-            mProgressBar2.visibility = GONE
-        }
-    }
 }
 
 

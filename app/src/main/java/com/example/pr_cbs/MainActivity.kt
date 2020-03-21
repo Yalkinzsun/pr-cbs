@@ -17,8 +17,12 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout
 import android.app.Activity
 import android.content.Context
 import android.content.pm.ActivityInfo
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
+import android.os.Build
 import android.view.View
 import android.view.inputmethod.InputMethodManager
+import android.widget.Toast
 
 
 class MainActivity : AppCompatActivity() {
@@ -26,6 +30,25 @@ class MainActivity : AppCompatActivity() {
     lateinit var searchFragment: SearchFragmentv2
     var isPressed = false
     var keyboardSearchIconPressed = false
+    var eventError = true
+    var latestError = true
+    var recommendedError = true
+
+
+
+
+    fun getInfoAboutEventError(): Boolean {
+        return eventError
+    }
+
+    fun getInfoAboutLatestError(): Boolean {
+        return latestError
+    }
+
+    fun getInfoAboutRecommendedError(): Boolean {
+        return recommendedError
+    }
+
 
     fun getSearchText(): String {
         return toolbar.input_line.text.toString()
@@ -80,7 +103,23 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
 
+        val connectionStatus = intent.getIntExtra("connection_status", 0)
+
+        eventError = intent.getBooleanExtra("event_storage_downloading_error", true)
+
+        if (connectionStatus == 1) Toast.makeText(
+            this,
+            "Вы не подключены к Интернету",
+            Toast.LENGTH_LONG
+        ).show()
+
+
+
+
         loadFragment(HomeFragment())
+
+
+
 
         val navView: BottomNavigationView = findViewById(R.id.nav_view)
         navView.setOnNavigationItemSelectedListener(onNavigationItemSelectedListener)
@@ -117,10 +156,42 @@ class MainActivity : AppCompatActivity() {
     }
 
 
+    override fun onBackPressed() {}
+
+
     private fun loadFragment(fragment: Fragment) {
         val transaction = supportFragmentManager.beginTransaction()
         transaction.replace(R.id.frame, fragment)
         transaction.addToBackStack(null)
         transaction.commit()
     }
+
+
+    fun isNetworkConnected(): Boolean {
+        var result = false
+        val cm = this.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            val capabilities = cm.getNetworkCapabilities(cm.activeNetwork)
+            if (capabilities != null) {
+                if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)) {
+                    result = true
+                } else if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)) {
+                    result = true
+                }
+            }
+        } else {
+            val activeNetwork = cm.activeNetworkInfo
+            if (activeNetwork != null) {
+                if (activeNetwork.getType() === ConnectivityManager.TYPE_WIFI) {
+                    result = true
+                } else if (activeNetwork.getType() === ConnectivityManager.TYPE_MOBILE) {
+                    result = true
+                }
+            }
+        }
+
+        return result
+    }
 }
+
+

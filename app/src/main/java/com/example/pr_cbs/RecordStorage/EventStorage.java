@@ -84,13 +84,9 @@ public class EventStorage {
                 }
             } else return false;
 
-
         } catch (Exception e) {
-            //Log.e(...)
             return false;
         }
-
-
         return true;
     }
 
@@ -103,21 +99,16 @@ public class EventStorage {
     public boolean loadAllActualEvents(Context mContext, Boolean reload) {
         clear();
 
-        SQLiteDatabase database = DBHelper.getInstance(mContext).getWritableDatabase();
-        Cursor cursor = database.query(DBHelper.TABLE_EVENTS, null, null, null, null, null, null);
-
         String currentDate = new SimpleDateFormat("dd.MM.yyyy HH:mm").format(Calendar.getInstance().getTime());
         boolean isTheDateRelevant = false;
         String savedDate;
         Date current_date = null;
         Date saved_date = null;
 
-
         if (!reload) {
             sPref = mContext.getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
             if (sPref.contains(APP_PREFERENCES_EVENT_UPDATE_DATE)) {
                 savedDate = sPref.getString(APP_PREFERENCES_EVENT_UPDATE_DATE, "");
-
 
                 try {
                     current_date = new SimpleDateFormat("dd.MM.yyyy HH:mm").parse(currentDate);
@@ -128,41 +119,39 @@ public class EventStorage {
                 }
             }
 
-
             if (current_date != null && saved_date != null) {
                 long diff = current_date.getTime() - saved_date.getTime();
                 long hours = TimeUnit.MILLISECONDS.toHours(diff);
-                isTheDateRelevant = hours < 10;
+                isTheDateRelevant = hours < 24;
             }
 
             if (isTheDateRelevant) {
 
+
+                SQLiteDatabase database = DBHelper.getInstance(mContext).getWritableDatabase();
+                Cursor cursor = database.query(DBHelper.TABLE_EVENTS, null, null, null, null, null, null);
+
                 if (cursor != null && cursor.getCount() > 0) {
                     downloadEventFromDatabase(mContext);
-                } else downloadActualEventRecord(currentDate, mContext);
+                } else {
+                    if (cursor != null) cursor.close();
+                    database.close();
+                    return downloadActualEventRecord(currentDate, mContext);
+                }
 
-            } else downloadActualEventRecord(currentDate, mContext);
+                cursor.close();
+                database.close();
 
-        } else downloadActualEventRecord(currentDate, mContext);
+            } else return downloadActualEventRecord(currentDate, mContext);
 
-        if (cursor != null) cursor.close();
-        database.close();
+        } else return downloadActualEventRecord(currentDate, mContext);
+
+
         return true;
 
     }
 
-    private void downloadActualEventRecord(String currentDate, Context mContext) {
-        sPref = mContext.getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
-        editor = sPref.edit();
-        editor.putString(APP_PREFERENCES_EVENT_UPDATE_DATE, currentDate);
-        editor.apply();
-
-        SQLiteDatabase database = DBHelper.getInstance(mContext).getWritableDatabase();
-        //Очистка содержимого таблицы events
-        database.execSQL("delete from events");
-
-        // класс для добавления новых строк в таблицу БД
-        ContentValues contentValues = new ContentValues();
+    private boolean downloadActualEventRecord(String currentDate, Context mContext) {
 
         try {
             IrbisConnection connection = getIrbisConnection();
@@ -183,26 +172,26 @@ public class EventStorage {
                     if (date_2 != null && event_date != null && event_date.getTime() >= date_2.getTime())
                         localMFNs.add(mfn);
                 }
-
-                Log.v("Tag", Integer.toString(localMFNs.size()));
-
             }
 
-            connection.disconnect();
+            SQLiteDatabase database = DBHelper.getInstance(mContext).getWritableDatabase();
+            database.execSQL("delete from events");
+
 
             for (int i = 0; i < localMFNs.size(); i++) {
                 int mfn = localMFNs.get(i);
 
+                ContentValues contentValues = new ContentValues();
                 //localEventRecords.add(downloadEventRecord(mfn, connection, mContext));
-                IrbisConnection connect = getIrbisConnection();
+
                 EventRecord eventRecord = new EventRecord();
-                MarcRecord record = connect.readRecord(mfn);
+                MarcRecord record = connection.readRecord(mfn);
 
                 String link = record.fm(107, 'P') + record.fm(107, 'F');
                 eventRecord.link = link;
                 contentValues.put(DBHelper.KEY_LINK, link);
 
-                String description2 = connect.formatRecord("@", mfn);
+                String description2 = connection.formatRecord("@", mfn);
 
                 Document html = Jsoup.parse(description2);
                 Element table = html.select("table").get(0);
@@ -298,16 +287,18 @@ public class EventStorage {
 
             }
 
-            connection.disconnect();
+            sPref = mContext.getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
+            editor = sPref.edit();
+            editor.putString(APP_PREFERENCES_EVENT_UPDATE_DATE, currentDate);
+            editor.apply();
 
+            connection.disconnect();
+            database.close();
 
         } catch (Exception e) {
-            Log.e("eTag", e.getMessage());
-
+            return false;
         }
-
-        database.close();
-
+        return true;
     }
 
     public void loadNextPage() {

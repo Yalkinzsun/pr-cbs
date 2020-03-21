@@ -4,7 +4,9 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import android.os.AsyncTask
+import android.os.Build
 
 import android.os.Bundle
 import android.util.Log
@@ -23,12 +25,14 @@ import com.example.pr_cbs.R
 import com.example.pr_cbs.RecordStorage.BookStorage
 import kotlinx.android.synthetic.main.search_fragmentv2.*
 import android.widget.*
+import com.example.pr_cbs.AsyncTasks.LoadAllBookMFNsAsyncTask
 import com.example.pr_cbs.AsyncTasks.LoadMoreBookRecordsAsyncTask
 import com.example.pr_cbs.RecordStorage.BookRecord
 import kotlin.math.abs
 
 
-class SearchFragmentv2() : Fragment(), LoadMoreBookRecordsAsyncTask.LoadMoreBookRecordsFinished {
+class SearchFragmentv2() : Fragment(), LoadMoreBookRecordsAsyncTask.LoadMoreBookRecordsFinished,
+    LoadAllBookMFNsAsyncTask.LoadAllBookMFNsFinished {
 
     private lateinit var searchBooksAdapter: SearchBooksAdapter
     private lateinit var mProgressBar: ProgressBar
@@ -37,9 +41,9 @@ class SearchFragmentv2() : Fragment(), LoadMoreBookRecordsAsyncTask.LoadMoreBook
     private lateinit var mTextNumberOfBooks: TextView
     private lateinit var mSearchImage: ImageView
     private lateinit var mSearchTextView: TextView
-    private var bookCount: String = "0"
     private var mSearchCombination: String = ""
     private var isDataLoading = false
+
 
     lateinit var sPref: SharedPreferences
     // имя файла настроек
@@ -106,12 +110,6 @@ class SearchFragmentv2() : Fragment(), LoadMoreBookRecordsAsyncTask.LoadMoreBook
                 super.onScrollStateChanged(recyclerView, newState)
                 val layoutManager = recyclerView.layoutManager as LinearLayoutManager
 
-//               // кол-во элементов на экране
-//                val visibleItemCount = layoutManager.childCount
-//                // кол-во элементов всего
-//
-//                val firstVisibleItem =
-//                    layoutManager.findFirstVisibleItemPosition()
 
                 val currentVisibleItem =
                     layoutManager.findLastCompletelyVisibleItemPosition()//какая позиция первого элемента
@@ -150,14 +148,16 @@ class SearchFragmentv2() : Fragment(), LoadMoreBookRecordsAsyncTask.LoadMoreBook
 
         val flag1: Boolean = (activity as MainActivity).isSearchIconPressed()
         val flag2: Boolean = (activity as MainActivity).isKeyboardSearchIconPressed()
+        val internetConnection = (activity as MainActivity).isNetworkConnected()
 
+        // Загрузка данных
         if (flag1) {
 
-            this.loadBooksList(false)
+            this.loadBooksList(false, internetConnection)
             (activity as MainActivity).isPressed = false
         }
         if (flag2) {
-            this.loadBooksList(false)
+            this.loadBooksList(false, internetConnection)
             (activity as MainActivity).keyboardSearchIconPressed = false
         }
     }
@@ -177,9 +177,76 @@ class SearchFragmentv2() : Fragment(), LoadMoreBookRecordsAsyncTask.LoadMoreBook
 
     }
 
+    override fun allBookMFNsLoaded(resCode: Int, bookCount: String) {
+
+        mNumberOfBooks.text = " " + bookCount
+        mTextNumberOfBooks.visibility = VISIBLE
+        mNumberOfBooks.visibility = VISIBLE
+
+        val sPref: SharedPreferences = this@SearchFragmentv2.context!!.getSharedPreferences(
+            "pref_settings",
+            Context.MODE_PRIVATE
+        )
+        val editor = sPref.edit()
+        editor.putString("book_count", bookCount)
+        editor.apply()
+
+        hideProgressBar()
+
+        when (resCode) {
+            //ошибок не произошло - 0
+//            0 -> {}
+            //не удалось найти книги по запросу - 1
+            1 -> bookNotFound()
+
+            // ошибка получения данных от сервера
+            2 -> serverError()
+            // нет подключения к интернету
+            3 -> noInternetConnection()
+
+
+        }
+
+    }
+
+    private fun preparingForSearch() {
+        search_fragment_start_block.visibility = GONE
+        progressBar2.visibility = VISIBLE
+
+    }
+
+    fun hideProgressBar() {
+        progressBar2.visibility = INVISIBLE
+    }
+
+
+    fun serverError() {
+        search_fragment_server_error_block.visibility = VISIBLE
+
+    }
+
+    fun noInternetConnection() {
+        search_fragment_no_internet_block.visibility = VISIBLE
+
+    }
+
+
+    private fun bookNotFound() {
+
+        search_fragment_not_found_block.visibility = VISIBLE
+
+        val errorText =
+            "К сожалению, по запросу\n\"${(activity as MainActivity).getSearchText()}\"\nничего не найдено"
+        search_fragment_not_found_text.text = errorText
+        (activity as MainActivity).setSearchText("")
+
+
+    }
+
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-
+        //TODO
+        val internetConnection = (activity as MainActivity).isNetworkConnected()
         if (data == null) return
         when (requestCode) {
             //  1 ->  mSearchCombination = data.getStringExtra("name")
@@ -193,7 +260,7 @@ class SearchFragmentv2() : Fragment(), LoadMoreBookRecordsAsyncTask.LoadMoreBook
 
                 mSearchCombination = "$title+\"A=$author$\""
                 //                     ("\"T=Google$\" * \"A=Машнин$\"");
-                this.loadBooksList(true)
+                this.loadBooksList(true, internetConnection)
                 (activity as MainActivity).setSearchText(mSearchCombination)
                 //  mSearchCombination = ""
 
@@ -204,107 +271,21 @@ class SearchFragmentv2() : Fragment(), LoadMoreBookRecordsAsyncTask.LoadMoreBook
     }
 
 
-
-    private fun loadBooksList(advanced_flag: Boolean) {
+    private fun loadBooksList(advanced_flag: Boolean, internetConnection: Boolean) {
         activity?.applicationContext?.let {
-            LoadMFNsAsyncTask(
-                it,
-                bookCount,
-                mProgressBar,
-                mNumberOfBooks,
-                mTextNumberOfBooks,
+            LoadAllBookMFNsAsyncTask(
+                this@SearchFragmentv2,
                 advanced_flag,
-                mSearchImage,
-                mSearchTextView,
                 mSearchCombination,
                 { (activity as MainActivity).getSearchText() },
                 { searchBooksAdapter.notifyDataSetChanged() },
-                {
-                    mSearchImage.visibility = VISIBLE
-                    mSearchTextView.visibility = VISIBLE
-                    val errorText =
-                        "К сожалению, по запросу\n\"${(activity as MainActivity).getSearchText()}\"\nничего не найдено"
-                    mSearchTextView.text = errorText
-                    (activity as MainActivity).setSearchText("")
-                }).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+                { this@SearchFragmentv2.preparingForSearch() },
+                internetConnection
+            ).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
         }
 
         (activity as MainActivity).keyboardSearchIconPressed = false
     }
 
-
-    class LoadMFNsAsyncTask(
-        var context: Context,
-        var bookCount: String,
-        var mProgressBar: ProgressBar,
-        var mNumberOfBooks: TextView,
-        var mTextNumberOfBooks: TextView,
-        var advanced_flag: Boolean,
-        var mSearchImage: ImageView,
-        var mSearchTextView: TextView,
-
-        var mSearchCombination: String,
-        private var getSearchText: () -> String,
-        private var notifyDataSetChanged: () -> Unit,
-        private var onNoResultsFound: () -> Unit
-    ) : AsyncTask<Unit, Unit, Unit>() {
-
-        private var hasResult: Boolean = true
-
-        override fun onPreExecute() {
-            super.onPreExecute()
-
-
-            mSearchImage.visibility = INVISIBLE
-            mSearchTextView.visibility = INVISIBLE
-            mProgressBar.visibility = VISIBLE
-
-            BookStorage.Instance().clear()
-            notifyDataSetChanged()
-        }
-
-        override fun doInBackground(vararg p0: Unit?) {
-            if (mSearchCombination != "") {
-
-                if (advanced_flag) this.hasResult =
-                    BookStorage.Instance().fetchMFNsByQueryAdvanced(mSearchCombination)
-                else this.hasResult =
-                    BookStorage.Instance().fetchMFNsByQuery(mSearchCombination)
-
-            } else this.hasResult = BookStorage.Instance().fetchMFNsByQuery(this.getSearchText())
-
-
-            BookStorage.Instance().loadNextPage(0)
-        }
-
-        override fun onPostExecute(result: Unit?) {
-            super.onPostExecute(result)
-
-
-            mProgressBar.visibility = GONE
-            notifyDataSetChanged()
-
-
-            val sPref: SharedPreferences =
-                context.getSharedPreferences("pref_settings", Context.MODE_PRIVATE)
-            val editor = sPref.edit()
-            bookCount = BookStorage.Instance().mfNsCount.toString()
-            editor.putString("book_count", bookCount)
-            editor.apply()
-
-            mTextNumberOfBooks.visibility = VISIBLE
-            mNumberOfBooks.visibility = VISIBLE
-
-            mNumberOfBooks.text = bookCount
-
-
-            if (!this.hasResult) {
-                onNoResultsFound()
-            } else {
-                mSearchImage.visibility = INVISIBLE
-                mSearchTextView.visibility = INVISIBLE
-            }
-        }
-    }
 
 }

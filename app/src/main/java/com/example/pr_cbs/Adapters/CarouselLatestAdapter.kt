@@ -67,10 +67,7 @@ class CarouselLatestAdapter(private val context: Context?) : RecyclerView.Adapte
                     2 ->  itemView.latest_book_cover.setBackgroundResource(R.drawable.book_cover_3)
                 }
             } else {
-                if (context != null) {
-
-                  Glide.with(context).load(book.link).into(itemView.latest_book_cover)
-                }
+                if (context != null) Glide.with(context).load(book.link).into(itemView.latest_book_cover)
             }
             this.currentPosition = pos
 

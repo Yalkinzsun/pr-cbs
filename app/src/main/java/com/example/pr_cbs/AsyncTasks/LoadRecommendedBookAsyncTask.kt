@@ -7,8 +7,7 @@ import com.example.pr_cbs.RecordStorage.RecommendedBookStorage
 class LoadRecommendedBookAsyncTask(
     private val callback: RecommendedATFinished,
     var context: Context,
-    var downloadLatestBooksFromDatabase: Boolean,
-    private var onNoResultsFound: () -> Unit
+    var downloadLatestBooksFromDatabase: Boolean
 
 ) : AsyncTask<Unit, Unit, Unit>() {
 
@@ -30,16 +29,11 @@ class LoadRecommendedBookAsyncTask(
     override fun onPostExecute(result: Unit?) {
         super.onPostExecute(result)
 
-        if (!this.hasResult) {
-            onNoResultsFound()
-        } else {
-            //TODO
-        }
 
-        callback.fromSecondATtoThird()
+        callback.fromSecondATtoThird(this.hasResult)
     }
 
     interface RecommendedATFinished {
-        fun fromSecondATtoThird()
+        fun fromSecondATtoThird(recommendedResult: Boolean)
     }
 }

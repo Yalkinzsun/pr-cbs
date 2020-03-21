@@ -19,18 +19,18 @@ import ru.arsmagna.IrbisException;
 import ru.arsmagna.MarcRecord;
 
 public class RecommendedBookStorage {
-    private ArrayList<BookRecord> localRecords;
+    private ArrayList<BookRecord> localRecommendedRecords;
 
 
-    private RecommendedBookStorage(ArrayList<BookRecord> localRecords) {
-        this.localRecords = localRecords;
+    private RecommendedBookStorage(ArrayList<BookRecord> localRecommendedRecords) {
+        this.localRecommendedRecords = localRecommendedRecords;
     }
 
     private static RecommendedBookStorage storage = null;
 
     String APP_PREFERENCES = "pref_settings";
     String APP_PREFERENCES_RECOMMENDED_BOOK_UPDATE_DATE = "recommended_book_update_date";
-    DBHelper dbHelper;
+
 
     public static RecommendedBookStorage Instance() {
         if (storage == null)
@@ -40,11 +40,11 @@ public class RecommendedBookStorage {
     }
 
     public int getAvailableRecordsCount() {
-        return localRecords.size();
+        return localRecommendedRecords.size();
     }
 
     public void clear() {
-        localRecords.clear();
+        localRecommendedRecords.clear();
     }
 
     public boolean downloadRecommendedBooks(Boolean canDownloadFromDatabase, Context context) {
@@ -56,7 +56,11 @@ public class RecommendedBookStorage {
 
             if (cursor != null && cursor.getCount() > 0) {
                 emptyDatabase = false;
-                downloadRecommendedBooksFromDatabase(context);
+                downloadRecommendedBooksFromDatabase(cursor);
+
+            }
+
+            if (cursor != null) {
                 cursor.close();
             }
 
@@ -66,7 +70,7 @@ public class RecommendedBookStorage {
             clear();
             SQLiteDatabase database = DBHelper.getInstance(context).getWritableDatabase();
             //Очистка содержимого таблицы events
-            database.execSQL("delete from latest");
+            database.execSQL("delete from recommended");
 
             try {
                 IrbisConnection connection = getIrbisConnection();
@@ -75,7 +79,7 @@ public class RecommendedBookStorage {
 
                 if (found.length != 0) {
                     for (int mfn : found) {
-                        localRecords.add(downloadBookRecord(mfn, connection, context));
+                        localRecommendedRecords.add(downloadBookRecord(mfn, connection, context));
                     }
                 } else return false;
 
@@ -89,10 +93,8 @@ public class RecommendedBookStorage {
         return true;
     }
 
-    public void downloadRecommendedBooksFromDatabase(Context context) {
-        dbHelper = new DBHelper(context);
-        SQLiteDatabase database = dbHelper.getWritableDatabase();
-        Cursor cursor = database.query(DBHelper.TABLE_RECOMMENDED, null, null, null, null, null, null);
+    private void downloadRecommendedBooksFromDatabase(Cursor cursor) {
+
 
         if (cursor.moveToFirst()) {
 
@@ -122,19 +124,18 @@ public class RecommendedBookStorage {
                 recommendedBookRecord.size = cursor.getString(sizeIndex);
                 recommendedBookRecord.lang = cursor.getString(langIndex);
 
-                localRecords.add(recommendedBookRecord);
+                localRecommendedRecords.add(recommendedBookRecord);
 
             } while (cursor.moveToNext());
 
         } else
             Log.d("mLog", "0 rows");
 
-        cursor.close();
     }
 
 
     public BookRecord getRecordById(int id) {
-        return localRecords.get(id);
+        return localRecommendedRecords.get(id);
     }
 
     private BookRecord downloadBookRecord(int mfn, IrbisConnection connection, Context context) throws

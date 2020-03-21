@@ -11,5 +11,8 @@
     <string name="map_key" translatable="false">
        AIzaSyCzBdN_i-PkzZEXdeMWyCH0FtJtvioKonU
    </string>
+    <string name="server_error_text">Ошибка получения данных от сервера.\nПожалуйста, повторите попытку\nчерез некоторое время</string>
+    <string name="found">Найдено:</string>
+    <string name="no_internet_connection">Вы не подключены к Интернету</string>
 
 </resources>

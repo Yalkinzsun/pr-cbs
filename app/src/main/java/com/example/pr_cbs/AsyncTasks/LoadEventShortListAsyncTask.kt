@@ -33,10 +33,10 @@ class LoadEventShortListAsyncTask(
             //TODO
         }
 
-        callback.afterLastATFinished()
+        callback.afterLastATFinished(hasResult)
     }
 
     interface EventsATFinished {
-        fun afterLastATFinished()
+        fun afterLastATFinished(hasResult: Boolean)
     }
 }

@@ -19,17 +19,17 @@ import ru.arsmagna.IrbisException;
 import ru.arsmagna.MarcRecord;
 
 public class LatestBookStorage {
-    private ArrayList<BookRecord> localRecords;
+    private ArrayList<BookRecord> localLatestRecords;
 
 
-    private LatestBookStorage(ArrayList<BookRecord> localRecords) {
-        this.localRecords = localRecords;
+    private LatestBookStorage(ArrayList<BookRecord> localLatestRecords) {
+        this.localLatestRecords = localLatestRecords;
     }
 
     private static LatestBookStorage storage = null;
     String APP_PREFERENCES = "pref_settings";
     String APP_PREFERENCES_LATEST_BOOK_UPDATE_DATE = "latest_book_update_date";
-    DBHelper dbHelper;
+
 
     public static LatestBookStorage Instance() {
         if (storage == null)
@@ -40,11 +40,11 @@ public class LatestBookStorage {
     }
 
     public int getAvailableRecordsCount() {
-        return localRecords.size();
+        return localLatestRecords.size();
     }
 
     public void clear() {
-        localRecords.clear();
+        localLatestRecords.clear();
     }
 
     public boolean downloadLatestBooks(Boolean canDownloadFromDatabase, Context context) {
@@ -56,15 +56,20 @@ public class LatestBookStorage {
 
             if (cursor != null && cursor.getCount() > 0) {
                 emptyDatabase = false;
-                downloadLatestBooksFromDatabase(database);
+                downloadLatestBooksFromDatabase(cursor);
+
+            }
+
+
+            if (cursor != null) {
                 cursor.close();
             }
 
         }
 
         if (!canDownloadFromDatabase || emptyDatabase) {
-            clear();
 
+            clear();
             database.execSQL("delete from latest");
 
 
@@ -75,7 +80,7 @@ public class LatestBookStorage {
 
                 if (found.length != 0) {
                     for (int mfn : found) {
-                        localRecords.add(downloadBookRecord(mfn, connection, database));
+                        localLatestRecords.add(downloadBookRecord(mfn, connection, database));
                     }
 
                     String currentDate = new SimpleDateFormat("dd.MM.yyyy HH:mm").format(Calendar.getInstance().getTime());
@@ -89,6 +94,7 @@ public class LatestBookStorage {
 
                 connection.disconnect();
 
+
             } catch (Exception e) {
                 //Log.e(...)
                 return false;
@@ -101,9 +107,7 @@ public class LatestBookStorage {
         return true;
     }
 
-    private void downloadLatestBooksFromDatabase(SQLiteDatabase database) {
-
-        Cursor cursor = database.query(DBHelper.TABLE_LATEST, null, null, null, null, null, null);
+    private void downloadLatestBooksFromDatabase(Cursor cursor ) {
 
         if (cursor.moveToFirst()) {
 
@@ -133,21 +137,21 @@ public class LatestBookStorage {
                 latestBookRecord.size = cursor.getString(sizeIndex);
                 latestBookRecord.lang = cursor.getString(langIndex);
 
-                localRecords.add(latestBookRecord);
+                localLatestRecords.add(latestBookRecord);
 
             } while (cursor.moveToNext());
 
         } else
             Log.d("mLog", "0 rows");
 
-        cursor.close();
+      //  cursor.close();
 
 
     }
 
 
     public BookRecord getRecordById(int id) {
-        return localRecords.get(id);
+        return localLatestRecords.get(id);
     }
 
     private BookRecord downloadBookRecord(int mfn, IrbisConnection connection, SQLiteDatabase database) throws
