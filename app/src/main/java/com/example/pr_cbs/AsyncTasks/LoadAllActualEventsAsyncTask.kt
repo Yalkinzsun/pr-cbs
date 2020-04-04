@@ -11,49 +11,42 @@ import com.example.pr_cbs.RecordStorage.BookStorage
 import com.example.pr_cbs.RecordStorage.EventStorage
 
 class LoadAllActualEventsAsyncTask(
+    private val callback: LoadAllActualEventsFinished,
     var mContext: Context,
     var reload: Boolean,
-    var mProgressBar: ProgressBar,
     private var notifyDataSetChanged: () -> Unit,
-    private var onNoResultsFound: () -> Unit
+    private var showProgressBar: () -> Unit,
+    private val internetConnection: Boolean
 ) : AsyncTask<Unit, Unit, Unit>() {
 
-    private var hasResult: Boolean = true
+    private var hasResult: Int = 0
 
 
     override fun onPreExecute() {
         super.onPreExecute()
-        mProgressBar.visibility = View.VISIBLE
 
         EventStorage.Instance().clear()
         notifyDataSetChanged()
+        showProgressBar()
     }
 
     override fun doInBackground(vararg p0: Unit?) {
 
-
-        this.hasResult = true
-
-        // TODO разобраться с этим
-        if (hasResult)
-            EventStorage.Instance().loadAllActualEvents(mContext, reload)
+        this.hasResult = EventStorage.Instance().loadAllActualEvents(mContext, reload, internetConnection)
     }
 
     override fun onPostExecute(result: Unit?) {
         super.onPostExecute(result)
-
-        mProgressBar.visibility = View.GONE
         notifyDataSetChanged()
+        callback.allActualEventsLoaded(hasResult)
 
-
-        //  mFound.visibility = VISIBLE
-        //  mNumberOfBooks.visibility = VISIBLE
-
-        if (!this.hasResult) {
-            onNoResultsFound()
-        } else {
-//                mSearchImage.visibility = INVISIBLE
-//                mSearchTextView.visibility = INVISIBLE
-        }
     }
+
+    interface LoadAllActualEventsFinished {
+        fun allActualEventsLoaded(resCode: Int)
+    }
+
 }
+
+
+

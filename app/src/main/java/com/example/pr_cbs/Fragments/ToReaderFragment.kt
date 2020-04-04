@@ -15,44 +15,20 @@ import com.example.pr_cbs.R
 import android.view.View.*
 import android.widget.ProgressBar
 import android.widget.TextView
+import android.widget.Toast
+import com.example.pr_cbs.AsyncTasks.LoadTakenBooksAsyncTask
 import com.example.pr_cbs.HowToBecomeAReaderActivity
 import com.example.pr_cbs.RecordStorage.TakenBookStorage
 import kotlinx.android.synthetic.main.to_reader_fragment.*
 import com.example.pr_cbs.TakenBooksActivity
 
 
-class ToReaderFragment : Fragment() {
-
-
-    private lateinit var mProgressBar: ProgressBar
-    private lateinit var mNumberOfBooks: TextView
-    private lateinit var mMore: TextView
-    private lateinit var libraryCard: String
-    private var isDownloadFinished: Boolean = false
-    lateinit var sPref: SharedPreferences
-    private val APP_PREFERENCES = "pref_settings"
-    private val APP_PREFERENCES_LIBRARY_CARD = "library_card"
-
-
-    override fun onPause() {
-        super.onPause()
-
-        if (libraryCard.isNotEmpty()) {
-            val editor = sPref.edit()
-            editor.putString(APP_PREFERENCES_LIBRARY_CARD, libraryCard)
-            editor.apply()
-        }
-    }
+class ToReaderFragment : Fragment(), LoadTakenBooksAsyncTask.LoadTakenBooksFinished {
 
     override fun onResume() {
         super.onResume()
         (activity as MainActivity).supportActionBar!!.hide()
 
-        if (sPref.contains(APP_PREFERENCES_LIBRARY_CARD)) {
-            // Получаем данные из настроек
-            libraryCard = sPref.getString(APP_PREFERENCES_LIBRARY_CARD, "").toString()
-            tv_reader_ticket_number.text = libraryCard
-        }
     }
 
     override fun onStop() {
@@ -62,8 +38,6 @@ class ToReaderFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-
     }
 
     override fun onCreateView(
@@ -75,35 +49,29 @@ class ToReaderFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        mProgressBar = view.findViewById(R.id.toReaderProgressBar)
-        mNumberOfBooks = view.findViewById(R.id.toReaderNumberOfBooks)
-        mMore = view.findViewById(R.id.reader_more_info_about_taken_books)
 
+        var libraryCard: String
 
-        sPref = this.activity!!.getSharedPreferences(APP_PREFERENCES, MODE_PRIVATE)
-
-
-        if (sPref.contains(APP_PREFERENCES_LIBRARY_CARD) && sPref.getString(
-                APP_PREFERENCES_LIBRARY_CARD,
-                ""
-            ).toString() != "0"
+        if (MainActivity.checkSharedPreferenceAvailability(
+                "library_card",
+                this.activity!!
+            ) && MainActivity.getFromSharedPreferences("library_card", this.activity!!) != "0"
         ) {
-            libraryCard = sPref.getString(APP_PREFERENCES_LIBRARY_CARD, "").toString()
+
+
+            libraryCard = MainActivity.getFromSharedPreferences("library_card", this.activity!!)
             tv_reader_ticket_number.text = libraryCard
             card_view_reader_1.visibility = INVISIBLE
             card_view_reader_2.visibility = VISIBLE
-
             loadTakenBooks("Microsoft")
 
-
         }
-
-
 
 
         iv_reader_submit2.setOnClickListener {
             if (et_reader_ticket_number.text.toString().isNotEmpty()) {
                 libraryCard = et_reader_ticket_number.text.toString()
+                MainActivity.putInSharedPreferences("library_card", libraryCard, this.activity!!)
                 card_view_reader_1.visibility = INVISIBLE
                 card_view_reader_2.visibility = VISIBLE
                 tv_reader_ticket_number.text = libraryCard
@@ -114,10 +82,7 @@ class ToReaderFragment : Fragment() {
         }
 
         iv_reader_clear.setOnClickListener {
-            libraryCard = "0"
-            val editor = sPref.edit()
-            editor.putString(APP_PREFERENCES_LIBRARY_CARD, libraryCard)
-            editor.apply()
+            MainActivity.putInSharedPreferences("library_card", "0", this.activity!!)
             card_view_reader_2.visibility = INVISIBLE
             card_view_reader_1.visibility = VISIBLE
         }
@@ -125,10 +90,10 @@ class ToReaderFragment : Fragment() {
 
 
         reader_more_info_about_taken_books.setOnClickListener {
-           // if (isDownloadFinished) {
-                val intent = Intent(context, TakenBooksActivity::class.java)
-                startActivity(intent)
-           // }
+            // if (isDownloadFinished) {
+            val intent = Intent(context, TakenBooksActivity::class.java)
+            startActivity(intent)
+            // }
         }
 
 
@@ -139,76 +104,50 @@ class ToReaderFragment : Fragment() {
 
     }
 
-    private fun loadTakenBooks(ticketNumber: String) {
 
-        context?.let {
-            LoadTakenBooksAsyncTask(
-                it,
-                mMore,
-                isDownloadFinished,
-                mProgressBar,
-                mNumberOfBooks,
-                ticketNumber,
-                { mNumberOfBooks.text = "-1" }
-            ).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
-        }
 
+    fun chekTicketNumber():Boolean {
+        return true
     }
 
-    class LoadTakenBooksAsyncTask(
-        var mContext: Context,
-        var mMore: TextView,
-        var finishFlag: Boolean,
-        var mProgressBar: ProgressBar,
-        var mNumberOfTakenBooks: TextView,
-        var ticketNumber: String,
-        private var onNoResultsFound: () -> Unit
+    override fun allTakenBooksLoaded(resCode: Int) {
 
-    ) : AsyncTask<Unit, Unit, Unit>() {
+        val takenBookCount = TakenBookStorage.Instance().availableRecordsCount.toString()
+        MainActivity.putInSharedPreferences("taken_book_count", takenBookCount, this.activity!!)
 
-        private var hasResult: Boolean = true
+        toReaderProgressBar.visibility = INVISIBLE
 
-        override fun onPreExecute() {
-            super.onPreExecute()
-            mNumberOfTakenBooks.visibility = INVISIBLE
-            mProgressBar.visibility = VISIBLE
+        when (resCode) {
 
-            TakenBookStorage.Instance().clear()
-        }
+            0 -> {
+                toReaderNumberOfBooks.text = takenBookCount
+                reader_more_info_about_taken_books.setBackgroundResource(R.drawable.button_order_delivery)
+                reader_more_info_about_taken_books.isEnabled = true
 
-        override fun doInBackground(vararg p0: Unit?) {
-
-            this.hasResult = TakenBookStorage.Instance().downloadAllTakenBooks(ticketNumber)
-
-        }
-
-        override fun onPostExecute(result: Unit?) {
-            super.onPostExecute(result)
-
-            mProgressBar.visibility = GONE
-
-            val sPref: SharedPreferences =
-                mContext.getSharedPreferences("pref_settings", MODE_PRIVATE)
-            val editor = sPref.edit()
-
-            val takenBookCount = TakenBookStorage.Instance().availableRecordsCount.toString()
-            editor.putString("taken_book_count", takenBookCount)
-            editor.apply()
-
-            mNumberOfTakenBooks.visibility = VISIBLE
-
-            mNumberOfTakenBooks.text = takenBookCount
-
-
-            if (!this.hasResult) {
-                onNoResultsFound()
-
-            } else {
-                finishFlag = true
-                mMore.setBackgroundResource(R.drawable.button_order_delivery)
             }
+            1 -> toReaderNumberOfBooks.text = "0"
+            2 -> Toast.makeText(
+                this@ToReaderFragment.context,
+                "Ошибка получения данных от сервера",
+                Toast.LENGTH_LONG
+            ).show()
+            3 -> Toast.makeText(
+                this@ToReaderFragment.context,
+                "Вы не подключены к Интернету",
+                Toast.LENGTH_LONG
+            ).show()
+
         }
     }
 
 
+    private fun loadTakenBooks(ticketNumber: String) {
+        val internetConnection = (activity as MainActivity).isNetworkConnected()
+        toReaderProgressBar.visibility = VISIBLE
+        LoadTakenBooksAsyncTask(
+            this@ToReaderFragment,
+            ticketNumber,
+            internetConnection
+        ).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+    }
 }

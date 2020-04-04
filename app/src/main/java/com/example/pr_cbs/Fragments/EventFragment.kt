@@ -3,7 +3,6 @@ package com.example.pr_cbs.Fragments
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
-import android.content.res.Resources
 import android.os.AsyncTask
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -22,22 +21,19 @@ import com.example.pr_cbs.R
 import com.example.pr_cbs.RecordStorage.EventStorage
 import kotlinx.android.synthetic.main.event_fragment.*
 import androidx.recyclerview.widget.LinearSnapHelper
-import androidx.recyclerview.widget.SnapHelper
-import com.example.pr_cbs.AsyncTasks.EventsLoadMFNsAsyncTask
-import com.example.pr_cbs.AsyncTasks.EventsLoadMoreRecordsAsyncTask
+import com.example.pr_cbs.AsyncTasks.LoadAllEventMFNsAsyncTask
+import com.example.pr_cbs.AsyncTasks.LoadMoreEventRecordsAsyncTask
 import com.example.pr_cbs.AsyncTasks.LoadAllActualEventsAsyncTask
 import com.example.pr_cbs.EventFilterActivity
-import java.text.SimpleDateFormat
-import java.util.*
+import com.example.pr_cbs.RecordStorage.EventRecord
+import java.text.FieldPosition
 
 
-class EventFragment : Fragment() {
+class EventFragment : Fragment(), LoadAllActualEventsAsyncTask.LoadAllActualEventsFinished,
+    LoadAllEventMFNsAsyncTask.LoadAllMFNsEventsFinished,
+    LoadMoreEventRecordsAsyncTask.LoadMoreEventRecordsFinished {
 
     private lateinit var searchEventAdapter: EventAdapterNew
-    private lateinit var mEventProgressBar: ProgressBar
-    private lateinit var mEventProgressBar2: ProgressBar
-    private lateinit var mErrorImage: ImageView
-    private lateinit var mErrorText: TextView
     private lateinit var mSearchLine: EditText
     lateinit var mContext: Context
     lateinit var sPref: SharedPreferences
@@ -45,6 +41,7 @@ class EventFragment : Fragment() {
     private val APP_PREFERENCES = "pref_settings"
     private val APP_PREFERENCES_EVENT_UPDATE_DATE = "event_update_date"
     private var actualEvents: Boolean = true
+    private var isDataLoading = false
 
 
     override fun onResume() {
@@ -71,15 +68,9 @@ class EventFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
-        mEventProgressBar = view.findViewById(R.id.eventProgressBar1)
-        mEventProgressBar2 = view.findViewById(R.id.eventProgressBar2)
-
         searchEventAdapter = EventAdapterNew(this@EventFragment.context)
         mContext = this@EventFragment.context!!
 
-        mErrorImage = view.findViewById(R.id.event_error_image)
-        mErrorText = view.findViewById(R.id.event_error_text)
         mSearchLine = view.findViewById(R.id.eT_event_search_line)
 
         sPref = this.activity!!.getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE)
@@ -90,7 +81,7 @@ class EventFragment : Fragment() {
 
         //проверка адаптера на наличие элеметов
         if (searchEventAdapter.itemCount == 0) {
-                this.loadAllActualEvents(false)
+            this.loadAllActualEvents(false)
         }
 
         EventRecyclerView.layoutManager =
@@ -118,9 +109,11 @@ class EventFragment : Fragment() {
                 super.onScrollStateChanged(recyclerView, newState)
 
                 val layoutManager = recyclerView.layoutManager as LinearLayoutManager
-                val visibleItemCount = layoutManager.childCount
+
+                val currentVisibleItem =
+                    layoutManager.findLastCompletelyVisibleItemPosition()
                 val totalItemCount = layoutManager.itemCount
-                val pastVisibleItems = layoutManager.findFirstCompletelyVisibleItemPosition()
+
 
                 event_arrow_forward.setOnClickListener {
                     EventRecyclerView.smoothScrollToPosition(layoutManager.findLastVisibleItemPosition() + 1)
@@ -131,15 +124,18 @@ class EventFragment : Fragment() {
                         EventRecyclerView.smoothScrollToPosition(layoutManager.findLastVisibleItemPosition() - 1)
                 }
 
-                if (!actualEvents) {
-                    if (pastVisibleItems + visibleItemCount >= totalItemCount) {
-                        if (EventStorage.Instance().canLoadMore())
-                            EventsLoadMoreRecordsAsyncTask(
-                                mEventProgressBar2
-                            ) { searchEventAdapter.notifyDataSetChanged() }.executeOnExecutor(
-                                AsyncTask.THREAD_POOL_EXECUTOR
-                            )
 
+                if (!actualEvents) {
+                    if (!isDataLoading) {
+                        if (currentVisibleItem == totalItemCount - 1) {
+                            if (EventStorage.Instance().canLoadMore())
+                                isDataLoading = true
+                            LoadMoreEventRecordsAsyncTask(
+                                this@EventFragment,
+                                currentVisibleItem,
+                                { this@EventFragment.showEventProgressBar() }
+                            ).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+                        }
                     }
                 }
             }
@@ -153,16 +149,122 @@ class EventFragment : Fragment() {
 
 
         event_reload_icon.setOnClickListener {
-                actualEvents = true
-                this.loadAllActualEvents(true)
+            actualEvents = true
+            this.loadAllActualEvents(true)
         }
 
 
         event_search_icon.setOnClickListener {
-                actualEvents = false
-                this.loadEventsList()
+            actualEvents = false
+            this.loadEventsList()
         }
     }
+
+
+    override fun allActualEventsLoaded(resCode: Int) {
+        hideEventProgressBar()
+
+        when (resCode) {
+            0 -> showArrows()
+            1 -> eventNotFound()
+            2 -> serverError()
+            3 -> noInternetConnection()
+
+        }
+
+    }
+
+    override fun allEventMFNsLoaded(resCode: Int) {
+        hideEventProgressBar()
+
+        when (resCode) {
+            0 -> showArrows()
+            1 -> eventNotFound()
+            2 -> serverError()
+            3 -> noInternetConnection()
+
+        }
+
+    }
+
+
+    override fun moreEventsLoaded(position: Int) {
+        val size = EventStorage.Instance().localEventRecords.size
+
+        for (i in position + 1..size) {
+            searchEventAdapter.notifyItemChanged(i)
+        }
+        isDataLoading = false
+
+    }
+
+
+    private fun showArrows() {
+        cl_event_arrows_block.visibility = VISIBLE
+    }
+
+
+    private fun noInternetConnection() {
+        CL_event_fragment_no_internet_block.visibility = VISIBLE
+    }
+
+
+    private fun serverError() {
+        CL_event_fragment_server_error_block.visibility = VISIBLE
+    }
+
+    private fun eventNotFound() {
+        CL_event_fragment_not_found_block.visibility = VISIBLE
+        val errorText =
+            "К сожалению, по запросу\n\"${eT_event_search_line.text}\"\nничего не найдено"
+        event_found_error_text.text = errorText
+
+    }
+
+
+    private fun preparingForSearching() {
+        CL_event_fragment_no_internet_block.visibility = INVISIBLE
+        CL_event_fragment_server_error_block.visibility = INVISIBLE
+        CL_event_fragment_not_found_block.visibility = INVISIBLE
+        cl_event_arrows_block.visibility = INVISIBLE
+    }
+
+    private fun showEventProgressBar() {
+        event_ProgressBar_block.visibility = VISIBLE
+    }
+
+    private fun hideEventProgressBar() {
+        event_ProgressBar_block.visibility = INVISIBLE
+    }
+
+
+    private fun loadEventsList() {
+        preparingForSearching()
+        val internetConnection = (activity as MainActivity).isNetworkConnected()
+        LoadAllEventMFNsAsyncTask(
+            this@EventFragment,
+            mSearchLine.text.toString(),
+            { searchEventAdapter.notifyDataSetChanged() },
+            internetConnection
+        ).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+
+    }
+
+    private fun loadAllActualEvents(reload: Boolean) {
+        preparingForSearching()
+        val internetConnection = (activity as MainActivity).isNetworkConnected()
+        this@EventFragment.context?.let {
+            LoadAllActualEventsAsyncTask(
+                this@EventFragment,
+                it,
+                reload,
+                { searchEventAdapter.notifyDataSetChanged() },
+                { this@EventFragment.showEventProgressBar() },
+                internetConnection
+            ).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+        }
+    }
+
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
 
@@ -176,45 +278,6 @@ class EventFragment : Fragment() {
 
     }
 
-
-    private fun loadAllActualEvents(reload: Boolean) {
-        this@EventFragment.context?.let {
-            LoadAllActualEventsAsyncTask(
-                it,
-                reload,
-                mEventProgressBar,
-                { searchEventAdapter.notifyDataSetChanged() },
-                {
-                  //TODO неясность
-                    Toast.makeText(context, "К сожалению, ничего не найдено", Toast.LENGTH_LONG)
-                        .show()
-
-                }
-            ).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
-        }
-    }
-
-
-
-
-    private fun loadEventsList() {
-
-        EventsLoadMFNsAsyncTask(
-            mSearchLine.text.toString(),
-            mErrorImage,
-            mErrorText,
-            mEventProgressBar,
-            { searchEventAdapter.notifyDataSetChanged() },
-            {
-                mErrorImage.visibility = VISIBLE
-                mErrorText.visibility = VISIBLE
-                val searchQuery = this.mSearchLine.text.toString()
-                val errorText =  "к сожалению, по запросу\n\"$searchQuery\" \nничего не найдено"
-                mErrorText.text = errorText
-            }
-        ).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
-
-    }
 
 }
 

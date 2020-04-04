@@ -1,6 +1,6 @@
 package com.example.pr_cbs
 
-import android.content.Intent
+
 import android.os.Bundle
 import android.text.Editable
 import android.view.inputmethod.EditorInfo
@@ -12,32 +12,26 @@ import com.google.android.material.bottomnavigation.BottomNavigationView.OnNavig
 
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_main.view.*
-import com.google.android.material.appbar.AppBarLayout
-import androidx.coordinatorlayout.widget.CoordinatorLayout
-import android.app.Activity
 import android.content.Context
 import android.content.pm.ActivityInfo
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
-import android.view.View
+
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 
 
 class MainActivity : AppCompatActivity() {
 
-    lateinit var searchFragment: SearchFragmentv2
     var isPressed = false
     var keyboardSearchIconPressed = false
-    var eventError = true
+    var eventError = 0
     var latestError = true
     var recommendedError = true
 
 
-
-
-    fun getInfoAboutEventError(): Boolean {
+    fun getInfoAboutEventError(): Int {
         return eventError
     }
 
@@ -54,10 +48,8 @@ class MainActivity : AppCompatActivity() {
         return toolbar.input_line.text.toString()
     }
 
-    fun setSearchText(mCombination: String): String {
-
+    fun setSearchText(mCombination: String) {
         toolbar.input_line.text = mCombination.toEditable()
-        return "true"
     }
 
     fun isSearchIconPressed(): Boolean {
@@ -77,7 +69,7 @@ class MainActivity : AppCompatActivity() {
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_catalog -> {
-                loadFragment(SearchFragmentv2())
+                loadFragment(SearchFragment())
 
                 return@OnNavigationItemSelectedListener true
             }
@@ -105,7 +97,8 @@ class MainActivity : AppCompatActivity() {
 
         val connectionStatus = intent.getIntExtra("connection_status", 0)
 
-        eventError = intent.getBooleanExtra("event_storage_downloading_error", true)
+        eventError = intent.getIntExtra("event_storage_downloading_error", 0)
+
 
         if (connectionStatus == 1) Toast.makeText(
             this,
@@ -114,11 +107,7 @@ class MainActivity : AppCompatActivity() {
         ).show()
 
 
-
-
         loadFragment(HomeFragment())
-
-
 
 
         val navView: BottomNavigationView = findViewById(R.id.nav_view)
@@ -165,6 +154,36 @@ class MainActivity : AppCompatActivity() {
         transaction.addToBackStack(null)
         transaction.commit()
     }
+
+
+
+    companion object {
+
+        fun putInSharedPreferences(name: String, value: String, context: Context) {
+            val sharedPreferences = context.getSharedPreferences("pref_settings", Context.MODE_PRIVATE)
+            val editor = sharedPreferences.edit()
+            editor.putString(name, value)
+            editor.apply()
+        }
+
+
+
+        fun getFromSharedPreferences(name: String,  context: Context): String {
+            val sharedPreferences = context.getSharedPreferences("pref_settings", Context.MODE_PRIVATE)
+
+            return sharedPreferences.getString(name, "").toString()
+
+        }
+
+        fun checkSharedPreferenceAvailability(name: String, context: Context): Boolean {
+            val sPref = context.getSharedPreferences("pref_settings", Context.MODE_PRIVATE)
+            if (!sPref.contains(name)) return false
+            return true
+        }
+
+    }
+
+
 
 
     fun isNetworkConnected(): Boolean {

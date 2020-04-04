@@ -178,22 +178,11 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
-                    android:text="@string/no_internet_connection"
                     android:layout_marginTop="10dp"
+                    android:text="@string/no_internet_connection"
                     android:textAlignment="center" />
 
         </RelativeLayout>
-
-
-        <ProgressBar
-                android:id="@+id/progressBar"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:indeterminateTint="@color/colorPrimaryDark"
-                android:indeterminateTintMode="src_in"
-                android:visibility="invisible"
-                tools:ignore="UnusedAttribute" />
 
 
         <androidx.recyclerview.widget.RecyclerView
@@ -205,16 +194,24 @@
                 android:layout_marginEnd="15dp"
                 app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
-        <ProgressBar
-                android:id="@+id/progressBar2"
+
+        <RelativeLayout
+                android:id="@+id/search_progressBar_block"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:background="@drawable/progress_bar_background"
                 android:layout_centerInParent="true"
-                android:indeterminateTint="@color/colorAccent"
-                android:indeterminateTintMode="src_in"
-                android:visibility="invisible"
-                tools:ignore="UnusedAttribute" />
+                android:visibility="invisible">
 
+            <ProgressBar
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:layout_margin="3dp"
+                    android:layout_centerInParent="true"
+                    android:visibility="visible" />
+
+
+        </RelativeLayout>
     </RelativeLayout>
 
 

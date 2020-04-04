@@ -1,6 +1,8 @@
 package com.example.pr_cbs.RecordStorage;
 
 
+import android.util.Log;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -136,7 +138,7 @@ public class BookStorage {
             connection.disconnect();
 
         } catch (Exception e) {
-            // TODO
+            Log.v("EventError", "IrbisError");
         }
 
     }

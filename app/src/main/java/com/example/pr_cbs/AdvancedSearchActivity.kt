@@ -3,13 +3,9 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import kotlinx.android.synthetic.main.activity_advanced_search.*
 
-import android.view.View
 import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
 import android.content.Intent
-
-import androidx.fragment.app.Fragment
-import com.example.pr_cbs.Fragments.SearchFragmentv2
 
 
 class AdvancedSearchActivity : AppCompatActivity() {

@@ -7,9 +7,8 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
-import android.widget.Toast;
-
 import com.example.pr_cbs.Database.DBHelper;
+import com.example.pr_cbs.MainActivity;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -31,16 +30,16 @@ import org.jsoup.select.Elements;
 
 public class EventStorage {
 
-    private ArrayList<EventRecord> localEventRecords;
+    public ArrayList<EventRecord> localEventRecords;
     private ArrayList<Integer> localMFNs;
-    private int currentPage = 0;
     private static final int PAGE_SIZE = 10;
     private static EventStorage storage = null;
-    DBHelper dbHelper;
-    SharedPreferences sPref;
-    SharedPreferences.Editor editor;
+
     String APP_PREFERENCES = "pref_settings";
     String APP_PREFERENCES_EVENT_UPDATE_DATE = "event_update_date";
+
+
+
 
 
     private EventStorage(ArrayList<EventRecord> localEventRecords, ArrayList<Integer> localMFNs) {
@@ -64,30 +63,32 @@ public class EventStorage {
     public void clear() {
         localEventRecords.clear();
         localMFNs.clear();
-        currentPage = 0;
     }
 
-    public boolean fetchMFNsByQuery(String query) {
+    public int fetchMFNsByQuery(String query, Boolean internetConnection) {
+
+        if (!internetConnection) return 3;
 
         clear();
 
         try {
+
             IrbisConnection connection = getIrbisConnection();
             int[] found = connection.search("\"EVENTNAME=" + query + "$\"");
 
             connection.disconnect();
 
             if (found.length != 0) {
-                for (int mfn : found) {
+                MarcRecord record = connection.readRecord(found[0]);
+                for (int mfn : found)
                     localMFNs.add(mfn);
 
-                }
-            } else return false;
+            } else return 1;
 
         } catch (Exception e) {
-            return false;
+            return 2;
         }
-        return true;
+        return 0;
     }
 
 
@@ -96,7 +97,10 @@ public class EventStorage {
     }
 
 
-    public boolean loadAllActualEvents(Context mContext, Boolean reload) {
+    public int loadAllActualEvents(Context context, Boolean reload,  Boolean internetConnection) {
+
+        if (!internetConnection) return 3;
+
         clear();
 
         String currentDate = new SimpleDateFormat("dd.MM.yyyy HH:mm").format(Calendar.getInstance().getTime());
@@ -106,9 +110,8 @@ public class EventStorage {
         Date saved_date = null;
 
         if (!reload) {
-            sPref = mContext.getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
-            if (sPref.contains(APP_PREFERENCES_EVENT_UPDATE_DATE)) {
-                savedDate = sPref.getString(APP_PREFERENCES_EVENT_UPDATE_DATE, "");
+            if (MainActivity.Companion.checkSharedPreferenceAvailability(APP_PREFERENCES_EVENT_UPDATE_DATE, context)) {
+                savedDate = MainActivity.Companion.getFromSharedPreferences(APP_PREFERENCES_EVENT_UPDATE_DATE, context);
 
                 try {
                     current_date = new SimpleDateFormat("dd.MM.yyyy HH:mm").parse(currentDate);
@@ -128,30 +131,30 @@ public class EventStorage {
             if (isTheDateRelevant) {
 
 
-                SQLiteDatabase database = DBHelper.getInstance(mContext).getWritableDatabase();
+                SQLiteDatabase database = DBHelper.getInstance(context).getWritableDatabase();
                 Cursor cursor = database.query(DBHelper.TABLE_EVENTS, null, null, null, null, null, null);
 
                 if (cursor != null && cursor.getCount() > 0) {
-                    downloadEventFromDatabase(mContext);
+                    downloadEventFromDatabase(context);
                 } else {
                     if (cursor != null) cursor.close();
                     database.close();
-                    return downloadActualEventRecord(currentDate, mContext);
+                    return downloadActualEventRecord(currentDate, context);
                 }
 
                 cursor.close();
                 database.close();
 
-            } else return downloadActualEventRecord(currentDate, mContext);
+            } else return downloadActualEventRecord(currentDate, context);
 
-        } else return downloadActualEventRecord(currentDate, mContext);
+        } else return downloadActualEventRecord(currentDate, context);
 
 
-        return true;
+        return 0;
 
     }
 
-    private boolean downloadActualEventRecord(String currentDate, Context mContext) {
+    private int downloadActualEventRecord(String currentDate, Context context) {
 
         try {
             IrbisConnection connection = getIrbisConnection();
@@ -159,6 +162,10 @@ public class EventStorage {
             int[] found = connection.search("\"EVENTNAME=$\"*\"MONTHLY=2020$\"");
             found = Arrays.copyOf(found, 100);
             if (found.length != 0) {
+
+                //проверочная -> вызовет IrbisException при ошибке получения данных с сервера
+
+                MarcRecord record = connection.readRecord(found[0]);
 
                 for (int mfn : found) {
 
@@ -172,11 +179,20 @@ public class EventStorage {
                     if (date_2 != null && event_date != null && event_date.getTime() >= date_2.getTime())
                         localMFNs.add(mfn);
                 }
+            } else {
+                connection.disconnect();
+                return 1;
             }
 
-            SQLiteDatabase database = DBHelper.getInstance(mContext).getWritableDatabase();
-            database.execSQL("delete from events");
 
+        } catch (Exception e) {
+            return 2;
+        }
+
+        try {
+            IrbisConnection connection = getIrbisConnection();
+            SQLiteDatabase database = DBHelper.getInstance(context).getWritableDatabase();
+            database.execSQL("delete from events");
 
             for (int i = 0; i < localMFNs.size(); i++) {
                 int mfn = localMFNs.get(i);
@@ -206,74 +222,74 @@ public class EventStorage {
 
                             if (spans.get(m).text().equals("Дата начала:")) {
                                 String start_date = spans.get(m + 1).text();
-                                eventRecord.start_date = start_date;
+                               // eventRecord.start_date = start_date;
                                 contentValues.put(DBHelper.KEY_START_DATE, start_date);
                             }
 
                             if (spans.get(m).text().equals("Дата окончания:")) {
                                 String end_date = spans.get(m + 1).text();
-                                eventRecord.end_date = end_date;
+                               // eventRecord.end_date = end_date;
                                 contentValues.put(DBHelper.KEY_END_DATE, end_date);
                             }
 
                             if (spans.get(m).text().equals("Время начала:")) {
                                 String start_time = spans.get(m + 1).text();
-                                eventRecord.start_time = start_time;
+                               // eventRecord.start_time = start_time;
                                 contentValues.put(DBHelper.KEY_START_TIME, start_time);
                             }
 
                             if (spans.get(m).text().equals("Время окончания:")) {
                                 String end_time = spans.get(m + 1).text();
-                                eventRecord.end_time = end_time;
+                              //  eventRecord.end_time = end_time;
                                 contentValues.put(DBHelper.KEY_END_TIME, end_time);
                             }
 
                             if (spans.get(m).text().equals("Возрастная категория:")) {
                                 String age_category = spans.get(m + 1).text();
-                                eventRecord.age_category = age_category;
+                             //   eventRecord.age_category = age_category;
                                 contentValues.put(DBHelper.KEY_AGE_CATEGORY, age_category);
                             }
 
                             if (spans.get(m).text().equals("Наименование мероприятия:")) {
                                 String name = spans.get(m + 1).text();
-                                eventRecord.name = name;
+                             //  eventRecord.name = name;
                                 contentValues.put(DBHelper.KEY_NAME, name);
                             }
 
                             if (spans.get(m).text().equals("Дополнительные сведения:")) {
                                 String additional_information = spans.get(m + 1).text();
-                                eventRecord.additional_information = additional_information;
+                             //   eventRecord.additional_information = additional_information;
                                 contentValues.put(DBHelper.KEY_ADDITIONAL_INFORMATION, additional_information);
 
                             }
 
                             if (spans.get(m).text().equals("Аннотация к мероприятию:")) {
                                 String annotation = spans.get(m + 1).text();
-                                eventRecord.annotation = annotation;
+                             //   eventRecord.annotation = annotation;
                                 contentValues.put(DBHelper.KEY_ANNOTATION, annotation);
                             }
 
                             if (spans.get(m).text().equals("Библиотека-организатор:")) {
                                 String library = spans.get(m + 1).text();
-                                eventRecord.library = library;
+                             //   eventRecord.library = library;
                                 contentValues.put(DBHelper.KEY_LIBRARY, library);
                             }
 
                             if (spans.get(m).text().equals("Адрес проведения мероприятия:")) {
                                 String address = spans.get(m + 1).text();
-                                eventRecord.address = address;
+                            //    eventRecord.address = address;
                                 contentValues.put(DBHelper.KEY_ADDRESS, address);
                             }
 
                             if (spans.get(m).text().equals("Ответственное лицо:")) {
                                 String responsible_person = spans.get(m + 1).text();
-                                eventRecord.responsible_person = responsible_person;
+                             //   eventRecord.responsible_person = responsible_person;
                                 contentValues.put(DBHelper.KEY_RESPONSIBLE_PERSON, responsible_person);
                             }
 
                             if (spans.get(m).text().equals("Телефоны для справок:")) {
                                 String phone = spans.get(m + 1).text();
-                                eventRecord.phone_number = phone;
+                            //    eventRecord.phone_number = phone;
                                 contentValues.put(DBHelper.KEY_PHONE_NUMBER, phone);
                             }
 
@@ -283,39 +299,51 @@ public class EventStorage {
 
 
                 database.insert(DBHelper.TABLE_EVENTS, null, contentValues);
-                localEventRecords.add(eventRecord);
+               // localEventRecords.add(eventRecord);
 
             }
-
-            sPref = mContext.getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
-            editor = sPref.edit();
-            editor.putString(APP_PREFERENCES_EVENT_UPDATE_DATE, currentDate);
-            editor.apply();
 
             connection.disconnect();
             database.close();
-
         } catch (Exception e) {
-            return false;
+            return 2;
         }
-        return true;
+
+        MainActivity.Companion.putInSharedPreferences(APP_PREFERENCES_EVENT_UPDATE_DATE, currentDate, context);
+
+        downloadEventFromDatabase(context);
+
+        return 0;
     }
 
-    public void loadNextPage() {
+
+
+    public void loadNextPage(int position) {
+
         try {
             IrbisConnection connection = getIrbisConnection();
 
-            for (int i = currentPage * PAGE_SIZE; i < currentPage * PAGE_SIZE + PAGE_SIZE; i++) {
-                int mfn = localMFNs.get(i);
-                localEventRecords.add(downloadEventRecord(mfn, connection));
+            if (localMFNs.size() <= 15) {
+                for (int i = 0; i < 15; i++) {
+                    int mfn = localMFNs.get(i);
+                    localEventRecords.add(downloadEventRecord(mfn, connection));
+
+                }
+            } else {
+
+                for (int i = position + 1; i <= position + PAGE_SIZE; i++) {
+                    if (localMFNs.contains(localMFNs.get(i))) {
+                        int mfn = localMFNs.get(i);
+                        localEventRecords.add(downloadEventRecord(mfn, connection));
+                    }
+                }
             }
             connection.disconnect();
 
         } catch (Exception e) {
-            return;
+            Log.v("EventError", "IrbisError");
         }
 
-        currentPage++;
     }
 
     public EventRecord getRecordById(int id) {
@@ -399,8 +427,12 @@ public class EventStorage {
     }
 
     private void downloadEventFromDatabase(Context mContext) {
-        dbHelper = new DBHelper(mContext);
+
+        DBHelper dbHelper = new DBHelper(mContext);
         SQLiteDatabase database = dbHelper.getWritableDatabase();
+
+        database.execSQL("select * from events order by startDateIndex");
+
         Cursor cursor = database.query(DBHelper.TABLE_EVENTS, null, null, null, null, null, null);
 
         if (cursor.moveToFirst()) {
@@ -447,8 +479,7 @@ public class EventStorage {
         IrbisConnection connection = new IrbisConnection();
         connection.parseConnectionString("host=194.186.155.14;" +
                 "port=1192;database=events;" +
-                "user=12_AGENT_MOB;password=agentmob;"
-        );
+                "user=12_AGENT_MOB;password=agentmob;");
 
 
         connection.connect();

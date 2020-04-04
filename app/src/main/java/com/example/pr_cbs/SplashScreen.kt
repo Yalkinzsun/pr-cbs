@@ -178,7 +178,7 @@ class SplashScreen : AppCompatActivity(), LoadLatestBookAsyncTask.LatestATFinish
     }
 
 
-    override fun afterLastATFinished(hasResult: Boolean) {
+    override fun afterLastATFinished(hasResult: Int) {
         var status = 0
         if (!isNetworkConnected(this)) status = 1
         val intent = Intent(this, MainActivity::class.java)
@@ -244,11 +244,13 @@ class SplashScreen : AppCompatActivity(), LoadLatestBookAsyncTask.LatestATFinish
 
 
     private fun loadEventShortList() {
+      val internetConnection = isNetworkConnected(this)
         LoadEventShortListAsyncTask(
             this,
             this,
             false,
-            {}).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+            internetConnection
+            ).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
 
     }
 

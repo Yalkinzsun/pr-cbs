@@ -73,7 +73,6 @@ class HomeFragment : Fragment(),
 
             // Трансформирование элемента
             this.infinite_carousel.setItemTransformer(InfiniteCarouselTransformer())
-
             this.infinite_carousel.addOnItemChangedListener(this)
 
         } else {
@@ -83,7 +82,7 @@ class HomeFragment : Fragment(),
 
         }
 
-        if ((activity as MainActivity).getInfoAboutEventError()) {
+        if ((activity as MainActivity).getInfoAboutEventError() == 0) {
 
 
             //Ближайшие мероприятия

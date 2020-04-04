@@ -8,11 +8,11 @@ class LoadEventShortListAsyncTask(
     private val callback: EventsATFinished,
     var context: Context,
     var downloadLatestBooksFromDatabase: Boolean,
-    private var onNoResultsFound: () -> Unit
+    var internetConnection: Boolean
 
 ) : AsyncTask<Unit, Unit, Unit>() {
 
-    private var hasResult: Boolean = true
+    private var hasResult: Int = 0
 
     override fun onPreExecute() {
         super.onPreExecute()
@@ -21,22 +21,17 @@ class LoadEventShortListAsyncTask(
     }
 
     override fun doInBackground(vararg p0: Unit?) {
-        this.hasResult = EventStorage.Instance().loadAllActualEvents(context, downloadLatestBooksFromDatabase )
+        this.hasResult = EventStorage.Instance()
+            .loadAllActualEvents(context, downloadLatestBooksFromDatabase,internetConnection)
     }
 
     override fun onPostExecute(result: Unit?) {
         super.onPostExecute(result)
 
-        if (!this.hasResult) {
-            onNoResultsFound()
-        } else {
-            //TODO
-        }
-
         callback.afterLastATFinished(hasResult)
     }
 
     interface EventsATFinished {
-        fun afterLastATFinished(hasResult: Boolean)
+        fun afterLastATFinished(hasResult: Int)
     }
 }

@@ -34,9 +34,13 @@ public class TakenBookStorage {
     }
 
 
-    public boolean downloadAllTakenBooks(String query) {
-        if (query == null || query.isEmpty())
-            return false;
+    public int downloadAllTakenBooks(String query, Boolean internetConnection) {
+
+        if (!internetConnection) return 3;
+
+
+//        if (query == null || query.isEmpty())
+
 
         else {
 
@@ -48,19 +52,16 @@ public class TakenBookStorage {
 
                 if (found.length != 0) {
                     for (int mfn : found) {
-                        //TODO Загрузка данных
                         localRecords.add(downloadTakenBookRecord(mfn, connection));
                     }
-                } else return false;
+                } else return 1;
 
                 connection.disconnect();
 
             } catch (Exception e) {
-                //Log.e(...)
-                return false;
+                return 2;
             }
-
-            return true;
+            return 0;
         }
     }
 
