@@ -167,10 +167,8 @@ class MainActivity : AppCompatActivity() {
         }
 
 
-
         fun getFromSharedPreferences(name: String,  context: Context): String {
             val sharedPreferences = context.getSharedPreferences("pref_settings", Context.MODE_PRIVATE)
-
             return sharedPreferences.getString(name, "").toString()
 
         }

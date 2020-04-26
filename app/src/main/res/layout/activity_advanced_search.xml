@@ -13,18 +13,14 @@
             android:background="@android:color/transparent"
             android:textAlignment="center">
 
-        <TextView
-                android:id="@+id/search_res_toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-
     </androidx.appcompat.widget.Toolbar>
 
     <ScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="35dp"
-            android:layout_marginEnd="35dp">
+            android:layout_marginEnd="35dp"
+            android:scrollbars="none">
 
 
         <LinearLayout
@@ -32,20 +28,51 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-            <TextView
+            <androidx.cardview.widget.CardView
+                    android:id="@+id/according_to_search_string"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="15dp"
-                    android:text="Расширенный поиск"
-                    android:textSize="20sp"
-                    android:textStyle="bold" />
+                    android:visibility="gone"
+                    app:cardBackgroundColor="@color/colorAccent"
+                    app:cardCornerRadius="3dp"
+                    app:cardElevation="0dp">
+
+                <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="10dp"
+                        android:orientation="vertical">
+
+                    <TextView
+                            android:id="@+id/according_to_text"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textSize="16sp" />
+
+                    <TextView
+                            android:id="@+id/according_to_button"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="end"
+                            android:layout_marginTop="15dp"
+                            android:text="Не учитывать"
+                            android:textAllCaps="false"
+                            android:textColor="@color/colorPrimaryDark"
+                            android:textSize="14sp"
+                            android:textStyle="bold" />
+
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
 
             <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Название"
                     android:textColor="@color/colorPrimary"
-                    android:textSize="20sp" />
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
 
             <EditText
                     android:id="@+id/advanced_title"
@@ -62,7 +89,8 @@
                     android:layout_height="wrap_content"
                     android:text="Автор"
                     android:textColor="@color/colorPrimary"
-                    android:textSize="20sp">
+                    android:textSize="20sp"
+                    android:textStyle="bold">
 
             </TextView>
 
@@ -80,7 +108,8 @@
                     android:layout_height="wrap_content"
                     android:text="Тематика"
                     android:textColor="@color/colorPrimary"
-                    android:textSize="20sp">
+                    android:textSize="20sp"
+                    android:textStyle="bold">
 
             </TextView>
 
@@ -98,7 +127,8 @@
                     android:layout_height="wrap_content"
                     android:text="Серия"
                     android:textColor="@color/colorPrimary"
-                    android:textSize="20sp">
+                    android:textSize="20sp"
+                    android:textStyle="bold">
 
             </TextView>
 
@@ -116,7 +146,8 @@
                     android:layout_height="wrap_content"
                     android:text="Персоналия"
                     android:textColor="@color/colorPrimary"
-                    android:textSize="20sp">
+                    android:textSize="20sp"
+                    android:textStyle="bold">
 
             </TextView>
 
@@ -141,6 +172,7 @@
                         android:layout_marginTop="15dp"
                         android:layout_marginBottom="15dp"
                         android:text="Наличие"
+                        android:textColor="@color/colorPrimary"
                         android:textSize="20sp"
                         android:textStyle="bold" />
 
@@ -157,14 +189,83 @@
             <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:layout_marginBottom="15dp">
 
                 <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="15dp"
-                        android:layout_marginBottom="15dp"
+                        android:text="Год выпуска"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="8dp">
+
+                    <TextView
+                            android:id="@+id/tv_advanced_fromYears"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="От"
+                            android:textSize="18sp"
+                            android:textStyle="bold"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintVertical_bias="0.0" />
+
+                    <TextView
+                            android:id="@+id/tv_advanced_toYears"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:text="До"
+                            android:textSize="18sp"
+                            android:textStyle="bold"
+
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintHorizontal_bias="0.5"
+                            app:layout_constraintStart_toEndOf="@+id/tv_advanced_fromYears"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                    <EditText
+                            android:id="@+id/edtFrom"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:hint="1881"
+                            android:inputType="date"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/tv_advanced_fromYears"
+                            app:layout_constraintVertical_bias="0.0" />
+
+                    <EditText
+                            android:id="@+id/edtTo"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:hint="2020"
+                            android:inputType="date"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintHorizontal_bias="0.5"
+                            app:layout_constraintStart_toEndOf="@id/edtFrom"
+                            app:layout_constraintTop_toBottomOf="@id/tv_advanced_toYears" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+            </LinearLayout>
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
                         android:text="Библиотеки"
+                        android:textColor="@color/colorPrimary"
                         android:textSize="20sp"
                         android:textStyle="bold" />
 
@@ -232,76 +333,17 @@
 
             </LinearLayout>
 
-
-            <LinearLayout
-                    android:layout_width="match_parent"
+            <Button
+                    android:id="@+id/advanced_search_activity_button"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="25dp"
-                    android:orientation="vertical">
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="20dp"
+                    android:text="Поиск"
+                    android:background="@color/colorAccent"
+                    android:layout_gravity="center_horizontal">
 
-                <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="15dp"
-                        android:layout_marginBottom="15dp"
-                        android:text="Год выпуска"
-                        android:textSize="20sp"
-                        android:textStyle="bold" />
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_marginTop="8dp">
-
-                    <TextView
-                            android:id="@+id/tv_advanced_fromYears"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="От"
-                            android:textSize="18sp"
-                            android:textStyle="bold"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent"
-                            app:layout_constraintVertical_bias="0.0" />
-
-                    <TextView
-                            android:id="@+id/tv_advanced_toYears"
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:text="До"
-                            android:textSize="18sp"
-                            android:textStyle="bold"
-
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintHorizontal_bias="0.5"
-                            app:layout_constraintStart_toEndOf="@+id/tv_advanced_fromYears"
-                            app:layout_constraintTop_toTopOf="parent" />
-
-                    <EditText
-                            android:id="@+id/edtFrom"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:hint="1881"
-                            android:inputType="date"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@id/tv_advanced_fromYears"
-                            app:layout_constraintVertical_bias="0.0" />
-
-                    <EditText
-                            android:id="@+id/edtTo"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:hint="2019"
-                            android:inputType="date"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintHorizontal_bias="0.5"
-                            app:layout_constraintStart_toEndOf="@id/edtFrom"
-                            app:layout_constraintTop_toBottomOf="@id/tv_advanced_toYears" />
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-            </LinearLayout>
+            </Button>
 
         </LinearLayout>
 

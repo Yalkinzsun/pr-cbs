@@ -51,20 +51,50 @@
                     android:visibility="visible" />
         </RelativeLayout>
 
-        <Button
-                android:id="@+id/search_filter"
+
+        <RelativeLayout
+                android:id="@+id/search_fragment_rl"
                 android:layout_width="wrap_content"
-                android:layout_height="25dp"
-                android:background="@drawable/button_order_delivery"
-                android:paddingStart="5dp"
-                android:paddingEnd="5dp"
-                android:text="Расш. поиск"
-                android:textColor="@color/main_color"
-                android:textSize="14sp"
-                android:textStyle="normal"
+                android:layout_height="wrap_content"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent">
+
+            <Button
+                    android:id="@+id/search_filter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="25dp"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginTop="5dp"
+                    android:background="@drawable/button_order_delivery"
+                    android:paddingStart="10dp"
+                    android:paddingEnd="10dp"
+                    android:text="Расш. поиск"
+                    android:textColor="@color/main_color"
+                    android:textSize="14sp"
+                    android:textStyle="normal"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+                android:id="@+id/search_fragment_notification"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="invisible"
+                app:layout_constraintStart_toStartOf="@+id/search_fragment_rl"
+                app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:background="@drawable/shape_circle_notification"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+        </RelativeLayout>
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -199,15 +229,15 @@
                 android:id="@+id/search_progressBar_block"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/progress_bar_background"
                 android:layout_centerInParent="true"
+                android:background="@drawable/progress_bar_background"
                 android:visibility="invisible">
 
             <ProgressBar
                     android:layout_width="35dp"
                     android:layout_height="35dp"
-                    android:layout_margin="3dp"
                     android:layout_centerInParent="true"
+                    android:layout_margin="3dp"
                     android:visibility="visible" />
 
 
