@@ -49,7 +49,7 @@ public class BookStorage {
         localMFNs.clear();
     }
 
-    public int fetchMFNsByQuery(String query, Boolean internetConnection) {
+    public int fetchMFNsByQuery(String query, Boolean internetConnection, Boolean isAdvanced) {
         if (!internetConnection) return 3;
 
         if (query == null || query.isEmpty())
@@ -61,56 +61,23 @@ public class BookStorage {
 
             try {
                 IrbisConnection connection = getIrbisConnection();
-                int[] found = connection.search("\"T=" + query + "$\"");
-
+                int[] found;
+                if (isAdvanced) found = connection.search(query);
+                else found = connection.search("\"T=" + query + "$\"");
                 connection.disconnect();
-
                 if (found.length != 0) {
                     for (int mfn : found) {
                         localMFNs.add(mfn);
-
-                    }
-                } else return 1;
-
-
-            } catch (Exception e) {
-
-                return 2;
-            }
-
-            return 0;
-        }
-    }
-
-    public int fetchMFNsByQueryAdvanced(String query, Boolean internetConnection) {
-        if (!internetConnection) return 3;
-
-        if (query == null || query.isEmpty())
-            return 1;
-
-        else {
-
-            clear();
-
-            try {
-                IrbisConnection connection = getIrbisConnection();
-                int[] found = connection.search(query);
-                connection.disconnect();
-
-                if (found.length != 0) {
-                    for (int mfn : found) {
-                        localMFNs.add(mfn);
-
                     }
                 } else return 1;
 
             } catch (Exception e) {
                 return 2;
             }
-
             return 0;
         }
     }
+
 
     public boolean canLoadMore() {
         return localMFNs.size() > localRecords.size();
@@ -138,7 +105,7 @@ public class BookStorage {
             connection.disconnect();
 
         } catch (Exception e) {
-            Log.v("EventError", "IrbisError");
+            //TODO
         }
 
     }
@@ -154,10 +121,30 @@ public class BookStorage {
 
         BookRecord bookRecord = new BookRecord();
 
-        bookRecord.title = record.fm(200, 'a');
+        String briefDes = connection.formatRecord("@brief", mfn);
+
+        //Удаление "Биб. описание: "
+
+        if (briefDes.contains("Биб.")) briefDes = briefDes.substring(briefDes.indexOf(":") + 2);
+
+
+        String title = record.fm(200, 'a');
+
+        if (title != null) bookRecord.title = record.fm(200, 'a');
+        else bookRecord.title = getTitle(briefDes);
+
+
+        String author = record.fm(700, 'A') + ' ' + record.fm(700, 'B');
+        if (author != "null null") bookRecord.author = author;
+        else bookRecord.author = getAuthor(briefDes);
+
+
+        String year = record.fm(210, 'D');
+        if (year != "null") bookRecord.year = year;
+        else bookRecord.year = getYear(briefDes);
+
+
         bookRecord.ISBN = record.fm(10, 'A');
-        bookRecord.author = record.fm(700, 'A') + ' ' + record.fm(700, 'B');
-        bookRecord.year = record.fm(210, 'D');
         bookRecord.description = connection.formatRecord("@brief", mfn);
         bookRecord.publish = record.fm(210, 'C') + " (" + record.fm(210, 'A') + ")";
         bookRecord.subjects = record.fm(606, 'A');
@@ -182,6 +169,23 @@ public class BookStorage {
         return bookRecord;
     }
 
+    private static String getTitle(String description) {
+        String check = description.substring(0, description.indexOf("["));
+        if (check.contains("."))
+            return description.substring(description.indexOf(".") + 2, description.indexOf("["));
+        else return description.substring(0, description.indexOf("[") - 1);
+    }
+
+    private static String getAuthor(String description) {
+        String author = description.substring(description.indexOf("/") + 2);
+        if (author.contains(";")) return author.substring(0, author.indexOf(";"));
+        else return author.substring(0, author.indexOf(","));
+    }
+
+    private static String getYear(String description) {
+        String year = description.substring(description.indexOf("/") + 2);
+        return year.substring(year.indexOf(",") + 2, year.indexOf("."));
+    }
 
     private static String[] getCopiesInfo(String description) {
 
@@ -194,6 +198,8 @@ public class BookStorage {
 
 
             String newRes = result.replace("\\par", "").replace("}", "").replace(" ", "");
+
+            if (newRes.contains("Экз")) newRes = newRes.substring(0, newRes.indexOf("Э"));
 
             String[] parts = newRes.split(",");
 
@@ -241,7 +247,7 @@ public class BookStorage {
                             info[6] = Integer.toString(copies);
                             break;
                         }
-                        case "do": {
+                        case "до": {
 //                    info[15] = "Центральная районная десткая библиотека";
                             info[7] = Integer.toString(copies);
                             break;
@@ -283,7 +289,6 @@ public class BookStorage {
         return res;
 
     }
-
 
     private IrbisConnection getIrbisConnection() throws IrbisException, IOException {
         IrbisConnection connection = new IrbisConnection();

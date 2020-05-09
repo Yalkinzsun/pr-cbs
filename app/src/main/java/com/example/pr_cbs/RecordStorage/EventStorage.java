@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
+
 import com.example.pr_cbs.Database.DBHelper;
 import com.example.pr_cbs.MainActivity;
 
@@ -17,6 +18,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 import ru.arsmagna.IrbisConnection;
@@ -37,9 +39,6 @@ public class EventStorage {
 
     String APP_PREFERENCES = "pref_settings";
     String APP_PREFERENCES_EVENT_UPDATE_DATE = "event_update_date";
-
-
-
 
 
     private EventStorage(ArrayList<EventRecord> localEventRecords, ArrayList<Integer> localMFNs) {
@@ -79,7 +78,7 @@ public class EventStorage {
             connection.disconnect();
 
             if (found.length != 0) {
-                MarcRecord record = connection.readRecord(found[0]);
+                //  MarcRecord record = connection.readRecord(found[0]);
                 for (int mfn : found)
                     localMFNs.add(mfn);
 
@@ -97,7 +96,7 @@ public class EventStorage {
     }
 
 
-    public int loadAllActualEvents(Context context, Boolean reload,  Boolean internetConnection) {
+    public int loadAllActualEvents(Context context, Boolean reload, Boolean internetConnection) {
 
         if (!internetConnection) return 3;
 
@@ -149,9 +148,7 @@ public class EventStorage {
 
         } else return downloadActualEventRecord(currentDate, context);
 
-
         return 0;
-
     }
 
     private int downloadActualEventRecord(String currentDate, Context context) {
@@ -160,12 +157,9 @@ public class EventStorage {
             IrbisConnection connection = getIrbisConnection();
 
             int[] found = connection.search("\"EVENTNAME=$\"*\"MONTHLY=2020$\"");
-            found = Arrays.copyOf(found, 100);
+            found = Arrays.copyOf(found, 110);
             if (found.length != 0) {
 
-                //проверочная -> вызовет IrbisException при ошибке получения данных с сервера
-
-                MarcRecord record = connection.readRecord(found[0]);
 
                 for (int mfn : found) {
 
@@ -173,8 +167,8 @@ public class EventStorage {
                     String eventDate = d.substring(d.indexOf("[") + 2, d.indexOf("]") - 1);
 
 
-                    Date event_date = new SimpleDateFormat("dd.MM.yyyy").parse(eventDate);
-                    Date date_2 = new SimpleDateFormat("dd.MM.yyyy").parse(currentDate);
+                    Date event_date = new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault()).parse(eventDate);
+                    Date date_2 = new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault()).parse(currentDate);
 
                     if (date_2 != null && event_date != null && event_date.getTime() >= date_2.getTime())
                         localMFNs.add(mfn);
@@ -201,9 +195,10 @@ public class EventStorage {
                 //localEventRecords.add(downloadEventRecord(mfn, connection, mContext));
 
                 EventRecord eventRecord = new EventRecord();
-                MarcRecord record = connection.readRecord(mfn);
+                //     MarcRecord record = connection.readRecord(mfn);
 
-                String link = record.fm(107, 'P') + record.fm(107, 'F');
+                //      String link = record.fm(107, 'P') + record.fm(107, 'F');
+                String link = "nullnull";
                 eventRecord.link = link;
                 contentValues.put(DBHelper.KEY_LINK, link);
 
@@ -221,75 +216,89 @@ public class EventStorage {
                         for (int m = 0; m < spans.size(); m++) {
 
                             if (spans.get(m).text().equals("Дата начала:")) {
-                                String start_date = spans.get(m + 1).text();
-                               // eventRecord.start_date = start_date;
-                                contentValues.put(DBHelper.KEY_START_DATE, start_date);
+                                String startDate = spans.get(m + 1).text();
+                                // eventRecord.startDate = startDate;
+
+                                //   Date startDateInNewFormat = new SimpleDateFormat("YYYY-MM-DD", Locale.getDefault()).parse(startDate);
+
+                                SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault());
+                                Date oldDate = format.parse(startDate);
+
+                                format = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+
+                                String newDate = null;
+                                if (oldDate != null) {
+                                    newDate = format.format(oldDate);
+                                }
+
+
+                                contentValues.put(DBHelper.KEY_START_DATE, newDate);
                             }
 
                             if (spans.get(m).text().equals("Дата окончания:")) {
                                 String end_date = spans.get(m + 1).text();
-                               // eventRecord.end_date = end_date;
+                                // eventRecord.end_date = end_date;
                                 contentValues.put(DBHelper.KEY_END_DATE, end_date);
                             }
 
                             if (spans.get(m).text().equals("Время начала:")) {
                                 String start_time = spans.get(m + 1).text();
-                               // eventRecord.start_time = start_time;
+                                // eventRecord.start_time = start_time;
                                 contentValues.put(DBHelper.KEY_START_TIME, start_time);
                             }
 
                             if (spans.get(m).text().equals("Время окончания:")) {
                                 String end_time = spans.get(m + 1).text();
-                              //  eventRecord.end_time = end_time;
+                                //  eventRecord.end_time = end_time;
                                 contentValues.put(DBHelper.KEY_END_TIME, end_time);
                             }
 
                             if (spans.get(m).text().equals("Возрастная категория:")) {
                                 String age_category = spans.get(m + 1).text();
-                             //   eventRecord.age_category = age_category;
+                                //   eventRecord.age_category = age_category;
                                 contentValues.put(DBHelper.KEY_AGE_CATEGORY, age_category);
                             }
 
                             if (spans.get(m).text().equals("Наименование мероприятия:")) {
                                 String name = spans.get(m + 1).text();
-                             //  eventRecord.name = name;
+                                //  eventRecord.name = name;
                                 contentValues.put(DBHelper.KEY_NAME, name);
                             }
 
                             if (spans.get(m).text().equals("Дополнительные сведения:")) {
                                 String additional_information = spans.get(m + 1).text();
-                             //   eventRecord.additional_information = additional_information;
+                                //   eventRecord.additional_information = additional_information;
                                 contentValues.put(DBHelper.KEY_ADDITIONAL_INFORMATION, additional_information);
 
                             }
 
                             if (spans.get(m).text().equals("Аннотация к мероприятию:")) {
                                 String annotation = spans.get(m + 1).text();
-                             //   eventRecord.annotation = annotation;
+                                //   eventRecord.annotation = annotation;
                                 contentValues.put(DBHelper.KEY_ANNOTATION, annotation);
                             }
 
                             if (spans.get(m).text().equals("Библиотека-организатор:")) {
                                 String library = spans.get(m + 1).text();
-                             //   eventRecord.library = library;
+                                //   eventRecord.library = library;
                                 contentValues.put(DBHelper.KEY_LIBRARY, library);
                             }
 
                             if (spans.get(m).text().equals("Адрес проведения мероприятия:")) {
                                 String address = spans.get(m + 1).text();
-                            //    eventRecord.address = address;
+                                //    eventRecord.address = address;
                                 contentValues.put(DBHelper.KEY_ADDRESS, address);
                             }
 
                             if (spans.get(m).text().equals("Ответственное лицо:")) {
                                 String responsible_person = spans.get(m + 1).text();
-                             //   eventRecord.responsible_person = responsible_person;
+                                //   eventRecord.responsible_person = responsible_person;
                                 contentValues.put(DBHelper.KEY_RESPONSIBLE_PERSON, responsible_person);
                             }
 
                             if (spans.get(m).text().equals("Телефоны для справок:")) {
                                 String phone = spans.get(m + 1).text();
-                            //    eventRecord.phone_number = phone;
+                                //    eventRecord.phone_number = phone;
                                 contentValues.put(DBHelper.KEY_PHONE_NUMBER, phone);
                             }
 
@@ -299,7 +308,7 @@ public class EventStorage {
 
 
                 database.insert(DBHelper.TABLE_EVENTS, null, contentValues);
-               // localEventRecords.add(eventRecord);
+                // localEventRecords.add(eventRecord);
 
             }
 
@@ -315,7 +324,6 @@ public class EventStorage {
 
         return 0;
     }
-
 
 
     public void loadNextPage(int position) {
@@ -355,7 +363,7 @@ public class EventStorage {
 
         EventRecord eventRecord = new EventRecord();
 
-        MarcRecord record = connection.readRecord(mfn);
+        // MarcRecord record = connection.readRecord(mfn);
 
         String eventDescription = connection.formatRecord("@", mfn);
 
@@ -421,7 +429,8 @@ public class EventStorage {
                 }
             }
 
-            eventRecord.link = record.fm(107, 'p') + record.fm(107, 'f');
+            //   eventRecord.link = record.fm(107, 'p') + record.fm(107, 'f');
+            eventRecord.link = "null";
         }
         return eventRecord;
     }
@@ -431,9 +440,7 @@ public class EventStorage {
         DBHelper dbHelper = new DBHelper(mContext);
         SQLiteDatabase database = dbHelper.getWritableDatabase();
 
-        database.execSQL("select * from events order by startDateIndex");
-
-        Cursor cursor = database.query(DBHelper.TABLE_EVENTS, null, null, null, null, null, null);
+        Cursor cursor = database.query(DBHelper.TABLE_EVENTS, null, null, null, null, null, "start_date" + " ASC", null);
 
         if (cursor.moveToFirst()) {
             int startDateIndex = cursor.getColumnIndex(DBHelper.KEY_START_DATE);

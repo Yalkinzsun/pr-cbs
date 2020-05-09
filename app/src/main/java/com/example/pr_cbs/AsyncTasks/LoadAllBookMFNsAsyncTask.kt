@@ -35,11 +35,11 @@ class LoadAllBookMFNsAsyncTask(
         if (mSearchCombination != "") {
 
             if (advanced_flag) this.hasResult =
-                BookStorage.Instance().fetchMFNsByQueryAdvanced(mSearchCombination, internetConnection)
+                BookStorage.Instance().fetchMFNsByQuery(mSearchCombination, internetConnection, true)
             else this.hasResult =
-                BookStorage.Instance().fetchMFNsByQuery(mSearchCombination, internetConnection)
+                BookStorage.Instance().fetchMFNsByQuery(mSearchCombination, internetConnection, false)
 
-        } else this.hasResult = BookStorage.Instance().fetchMFNsByQuery(this.getSearchText(), internetConnection)
+        } else this.hasResult = BookStorage.Instance().fetchMFNsByQuery(this.getSearchText(), internetConnection, false)
         bookCount = BookStorage.Instance().mfNsCount.toString()
         BookStorage.Instance().loadNextPage(0)
     }

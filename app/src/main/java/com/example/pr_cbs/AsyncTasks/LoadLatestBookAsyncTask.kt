@@ -2,7 +2,7 @@ package com.example.pr_cbs.AsyncTasks
 
 import android.content.Context
 import android.os.AsyncTask
-import com.example.pr_cbs.RecordStorage.LatestBookStorage
+import com.example.pr_cbs.RecordStorage.RecommendedBooksStorage
 
 class LoadLatestBookAsyncTask(
     private val callback: LatestATFinished,
@@ -16,12 +16,12 @@ class LoadLatestBookAsyncTask(
 
     override fun onPreExecute() {
         super.onPreExecute()
-        LatestBookStorage.Instance().clear()
+        RecommendedBooksStorage.Instance().clear()
     }
 
     override fun doInBackground(vararg p0: Unit?) {
         this.hasResult =
-            LatestBookStorage.Instance()
+            RecommendedBooksStorage.Instance()
                 .downloadLatestBooks(downloadLatestBooksFromDatabase, context)
 
     }

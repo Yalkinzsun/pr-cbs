@@ -35,14 +35,12 @@
                     android:id="@+id/main_final_book_author"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Author"
                     android:textSize="18sp" />
 
             <TextView
                     android:id="@+id/main_final_book_title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Title"
                     android:textColor="@color/colorPrimary"
                     android:textSize="22sp"
                     android:textStyle="bold" />
@@ -50,7 +48,8 @@
             <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:id="@+id/main_final_book_isbn_block">
 
                 <TextView
                         android:layout_width="wrap_content"
@@ -64,7 +63,6 @@
                         android:id="@+id/main_final_book_isbn"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="978-5-4224-0944-0"
                         android:textSize="16sp" />
 
             </LinearLayout>
@@ -86,7 +84,7 @@
                             android:layout_width="130dp"
                             android:layout_height="200dp"
                             android:scaleType="centerCrop"
-                            android:src="@drawable/book_cover_1" />
+                            android:src="@drawable/book_cover_3" />
 
 
                 </androidx.cardview.widget.CardView>
@@ -100,6 +98,7 @@
 
 
                     <TextView
+                            android:id="@+id/main_final_book_publish_text"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="Издательство"
@@ -114,6 +113,7 @@
                             android:textSize="16sp" />
 
                     <TextView
+                            android:id="@+id/main_final_book_series_text"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="Серия "
@@ -130,7 +130,8 @@
                     <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="horizontal">
+                            android:orientation="horizontal"
+                            android:id="@+id/main_final_book_year_block">
 
                         <TextView
                                 android:layout_width="wrap_content"
@@ -151,7 +152,8 @@
                     <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="horizontal">
+                            android:orientation="horizontal"
+                            android:id="@+id/main_final_book_size_block">
 
                         <TextView
                                 android:layout_width="wrap_content"
@@ -172,7 +174,8 @@
                     <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="horizontal">
+                            android:orientation="horizontal"
+                            android:id="@+id/main_final_book_language_block">
 
                         <TextView
                                 android:layout_width="wrap_content"
@@ -225,7 +228,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="15dp"
-                        android:orientation="vertical">
+                        android:orientation="vertical"
+                        android:id="@+id/main_search_availability_info_block">
 
                     <TextView
                             android:layout_width="wrap_content"

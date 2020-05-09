@@ -37,9 +37,8 @@ class LoadAllActualEventsAsyncTask(
 
     override fun onPostExecute(result: Unit?) {
         super.onPostExecute(result)
-        notifyDataSetChanged()
-        callback.allActualEventsLoaded(hasResult)
-
+            notifyDataSetChanged()
+            callback.allActualEventsLoaded(hasResult)
     }
 
     interface LoadAllActualEventsFinished {

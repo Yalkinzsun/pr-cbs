@@ -19,10 +19,8 @@ import com.example.pr_cbs.RecordStorage.EventStorage
 import com.example.pr_cbs.ResultMainSearch
 import kotlinx.android.synthetic.main.adapter_event_item.view.*
 import kotlinx.android.synthetic.main.adapter_main_search_item.view.*
-
-
-
-
+import java.text.SimpleDateFormat
+import java.util.*
 
 
 class EventAdapterNew(private val context: Context?) :
@@ -66,11 +64,22 @@ class EventAdapterNew(private val context: Context?) :
         }
 
         fun setData(event: EventRecord, pos: Int) {
-            if (event.start_date != event.end_date) {
+//            if (event.start_date != event.end_date) {
+//
+//            } else
 
-            } else itemView.event_date.text = shortenedDate(event.start_date)
 
-            itemView.event_time.text = event.start_time + " - " + event.end_time
+            val startDate: String = event.start_date
+
+            var format = SimpleDateFormat("yyyy-MM-dd", Locale("ru"))
+            val newDate = format.parse(startDate)
+            format = SimpleDateFormat("dd.MM.yyyy", Locale("ru"))
+            val newStartDate = format.format(newDate)
+
+            itemView.event_date.text = shortenedDate(newStartDate)
+
+            val time = event.start_time + " - " + event.end_time
+            itemView.event_time.text = time
             itemView.event_age_category.text = event.age_category
             itemView.event_name.text = event.name
             itemView.event_additional_information.text = event.additional_information

@@ -16,7 +16,8 @@
         <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:layout_marginBottom="15dp">
 
             <androidx.cardview.widget.CardView
                     android:layout_width="wrap_content"
@@ -50,7 +51,6 @@
                         android:paddingBottom="2dp"
                         android:textSize="14sp"
                         android:textStyle="normal"
-                        android:text="14"
                         android:textColor="@color/main_color"
                         android:background="@drawable/copies_info_green"/>
 
@@ -60,14 +60,12 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:textSize="19sp"
-                        android:text="Tittle"
                         android:textStyle="bold"/>
 
                 <TextView
                         android:id="@+id/book_author"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Author"
                         android:textSize="16sp"
                         android:textStyle="normal" />
 
@@ -82,7 +80,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_marginTop="15dp">
+                android:id="@+id/main_search_subject_block">
 
             <TextView
                     android:layout_width="wrap_content"
@@ -95,7 +93,6 @@
                     android:id="@+id/book_subjects"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="subjects"
                     android:textSize="14sp"
                     android:textStyle="normal"
                     android:layout_marginStart="5dp"/>
@@ -106,7 +103,8 @@
         <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:id="@+id/main_search_publisher_block">
 
             <TextView
                     android:layout_width="wrap_content"
@@ -119,7 +117,6 @@
                     android:id="@+id/book_publisher"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="publisher"
                     android:textSize="14sp"
                     android:textStyle="normal"
                     android:layout_marginStart="5dp"/>
@@ -129,7 +126,8 @@
         <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:id="@+id/main_search_series_block">
 
             <TextView
                     android:layout_width="wrap_content"
@@ -142,7 +140,6 @@
                     android:id="@+id/book_series"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="series"
                     android:textSize="14sp"
                     android:textStyle="normal"
                     android:layout_marginStart="5dp"/>
@@ -152,7 +149,8 @@
         <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:id="@+id/main_search_year_block">
 
             <TextView
                     android:layout_width="wrap_content"
@@ -165,7 +163,6 @@
                     android:id="@+id/book_year"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="year"
                     android:textSize="14sp"
                     android:textStyle="normal"
                     android:layout_marginStart="5dp"/>

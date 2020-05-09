@@ -10,6 +10,8 @@ import com.example.pr_cbs.R
 import com.example.pr_cbs.RecordStorage.EventRecord
 import com.example.pr_cbs.RecordStorage.EventStorage
 import kotlinx.android.synthetic.main.adapter_short_event_item.view.*
+import java.text.SimpleDateFormat
+import java.util.*
 
 
 class ShortEventAdapter(private val context: Context?) :
@@ -40,9 +42,17 @@ class ShortEventAdapter(private val context: Context?) :
 
         fun setData(event: EventRecord, pos: Int) {
 
+            val startDate: String = event.start_date
 
-            itemView.home_day_number.text = getDay(event.start_date).toString()
-            itemView.home_weekday.text = getMonth(event.start_date)
+            var format = SimpleDateFormat("yyyy-MM-dd", Locale("ru"))
+            val newDate = format.parse(startDate)
+            format = SimpleDateFormat("dd.MM.yyyy", Locale("ru"))
+            val newStartDate = format.format(newDate)
+
+
+
+            itemView.home_day_number.text = getDay(newStartDate).toString()
+            itemView.home_weekday.text = getMonth(newStartDate)
             itemView.home_event_name.text = event.name
             itemView.home_event_location.text = event.library
 

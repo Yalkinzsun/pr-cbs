@@ -1,23 +1,22 @@
 package com.example.pr_cbs
 
-import android.app.AlarmManager
-import android.app.NotificationChannel
-import android.app.NotificationManager
-import android.app.PendingIntent
+import android.app.*
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Toast
+import androidx.annotation.RequiresApi
+import androidx.core.app.NotificationCompat
 import com.example.pr_cbs.RecordStorage.EventStorage
 import com.example.pr_cbs.Reminder.ReminderBroadcast
 import kotlinx.android.synthetic.main.activity_event_full_info.*
-import java.util.*
 
 
 class EventFullInfo : AppCompatActivity() {
 
-    lateinit var id: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,9 +33,9 @@ class EventFullInfo : AppCompatActivity() {
         full_event_additional_information.text = event.additional_information
         full_event_address.text = event.address
         full_event_annotation.text = event.annotation
-        full_event_cover.setBackgroundResource(R.drawable.cover_event_1)
         full_event_date.text = event.start_date
-        full_event_time.text = event.start_time + " - " + event.end_time
+        val time = event.start_time + " - " + event.end_time
+        full_event_time.text = time
         full_event_library.text = event.library
         full_event_responsible_person.text = event.responsible_person
         full_event_phone_number.text = event.phone_number
@@ -44,25 +43,62 @@ class EventFullInfo : AppCompatActivity() {
         supportActionBar?.title = event.start_date
 
 
-        id = UUID.randomUUID().toString()
-
-
-        createNotificationChannel(id, event.start_date)
-
         event_full_CL_tv_1.setOnClickListener {
 
-            val intent2 = Intent(this, ReminderBroadcast::class.java)
-                .putExtra("test", event.name)
-                .putExtra("id", id)
 
+            val builder = AlertDialog.Builder(this@EventFullInfo)
 
-            val pendingIntent = PendingIntent.getBroadcast(this, 0, intent2, 0)
-            val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
+            val id = (1..100).random()
+            
+            // Заголовок AlertDialog
+            builder.setTitle("Напомнить?")
+            // Текст AlertDialog
+            builder.setMessage("$id")
 
             val timeA: Long = System.currentTimeMillis()
             val tenSecondsInMillis: Long = 1000 * 10
 
-            alarmManager.set(AlarmManager.RTC_WAKEUP, timeA + tenSecondsInMillis, pendingIntent)
+            builder.setPositiveButton("YES") { dialog, which ->
+
+                getNotificationBuilder(this@EventFullInfo).apply {
+                    // Обязательные параметры, без которые Notification не будет работать
+                    setSmallIcon(android.R.mipmap.sym_def_app_icon)
+                    setContentTitle(event.name)
+                    setContentText(event.additional_information)
+                  //  setWhen(timeA + tenSecondsInMillis)
+                }.build().also { getNotificationManager(this@EventFullInfo).notify(id, it) }
+
+
+
+//                val intent2 = Intent(this, ReminderBroadcast::class.java)
+//                    .putExtra("event_name", event.name)
+//                    .putExtra("event_text", event.additional_information)
+//                    .putExtra("id", id)
+//
+//                val pendingIntent = PendingIntent.getBroadcast(this, 0, intent2, 0)
+//                val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
+//
+//                val timeA: Long = System.currentTimeMillis()
+//                val tenSecondsInMillis: Long = 100 * 10
+//
+//                alarmManager.set(AlarmManager.RTC_WAKEUP, timeA + tenSecondsInMillis, pendingIntent)
+
+                Toast.makeText(applicationContext, "Уведомление установлено!", Toast.LENGTH_SHORT)
+                    .show()
+
+            }
+
+            // Установка текста кнопки отмены в диалоге и обработчика по нажатию
+            builder.setNeutralButton("Cancel") { _, _ ->
+            }
+
+            // Создание настроенного экземпляра AlertDialog
+            val dialog: AlertDialog = builder.create()
+
+            // Вывод на экран созданного AlertDialog
+            dialog.show()
+
+
         }
 
 
@@ -72,25 +108,54 @@ class EventFullInfo : AppCompatActivity() {
         }
 
 
-        event_full_CL_iv_info.setOnClickListener {
-            val aboutNotificationIntent = Intent(this, AboutNotificationActivity::class.java)
-            startActivity(aboutNotificationIntent)
-        }
+//        event_full_CL_iv_info.setOnClickListener {
+//            val aboutNotificationIntent = Intent(this, AboutNotificationActivity::class.java)
+//            startActivity(aboutNotificationIntent)
+//        }
     }
 
 
+    fun getNotificationBuilder(context: Context): NotificationCompat.Builder {
+        // Для версии Android не менее 8.0 (Oreo)
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val channel = getNotificationChannel()
+            val manager = getNotificationManager(context)
+            manager.createNotificationChannel(channel)
+            NotificationCompat.Builder(context, channel.id)
+        } else {
+            NotificationCompat.Builder(context)
+        }
+    }
 
-    private fun createNotificationChannel(id: String, name: CharSequence) {
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun getNotificationChannel(): NotificationChannel {
+        val chanelId = "3939"
+        val name = "Channel"
+        val description = "Description"
+        val importance = NotificationManager.IMPORTANCE_HIGH
+        val channel = NotificationChannel(chanelId, name, importance)
+        channel.description = description
+        channel.enableLights(true)
+        channel.lightColor = Color.BLUE
+        return channel
+    }
+
+
+    fun getNotificationManager(context: Context): NotificationManager {
+        return context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+    }
+
+
+    private fun createNotificationChannel(id: Int, name: CharSequence) {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 
-//            val name: CharSequence = "LemubitReminderChannel"
 
-            val description =  "Channel for ReminderBroadcast $id"
+            val description = "Channel for ReminderBroadcast $id"
 
 
             val importance = NotificationManager.IMPORTANCE_DEFAULT
-            val channel = NotificationChannel(id, name, importance)
+            val channel = NotificationChannel(id.toString(), name, importance)
             channel.description = description
 
 

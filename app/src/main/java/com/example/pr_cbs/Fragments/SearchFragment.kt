@@ -37,6 +37,11 @@ class SearchFragment : Fragment(), LoadMoreBookRecordsAsyncTask.LoadMoreBookReco
     private var isDataLoading = false
 
 
+    override fun onDestroy() {
+        super.onDestroy()
+        zeroing((SearchFragment@ this.context)!!)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
@@ -207,7 +212,10 @@ class SearchFragment : Fragment(), LoadMoreBookRecordsAsyncTask.LoadMoreBookReco
     }
 
     private fun preparingForSearch() {
-        search_fragment_start_block.visibility = GONE
+        search_fragment_server_error_block.visibility = INVISIBLE
+        search_fragment_not_found_block.visibility = INVISIBLE
+        search_fragment_no_internet_block.visibility = INVISIBLE
+        search_fragment_start_block.visibility = INVISIBLE
         showSearchProgressBar()
     }
 
@@ -246,8 +254,8 @@ class SearchFragment : Fragment(), LoadMoreBookRecordsAsyncTask.LoadMoreBookReco
                 val subjectsAdvancedSearch = data.getStringExtra("subjects")
                 if (subjectsAdvancedSearch != "null") {
 
-                    if (searchString == "") searchString += "\"S=$subjectsAdvancedSearch\""
-                    else searchString += "*\"S=$subjectsAdvancedSearch\""
+                    if (searchString == "") searchString += "\"S=$subjectsAdvancedSearch$\""
+                    else searchString += "*\"TEMS=$subjectsAdvancedSearch\""
                 }
 
                 val seriesAdvancedSearch = data.getStringExtra("series")
@@ -265,8 +273,8 @@ class SearchFragment : Fragment(), LoadMoreBookRecordsAsyncTask.LoadMoreBookReco
 
                 val availabilityAdvancedSearch = data.getStringExtra("checkBox_available")
                 if (availabilityAdvancedSearch != "false") {
-                    if (searchString == "") searchString += "(\"INVST=0\"*\"INVST=1\")"
-                    else searchString += "*(\"INVST=0\"*\"INVST=1\")"
+                    if (searchString == "") searchString += "\"INVST=0\""
+                    else searchString += "*(\"INVST=1\")"
                 }
 
                 val centerPushkin = data.getStringExtra("checkBox_centerPushkin")
@@ -312,7 +320,7 @@ class SearchFragment : Fragment(), LoadMoreBookRecordsAsyncTask.LoadMoreBookReco
                     )
                     val textFromSearchLine = (activity as MainActivity).getSearchText()
 
-                    if (addition) {
+                    if (addition && textFromSearchLine != "") {
                         mSearchCombination = "\"K=$textFromSearchLine\"*($searchString)"
                         this.loadBooksList(true, internetConnection, false)
 
@@ -323,6 +331,12 @@ class SearchFragment : Fragment(), LoadMoreBookRecordsAsyncTask.LoadMoreBookReco
                     }
 
 
+
+                    Toast.makeText(
+                        SearchFragment@ this.context,
+                        mSearchCombination,
+                        Toast.LENGTH_LONG
+                    ).show()
                     //   (activity as MainActivity).setSearchText(mSearchCombination)
 
                 }

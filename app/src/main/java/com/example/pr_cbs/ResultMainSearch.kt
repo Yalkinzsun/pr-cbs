@@ -32,6 +32,7 @@ class ResultMainSearch : AppCompatActivity() {
 
         val book = Instance().getRecordById(intent.getIntExtra("Id", 0))
 
+
         val f1 = book.lib_1f_num_of_copies
         val f2 = book.lib_2f_num_of_copies
         val f3 = book.lib_3f_num_of_copies
@@ -61,19 +62,44 @@ class ResultMainSearch : AppCompatActivity() {
 
 
 
-        main_final_book_author.text = book.author
+        if (book.author != "null null") main_final_book_author.text = book.author
+        else main_final_book_author.visibility = GONE
+
         main_final_book_title.text = book.title
-        main_final_book_publish.text = book.publish
-        main_final_book_series.text = book.series
-        main_final_book_year.text = book.year
-        main_final_book_size.text = book.size
-        main_final_book_language.text = book.lang
-        main_final_book_isbn.text = book.ISBN
+
+        if (book.publish != "null (null)") main_final_book_publish.text = book.publish
+        else {
+            main_final_book_publish.visibility = GONE
+            main_final_book_publish_text.visibility = GONE
+        }
+
+        if (book.series != null) main_final_book_series.text = book.series
+        else {
+            main_final_book_series.visibility = GONE
+            main_final_book_series_text.visibility = GONE
+        }
+
+
+        if (book.year != "null" && book.year != null) main_final_book_year.text = book.year
+        else main_final_book_year_block.visibility = GONE
+
+
+        if (book.size != "null" && book.size != null) main_final_book_size.text = book.size
+        else main_final_book_size_block.visibility = GONE
+
+        if (book.lang != "null" && book.lang != null) main_final_book_language.text = book.lang
+        else main_final_book_language_block.visibility = GONE
+
+        if (book.ISBN != "null" && book.ISBN != null)  main_final_book_isbn.text = book.ISBN
+        else main_final_book_isbn_block.visibility = GONE
+
         main_final_book_description.text = book.description
-        supportActionBar?.title = "ISBN: " + book.ISBN
 
 
-        if (book.link != null) Glide.with(this).load(book.link).into(main_search_result_book_cover)
+//        supportActionBar?.title = "ISBN: " + book.ISBN
+
+
+        if (book.link != null && book.link != "nullnull") Glide.with(this).load(book.link).into(main_search_result_book_cover)
 
 
         if (!setNumberOfCopies(textViewList, dataFromStorage, blocks)) {

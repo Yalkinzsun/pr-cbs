@@ -148,7 +148,7 @@ class MainActivity : AppCompatActivity() {
     override fun onBackPressed() {}
 
 
-    private fun loadFragment(fragment: Fragment) {
+    fun loadFragment(fragment: Fragment) {
         val transaction = supportFragmentManager.beginTransaction()
         transaction.replace(R.id.frame, fragment)
         transaction.addToBackStack(null)

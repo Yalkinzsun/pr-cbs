@@ -1,45 +1,39 @@
 package com.example.pr_cbs.Fragments
 
-import android.content.Context
-import android.os.AsyncTask
 import android.os.Bundle
-import android.os.Parcelable
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.*
 import android.view.ViewGroup
-import android.widget.ProgressBar
-import androidx.cardview.widget.CardView
 
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.LinearSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.example.pr_cbs.InfiniteCarouselTransformer
 import com.example.pr_cbs.R
-import com.example.pr_cbs.Adapters.RecommendedBooksAdapter
+import com.example.pr_cbs.Adapters.LatestBooksAdapter
 import com.yarolegovich.discretescrollview.DiscreteScrollView
 import com.yarolegovich.discretescrollview.InfiniteScrollAdapter
 import com.yarolegovich.discretescrollview.InfiniteScrollAdapter.wrap
 import kotlinx.android.synthetic.main.home_fragment.*
-import com.example.pr_cbs.Adapters.CarouselLatestAdapter
+import com.example.pr_cbs.Adapters.RecommendedBooksAdapterCarousel
 import com.example.pr_cbs.Adapters.ShortEventAdapter
 import com.example.pr_cbs.MainActivity
 
 
 class HomeFragment : Fragment(),
-    DiscreteScrollView.OnItemChangedListener<CarouselLatestAdapter.MyViewHolder> {
+    DiscreteScrollView.OnItemChangedListener<RecommendedBooksAdapterCarousel.MyViewHolder> {
 
 
     private lateinit var mInfiniteScrollWrapper: InfiniteScrollAdapter<*>
 
-    private lateinit var mLatestAdapterMain: CarouselLatestAdapter
-    private lateinit var mRecommendedAdapterMain: RecommendedBooksAdapter
+    private lateinit var mLatestAdapterMain: RecommendedBooksAdapterCarousel
+    private lateinit var mRecommendedAdapterMain: LatestBooksAdapter
     private lateinit var mShortEventAdapter: ShortEventAdapter
 
 
-    override fun onCurrentItemChanged(p0: CarouselLatestAdapter.MyViewHolder?, p1: Int) {
+    override fun onCurrentItemChanged(p0: RecommendedBooksAdapterCarousel.MyViewHolder?, p1: Int) {
         val realPosition = mInfiniteScrollWrapper.realCurrentPosition
         Log.v("HomeTag", ("onCurrentItemChanged $realPosition"))
     }
@@ -64,8 +58,8 @@ class HomeFragment : Fragment(),
 
         if ((activity as MainActivity).getInfoAboutLatestError()) {
 
-            //Последние поступления
-            this.mLatestAdapterMain = CarouselLatestAdapter(this@HomeFragment.context)
+            //Наши рекомендации
+            this.mLatestAdapterMain = RecommendedBooksAdapterCarousel(this@HomeFragment.context)
 
             // Бесконечное прокручивание
             this.mInfiniteScrollWrapper = wrap(this.mLatestAdapterMain)
@@ -103,17 +97,21 @@ class HomeFragment : Fragment(),
 
         if ((activity as MainActivity).getInfoAboutRecommendedError()) {
 
-            //Рекомендуемые книги
-            this.mRecommendedAdapterMain = RecommendedBooksAdapter(this@HomeFragment.context)
-            recyclerViewRecommendedBooks.layoutManager =
+            //Последние поступления
+            this.mRecommendedAdapterMain = LatestBooksAdapter(this@HomeFragment.context)
+            recyclerView_latest_books.layoutManager =
                 LinearLayoutManager(this@HomeFragment.context, RecyclerView.HORIZONTAL, false)
-            recyclerViewRecommendedBooks.adapter =
-                RecommendedBooksAdapter(this@HomeFragment.context)
+            recyclerView_latest_books.adapter =
+                LatestBooksAdapter(this@HomeFragment.context)
 
         } else {
             home_recommended_error_block.visibility = VISIBLE
-            recyclerViewRecommendedBooks.visibility = GONE
+            recyclerView_latest_books.visibility = GONE
         }
+
+//        home_more_events.setOnClickListener {
+//            (activity as MainActivity).loadFragment(EventFragment())
+//        }
 
 
     }

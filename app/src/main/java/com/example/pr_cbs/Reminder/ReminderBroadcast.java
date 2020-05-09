@@ -19,24 +19,28 @@ public class ReminderBroadcast extends BroadcastReceiver {
 
         String action = intent.getAction();
 
-        String title = intent.getStringExtra("test");
-        String channelId = intent.getStringExtra("id");
-
-        if (channelId != null) {
-            NotificationCompat.Builder builder = new NotificationCompat.Builder(context, channelId)
-                    .setSmallIcon(R.drawable.ic_start_logo)
-                    .setContentTitle(title)
-                    .setContentText("Text")
-                    .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                    .setAutoCancel(true);
+        String title = intent.getStringExtra("event_name");
+        String additionalText = intent.getStringExtra("event_text");
+        int channelId = intent.getIntExtra("id", 100);
 
 
-            NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
+//
+//        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, "777")
+//                .setSmallIcon(R.drawable.ic_start_logo)
+//                .setContentTitle(title)
+//                .setContentText(additionalText)
+//                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+//                .setAutoCancel(true);
+//
+//
+//        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
+//
+//        // int id = (int) ((new Date().getTime() / 1000L) % Integer.MAX_VALUE);
+//
+//        notificationManager.notify(channelId, builder.build());
 
-            int id = (int) ((new Date().getTime() / 1000L) % Integer.MAX_VALUE);
-
-            notificationManager.notify(id, builder.build());
-        }
 
     }
+
+
 }

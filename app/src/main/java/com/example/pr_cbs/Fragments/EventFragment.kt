@@ -36,10 +36,7 @@ class EventFragment : Fragment(), LoadAllActualEventsAsyncTask.LoadAllActualEven
     private lateinit var searchEventAdapter: EventAdapterNew
     private lateinit var mSearchLine: EditText
     lateinit var mContext: Context
-    lateinit var sPref: SharedPreferences
     var savedDate: String = ""
-    private val APP_PREFERENCES = "pref_settings"
-    private val APP_PREFERENCES_EVENT_UPDATE_DATE = "event_update_date"
     private var actualEvents: Boolean = true
     private var isDataLoading = false
 
@@ -53,6 +50,7 @@ class EventFragment : Fragment(), LoadAllActualEventsAsyncTask.LoadAllActualEven
         super.onStop()
         (activity as MainActivity).supportActionBar!!.show()
     }
+    
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -70,19 +68,18 @@ class EventFragment : Fragment(), LoadAllActualEventsAsyncTask.LoadAllActualEven
 
         searchEventAdapter = EventAdapterNew(this@EventFragment.context)
         mContext = this@EventFragment.context!!
-
         mSearchLine = view.findViewById(R.id.eT_event_search_line)
 
-        sPref = this.activity!!.getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE)
-
-        if (sPref.contains(APP_PREFERENCES_EVENT_UPDATE_DATE))
-            savedDate = sPref.getString(APP_PREFERENCES_EVENT_UPDATE_DATE, "").toString()
+        if (MainActivity.checkSharedPreferenceAvailability("event_update_date",
+                this@EventFragment.context!!
+            ))
+            savedDate = MainActivity.getFromSharedPreferences("this@EventFragment.context", this@EventFragment.context!!)
 
 
         //проверка адаптера на наличие элеметов
         if (searchEventAdapter.itemCount == 0) {
             this.loadAllActualEvents(false)
-        }
+        } else this.showArrows()
 
         EventRecyclerView.layoutManager =
             LinearLayoutManager(this@EventFragment.context, RecyclerView.HORIZONTAL, false)
@@ -132,9 +129,8 @@ class EventFragment : Fragment(), LoadAllActualEventsAsyncTask.LoadAllActualEven
                                 isDataLoading = true
                             LoadMoreEventRecordsAsyncTask(
                                 this@EventFragment,
-                                currentVisibleItem,
-                                { this@EventFragment.showEventProgressBar() }
-                            ).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
+                                currentVisibleItem
+                            ) { this@EventFragment.showEventProgressBar() }.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR)
                         }
                     }
                 }
@@ -162,6 +158,8 @@ class EventFragment : Fragment(), LoadAllActualEventsAsyncTask.LoadAllActualEven
 
 
     override fun allActualEventsLoaded(resCode: Int) {
+
+
         hideEventProgressBar()
 
         when (resCode) {
@@ -171,10 +169,10 @@ class EventFragment : Fragment(), LoadAllActualEventsAsyncTask.LoadAllActualEven
             3 -> noInternetConnection()
 
         }
-
     }
 
     override fun allEventMFNsLoaded(resCode: Int) {
+
         hideEventProgressBar()
 
         when (resCode) {
@@ -184,7 +182,6 @@ class EventFragment : Fragment(), LoadAllActualEventsAsyncTask.LoadAllActualEven
             3 -> noInternetConnection()
 
         }
-
     }
 
 

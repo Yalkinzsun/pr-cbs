@@ -4,6 +4,8 @@ import android.content.Context
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.GONE
+import android.view.View.INVISIBLE
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -14,12 +16,8 @@ import com.example.pr_cbs.ResultMainSearch
 import kotlinx.android.synthetic.main.adapter_main_search_item.view.*
 
 
-
-
-
 class SearchBooksAdapter(private val context: Context?) :
     RecyclerView.Adapter<SearchBooksAdapter.ViewHolder>() {
-
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -27,7 +25,6 @@ class SearchBooksAdapter(private val context: Context?) :
             LayoutInflater.from(context).inflate(R.layout.adapter_main_search_item, parent, false)
         return ViewHolder(v)
     }
-
 
     override fun getItemCount(): Int {
         return BookStorage.Instance().availableRecordsCount
@@ -45,9 +42,6 @@ class SearchBooksAdapter(private val context: Context?) :
 
     }
 
-
-
-
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private var currentPosition: Int = 0
 
@@ -61,29 +55,45 @@ class SearchBooksAdapter(private val context: Context?) :
         }
 
         fun setData(book: BookRecord, pos: Int) {
-//            itemView.book_author.text = book.author
-            itemView.book_author.text = pos.toString()
+
+            if (book.author != "null null") itemView.book_author.text = book.author
+            else itemView.book_author.visibility = GONE
+
             itemView.book_tittle.text = book.title
-            itemView.book_subjects.text = book.subjects
-            itemView.book_publisher.text = book.publish
-            itemView.book_series.text = book.series
-            itemView.book_year.text = book.year
+
+
+            if (book.subjects != null) itemView.book_subjects.text = book.subjects
+            else itemView.main_search_subject_block.visibility = GONE
+
+
+            if (book.publish != "null (null)") itemView.book_publisher.text = book.publish
+            else itemView.main_search_publisher_block.visibility = GONE
+
+            if (book.series != null) itemView.book_series.text = book.series
+            else itemView.main_search_series_block.visibility = GONE
+
+
+            if (book.year != "null" && book.year != null) itemView.book_year.text = book.year
+            else itemView.main_search_year_block.visibility = GONE
+
 
             if (book.link == "nullnull") {
 
                 if (itemView.book_cover.drawable == null) {
 
-                    when ((0..2).random()) {
-                        0 -> itemView.book_cover.setBackgroundResource(R.drawable.book_cover_1)
-                        1 -> itemView.book_cover.setBackgroundResource(R.drawable.book_cover_2)
-                        2 -> itemView.book_cover.setBackgroundResource(R.drawable.book_cover_3)
-                    }
+                    itemView.book_cover.setBackgroundResource(R.drawable.book_cover_3)
+
+//                    when ((0..2).random()) {
+//                        0 -> itemView.book_cover.setBackgroundResource(R.drawable.book_cover_1)
+//                        1 -> itemView.book_cover.setBackgroundResource(R.drawable.book_cover_2)
+//                        2 -> itemView.book_cover.setBackgroundResource(R.drawable.book_cover_3)
+//                    }
                 }
 
             } else {
                 if (context != null) {
 
-                   Glide.with(context).load(book.link).into(itemView.book_cover)
+                    Glide.with(context).load(book.link).into(itemView.book_cover)
                 }
             }
 

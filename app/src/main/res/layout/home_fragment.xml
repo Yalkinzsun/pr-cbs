@@ -19,7 +19,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="15dp"
                 android:layout_marginTop="15dp"
-                android:text="Последние поступления"
+                android:text="Наши рекомендации"
                 android:textSize="20sp"
                 android:textStyle="bold" />
 
@@ -75,7 +75,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Ближайшие мероприятия"
-                    android:textSize="20dp"
+                    android:textSize="20sp"
                     android:textStyle="bold" />
 
             <androidx.recyclerview.widget.RecyclerView
@@ -83,6 +83,18 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="10dp" />
+
+<!--            <TextView-->
+<!--                    android:id="@+id/home_more_events"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:textColor="@color/colorPrimary"-->
+<!--                    android:textStyle="bold"-->
+<!--                    android:textSize="16sp"-->
+<!--                    android:gravity="end"-->
+<!--                    android:layout_marginTop="10dp"-->
+<!--                    android:layout_marginEnd="15dp"-->
+<!--                    android:text="Больше..."/>-->
 
         </LinearLayout>
 
@@ -119,7 +131,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="15dp"
                 android:layout_marginTop="15dp"
-                android:text="Наши рекомендации"
+                android:text="Последние поступления"
                 android:textSize="20sp"
                 android:textStyle="bold" />
 
@@ -131,7 +143,7 @@
 
 
             <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recyclerViewRecommendedBooks"
+                    android:id="@+id/recyclerView_latest_books"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="15dp" />

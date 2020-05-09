@@ -43,7 +43,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
-            android:text="загружаются актуальные данные\nэто может занять некоторое время"
+            android:text="загружаются актуальные данные,\nэто может занять некоторое время"
             android:textAlignment="center"
             android:textColor="@color/colorPrimaryDark"
             app:layout_constraintTop_toBottomOf="@id/splash_screen_progressBar" />
