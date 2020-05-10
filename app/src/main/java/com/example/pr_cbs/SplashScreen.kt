@@ -41,7 +41,6 @@ class SplashScreen : AppCompatActivity(), LoadLatestBookAsyncTask.LatestATFinish
 
 
         if (isNetworkConnected(this)) {
-            Toast.makeText(this@SplashScreen, "Интернет подключен", Toast.LENGTH_SHORT).show()
             startDownloading()
         } else {
             splash_screen_downloading.visibility = INVISIBLE

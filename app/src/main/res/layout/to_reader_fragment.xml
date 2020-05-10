@@ -56,7 +56,7 @@
                                 android:id="@+id/tv_reader_text_3"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Чтобы посмотреть список всех имеющихся на руках книг и дат их возврата введите номер своего читательского билета"
+                                android:text="Чтобы посмотреть список всех имеющихся на руках книг, введите номер своего читательского билета без пробелов"
                                 android:textSize="18sp"
                                 android:textStyle="normal"
                                 app:layout_constraintStart_toStartOf="parent"
@@ -91,9 +91,9 @@
                                     android:layout_height="wrap_content"
                                     android:layout_marginTop="10dp"
                                     android:layout_marginBottom="8dp"
-                                    android:hint="123456789"
+                                    android:hint="@string/num_1_8"
                                     android:inputType="number"
-                                    android:maxLength="9"
+                                    android:maxLength="8"
                                     android:singleLine="true"
                                     android:textColor="@color/colorPrimary"
                                     android:textSize="20sp"
@@ -145,7 +145,7 @@
                                     android:id="@+id/tv_reader_text_1"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="Читательский билет:"
+                                    android:text="@string/reader_card"
                                     android:textSize="18sp"
                                     android:textStyle="bold"
                                     app:layout_constraintStart_toStartOf="parent"
@@ -243,6 +243,45 @@
             </RelativeLayout>
 
             <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="10dp"
+                app:cardCornerRadius="5dp">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="15dp">
+
+
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Как стать читателем"
+                        android:textSize="18dp"
+                        android:textStyle="bold"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+
+                <ImageView
+                        android:id="@+id/iv_how_to_become_a_reader"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:background="@drawable/button_order_delivery"
+                        android:src="@drawable/ic_arrow_right_white_24dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
@@ -260,7 +299,7 @@
                     <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Как стать читателем"
+                            android:text="Продлить книги"
                             android:textSize="18dp"
                             android:textStyle="bold"
                             app:layout_constraintBottom_toBottomOf="parent"
@@ -269,7 +308,46 @@
 
 
                     <ImageView
-                            android:id="@+id/iv_how_to_become_a_reader"
+                            android:id="@+id/iv_extend_book"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:background="@drawable/button_order_delivery"
+                            android:src="@drawable/ic_arrow_right_white_24dp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginBottom="10dp"
+                    app:cardCornerRadius="5dp">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="15dp">
+
+
+                    <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Задать вопрос"
+                            android:textSize="18dp"
+                            android:textStyle="bold"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+
+                    <ImageView
+                            android:id="@+id/iv_ask_librarian"
                             android:layout_width="30dp"
                             android:layout_height="30dp"
                             android:background="@drawable/button_order_delivery"

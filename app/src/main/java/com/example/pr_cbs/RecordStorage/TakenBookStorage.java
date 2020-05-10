@@ -2,6 +2,7 @@ package com.example.pr_cbs.RecordStorage;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import ru.arsmagna.IrbisConnection;
 import ru.arsmagna.IrbisException;
@@ -19,7 +20,8 @@ public class TakenBookStorage {
 
     public static TakenBookStorage Instance() {
         if (storage == null)
-            storage = new TakenBookStorage(new ArrayList<TakenBookRecord>() {});
+            storage = new TakenBookStorage(new ArrayList<TakenBookRecord>() {
+            });
 
         return storage;
     }
@@ -48,11 +50,11 @@ public class TakenBookStorage {
 
             try {
                 IrbisConnection connection = getIrbisConnection();
-                int[] found = connection.search("\"T=" + query + "$\"");
+                int[] found = connection.search("\"RI=" + query + "\"");
 
                 if (found.length != 0) {
                     for (int mfn : found) {
-                        localRecords.add(downloadTakenBookRecord(mfn, connection));
+                        downloadTakenBookRecord(mfn, connection);
                     }
                 } else return 1;
 
@@ -66,33 +68,43 @@ public class TakenBookStorage {
     }
 
 
-
     public TakenBookRecord getRecordById(int id) {
         return localRecords.get(id);
     }
 
-    private TakenBookRecord downloadTakenBookRecord(int mfn, IrbisConnection connection) throws
-            IOException, IrbisException {
+    private void downloadTakenBookRecord(int mfn, IrbisConnection connection) throws IOException, IrbisException {
 
-        MarcRecord record = connection.readRecord(mfn);
+        String description2 = connection.formatRecord("&uf('+0')", mfn);
+        String[] parts = description2.split("40#");
+        List<String> myList = new ArrayList<>();
 
-        TakenBookRecord takenBookRecord = new TakenBookRecord();
+        for (String part : parts) {
+            if (part.contains("F******") && part.contains("[Текст]")) {
+                myList.add(part);
+            }
+        }
 
-        takenBookRecord.title = record.fm(200, 'a');
-        takenBookRecord.ISBN = record.fm(10, 'A');
-        takenBookRecord.author = record.fm(700, 'A') + ' ' + record.fm(700, 'B');
-        takenBookRecord.year = record.fm(210, 'D');
-        takenBookRecord.publish = record.fm(210, 'A') + record.fm(210, 'C');
-        takenBookRecord.size = record.fm(215, 'A');
+        for (String part : myList) {
+            TakenBookRecord takenBookRecord = new TakenBookRecord();
+            String Date;
+            String Description = part;
+            Date = part.substring(part.indexOf("^D") + 2, part.indexOf("^E"));
+            Date = Date.substring(0, 4) + "." + Date.substring(4, 6) + "." + Date.substring(6, 8);
+            takenBookRecord.date_book_taken = Date;
 
-        return takenBookRecord;
+            Description = Description.substring(Description.indexOf("^C") + 2, Description.indexOf("^V"));
+            takenBookRecord.description = Description;
+
+            localRecords.add(takenBookRecord);
+        }
+
     }
 
     private IrbisConnection getIrbisConnection() throws IrbisException, IOException {
         IrbisConnection connection = new IrbisConnection();
         connection.parseConnectionString("host=194.186.155.14;" +
-                "port=1192;database=BDP%SERV12%;" +
-                "user=12_AGENT_MOB;password=agentmob;");
+                "port=1192;database=RDR;" +
+                "user=12_1_Zajceva;password=811;");
         connection.connect();
 
         return connection;

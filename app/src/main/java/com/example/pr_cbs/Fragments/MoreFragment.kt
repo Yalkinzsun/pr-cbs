@@ -87,6 +87,7 @@ class MoreFragment : Fragment() {
                 "Центральная районная библиотека им. А. С. Пушкина",
                 "Каменоостровский пр., 36/73",
                 "null",
+                R.drawable.lib_push,
                 "8 (812) 346-26-07",
                 "8 (812) 417-34-25",
                 "выходной",
@@ -101,9 +102,28 @@ class MoreFragment : Fragment() {
         )
         libsList.add(
             LibraryRecord(
+                "Бибилиотека им. В. И. Ленин",
+                "ул. Воскова, 2",
+                "leblenina-reader@mail.ru",
+                R.drawable.lenin,
+                "8 (812) 232-40-62",
+                "null",
+                "09:00 - 09:00",
+                "09:00 - 21:00",
+                "09:00 - 021:00",
+                "09:00 - 21:00",
+                "11:00 - 21:00",
+                "11:00 - 21:00",
+                "11:00 - 21:00"
+
+            )
+        )
+        libsList.add(
+            LibraryRecord(
                 "Центральная районная детская библиотека",
                 "Большой проспект. П.С., 65 (2-ой этаж)",
                 "petr-crdb@mail.ru",
+                R.drawable.cb_det,
                 "8 (812) 232-41-29",
                 "null",
                 "выходной",
@@ -121,6 +141,7 @@ class MoreFragment : Fragment() {
                 "Бибилиотека Кировских островов",
                 "Кемская ул., 8/3",
                 "krest.bibl@mail.ru",
+                R.drawable.kirov,
                 "8 (812) 235-01-63",
                 "null",
                 "выходной",
@@ -139,6 +160,7 @@ class MoreFragment : Fragment() {
                 "Бибилиотека им. Б. А. Лавренева",
                 "наб. р. Карповки, 28",
                 "bibllav@yandex.ru",
+                R.drawable.lavre,
                 "8 (812) 346-09-17",
                 "null",
                 "11:00 - 19:00",
@@ -153,26 +175,10 @@ class MoreFragment : Fragment() {
         )
         libsList.add(
             LibraryRecord(
-                "Бибилиотека им. В. И. Ленин",
-                "ул. Воскова, 2",
-                "leblenina-reader@mail.ru",
-                "8 (812) 232-40-62",
-                "null",
-                "09:00 - 09:00",
-                "09:00 - 21:00",
-                "09:00 - 021:00",
-                "09:00 - 21:00",
-                "11:00 - 21:00",
-                "11:00 - 21:00",
-                "11:00 - 21:00"
-
-            )
-        )
-        libsList.add(
-            LibraryRecord(
                 "Юношеская библиотека им. А. П. Гайдара",
                 "Большой пр. П.С., 18А (4-й этаж)",
                 "gaidara-spb@mail.ru",
+                R.drawable.gaidar,
                 "8 (812) 235-35-96",
                 "null",
                 "11:00 - 20:00",
@@ -190,6 +196,7 @@ class MoreFragment : Fragment() {
                 "2-я детская библиотека",
                 "Татарский пер., 1",
                 "2child.library@mail.ru",
+                R.drawable.det2,
                 "8 (812) 232-21-64",
                 "null",
                 "10:00 - 20:00",
@@ -207,6 +214,7 @@ class MoreFragment : Fragment() {
                 "3-я районная библиотека",
                 "Троицкая пл. П.С., 1",
                 "troickaya1@mail.ru",
+                R.drawable.lib3,
                 "8 (812) 232-58-36",
                 "null",
                 "11:00 - 19:00",

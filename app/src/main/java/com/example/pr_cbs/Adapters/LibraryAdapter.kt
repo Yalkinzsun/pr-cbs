@@ -68,7 +68,7 @@ class LibraryAdapter(private val context: Context?, private val libList: ArrayLi
             else itemView.lib_mail_block.visibility = GONE
 
             if (context != null) {
-                Glide.with(context).load(R.drawable.lib_push).into( itemView.lib_image)
+                Glide.with(context).load(lib.img_file).into( itemView.lib_image)
             }
 
 
@@ -105,7 +105,7 @@ class LibraryAdapter(private val context: Context?, private val libList: ArrayLi
                     } else {
                         itemView.lib_today_working_hours.text =
                             "открыта: " + lib.monday_working_hours
-                        itemView.lib_today_working_hours.setTextColor(Color.GREEN)
+                        itemView.lib_today_working_hours.setTextColor(Color.parseColor("#43d143"))
                     }
                 }
 
@@ -118,7 +118,7 @@ class LibraryAdapter(private val context: Context?, private val libList: ArrayLi
                     } else {
                         itemView.lib_today_working_hours.text =
                             "открыта: " + lib.tuesday_working_hours
-                        itemView.lib_today_working_hours.setTextColor(Color.GREEN)
+                        itemView.lib_today_working_hours.setTextColor(Color.parseColor("#43d143"))
                     }
                 }
 
@@ -131,7 +131,7 @@ class LibraryAdapter(private val context: Context?, private val libList: ArrayLi
                     } else {
                         itemView.lib_today_working_hours.text =
                             "открыта: " + lib.wednesday_working_hours
-                        itemView.lib_today_working_hours.setTextColor(Color.GREEN)
+                        itemView.lib_today_working_hours.setTextColor(Color.parseColor("#43d143"))
                     }
                 }
 
@@ -144,7 +144,7 @@ class LibraryAdapter(private val context: Context?, private val libList: ArrayLi
                     } else {
                         itemView.lib_today_working_hours.text =
                             "открыта: " + lib.thursday_working_hours
-                        itemView.lib_today_working_hours.setTextColor(Color.GREEN)
+                        itemView.lib_today_working_hours.setTextColor(Color.parseColor("#43d143"))
                     }
                 }
 
@@ -157,7 +157,7 @@ class LibraryAdapter(private val context: Context?, private val libList: ArrayLi
                     } else {
                         itemView.lib_today_working_hours.text =
                             "открыта: " + lib.friday_working_hours
-                        itemView.lib_today_working_hours.setTextColor(Color.GREEN)
+                        itemView.lib_today_working_hours.setTextColor(Color.parseColor("#43d143"))
                     }
                 }
 
@@ -170,13 +170,13 @@ class LibraryAdapter(private val context: Context?, private val libList: ArrayLi
                     } else {
                         itemView.lib_today_working_hours.text =
                             "открыта: " + lib.saturday_working_hours
-                        itemView.lib_today_working_hours.setTextColor(Color.GREEN)
+                        itemView.lib_today_working_hours.setTextColor(Color.parseColor("#43d143"))
                     }
                 }
 
 
                 "воскресенье" -> {
-                    if (lib.friday_working_hours == "выходной") {
+                    if (lib.sunday_working_hours == "выходной") {
 
                         itemView.lib_today_working_hours.text =
                             "закрыта"
@@ -185,7 +185,7 @@ class LibraryAdapter(private val context: Context?, private val libList: ArrayLi
                     } else {
                         itemView.lib_today_working_hours.text =
                             "открыта: " + lib.sunday_working_hours
-                        itemView.lib_today_working_hours.setTextColor(Color.GREEN)
+                        itemView.lib_today_working_hours.setTextColor(Color.parseColor("#43d143"))
                     }
                 }
 

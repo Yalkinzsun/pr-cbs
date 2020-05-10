@@ -17,5 +17,7 @@
     <string name="enter_event_name">Введите название мероприятия</string>
     <string name="event_fragment_title">Афиша событий</string>
     <string name="more_info">Подробнее</string>
+    <string name="num_1_8">12345678</string>
+    <string name="reader_card">Читательский билет:</string>
 
 </resources>

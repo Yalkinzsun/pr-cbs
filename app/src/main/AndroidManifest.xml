@@ -15,7 +15,8 @@
             android:supportsRtl="true"
             android:theme="@style/AppTheme"
             tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".AboutNotificationActivity"></activity>
+        <activity android:name=".WebActivity"></activity>
+        <activity android:name=".AboutNotificationActivity" />
 
         <meta-data
                 android:name="com.google.android.geo.API_KEY"

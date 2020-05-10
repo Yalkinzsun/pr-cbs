@@ -4,23 +4,21 @@ import android.content.Context
 import android.content.Context.MODE_PRIVATE
 import android.content.Intent
 import android.content.SharedPreferences
+import android.net.Uri
 import android.os.AsyncTask
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.example.pr_cbs.MainActivity
-import com.example.pr_cbs.R
 import android.view.View.*
 import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
+import com.example.pr_cbs.*
 import com.example.pr_cbs.AsyncTasks.LoadTakenBooksAsyncTask
-import com.example.pr_cbs.HowToBecomeAReaderActivity
 import com.example.pr_cbs.RecordStorage.TakenBookStorage
 import kotlinx.android.synthetic.main.to_reader_fragment.*
-import com.example.pr_cbs.TakenBooksActivity
 
 
 class ToReaderFragment : Fragment(), LoadTakenBooksAsyncTask.LoadTakenBooksFinished {
@@ -58,27 +56,43 @@ class ToReaderFragment : Fragment(), LoadTakenBooksAsyncTask.LoadTakenBooksFinis
             ) && MainActivity.getFromSharedPreferences("library_card", this.activity!!) != "0"
         ) {
 
-
             libraryCard = MainActivity.getFromSharedPreferences("library_card", this.activity!!)
             tv_reader_ticket_number.text = libraryCard
             card_view_reader_1.visibility = INVISIBLE
             card_view_reader_2.visibility = VISIBLE
-            loadTakenBooks("Microsoft")
+            loadTakenBooks(libraryCard)
 
         }
 
 
         iv_reader_submit2.setOnClickListener {
             if (et_reader_ticket_number.text.toString().isNotEmpty()) {
-                libraryCard = et_reader_ticket_number.text.toString()
-                MainActivity.putInSharedPreferences("library_card", libraryCard, this.activity!!)
-                card_view_reader_1.visibility = INVISIBLE
-                card_view_reader_2.visibility = VISIBLE
-                tv_reader_ticket_number.text = libraryCard
 
-                loadTakenBooks("Microsoft")
+                if (et_reader_ticket_number.text.toString().length == 8) {
 
-            }
+                    libraryCard = et_reader_ticket_number.text.toString()
+                    libraryCard = libraryCard.substring(0, 2) + " " + libraryCard.substring(2, 8)
+                    MainActivity.putInSharedPreferences(
+                        "library_card",
+                        libraryCard,
+                        this.activity!!
+                    )
+                    card_view_reader_1.visibility = INVISIBLE
+                    card_view_reader_2.visibility = VISIBLE
+                    tv_reader_ticket_number.text = libraryCard
+
+                    loadTakenBooks(libraryCard)
+                } else Toast.makeText(
+                    this@ToReaderFragment.context,
+                    "Номер билета состоит из 8 цифр!",
+                    Toast.LENGTH_LONG
+                ).show()
+
+            } else Toast.makeText(
+                this@ToReaderFragment.context,
+                "Введите номер читательского билета!",
+                Toast.LENGTH_LONG
+            ).show()
         }
 
         iv_reader_clear.setOnClickListener {
@@ -102,13 +116,25 @@ class ToReaderFragment : Fragment(), LoadTakenBooksAsyncTask.LoadTakenBooksFinis
             startActivity(intent)
         }
 
+        iv_extend_book.setOnClickListener {
+//            val intent = Intent(context, WebActivity::class.java)
+//            intent.putExtra("link", "https://forms.yandex.ru/u/5d7b923c4398960967b56616/?iframe=1")
+//            startActivity(intent)
+            val browseIntent = Intent(Intent.ACTION_VIEW, Uri.parse("https://forms.yandex.ru/u/5d7b923c4398960967b56616/?iframe=1"))
+            startActivity(browseIntent)
+
+
+        }
+
+        iv_ask_librarian.setOnClickListener {
+            val intent = Intent(context, WebActivity::class.java)
+            intent.putExtra("link", "https://forms.yandex.ru/u/5d7f7ed1f198c02605ba8364/?iframe=1")
+            startActivity(intent)
+
+        }
+
     }
 
-
-
-    fun chekTicketNumber():Boolean {
-        return true
-    }
 
     override fun allTakenBooksLoaded(resCode: Int) {
 

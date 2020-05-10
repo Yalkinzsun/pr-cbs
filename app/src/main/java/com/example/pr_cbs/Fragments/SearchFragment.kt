@@ -170,8 +170,8 @@ class SearchFragment : Fragment(), LoadMoreBookRecordsAsyncTask.LoadMoreBookReco
         val moreBooks: ArrayList<BookRecord> = BookStorage.Instance().localRecords
         val size = BookStorage.Instance().localRecords.size
 
-        Toast.makeText(this@SearchFragment.context, moreBooks.size.toString(), Toast.LENGTH_SHORT)
-            .show()
+//        Toast.makeText(this@SearchFragment.context, moreBooks.size.toString(), Toast.LENGTH_SHORT)
+//            .show()
 
         for (i in position + 1..size) {
             searchBooksAdapter.notifyItemChanged(i)
@@ -332,11 +332,11 @@ class SearchFragment : Fragment(), LoadMoreBookRecordsAsyncTask.LoadMoreBookReco
 
 
 
-                    Toast.makeText(
-                        SearchFragment@ this.context,
-                        mSearchCombination,
-                        Toast.LENGTH_LONG
-                    ).show()
+//                    Toast.makeText(
+//                        SearchFragment@ this.context,
+//                        mSearchCombination,
+//                        Toast.LENGTH_LONG
+//                    ).show()
                     //   (activity as MainActivity).setSearchText(mSearchCombination)
 
                 }
