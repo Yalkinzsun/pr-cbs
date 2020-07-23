@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
@@ -102,7 +103,16 @@ public class EventStorage {
 
         clear();
 
-        String currentDate = new SimpleDateFormat("dd.MM.yyyy HH:mm").format(Calendar.getInstance().getTime());
+        String currentDate = new SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.getDefault()).format(Calendar.getInstance().getTime());
+
+
+//        GregorianCalendar calendar = new GregorianCalendar(2020, Calendar.APRIL , 15);
+//        calendar.set(Calendar.HOUR, 0);
+//        calendar.set(Calendar.MINUTE, 0);
+
+      //  String currentDate = new SimpleDateFormat("dd.MM.yyyy HH:mm").format(calendar.getTime());
+
+
         boolean isTheDateRelevant = false;
         String savedDate;
         Date current_date = null;
@@ -113,8 +123,8 @@ public class EventStorage {
                 savedDate = MainActivity.Companion.getFromSharedPreferences(APP_PREFERENCES_EVENT_UPDATE_DATE, context);
 
                 try {
-                    current_date = new SimpleDateFormat("dd.MM.yyyy HH:mm").parse(currentDate);
-                    saved_date = new SimpleDateFormat("dd.MM.yyyy HH:mm").parse(savedDate);
+                    current_date = new SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.getDefault()).parse(currentDate);
+                    saved_date = new SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.getDefault()).parse(savedDate);
 
                 } catch (ParseException e) {
                     e.printStackTrace();
@@ -157,7 +167,7 @@ public class EventStorage {
             IrbisConnection connection = getIrbisConnection();
 
             int[] found = connection.search("\"EVENTNAME=$\"*\"MONTHLY=2020$\"");
-            found = Arrays.copyOf(found, 110);
+            found = Arrays.copyOf(found, 200);
             if (found.length != 0) {
 
 
@@ -379,7 +389,24 @@ public class EventStorage {
                 for (int m = 0; m < spans.size(); m++) {
 
                     if (spans.get(m).text().equals("Дата начала:")) {
-                        eventRecord.start_date = spans.get(m + 1).text();
+                        String startDate = spans.get(m + 1).text();
+
+                        SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault());
+                        Date oldDate = null;
+                        try {
+                            oldDate = format.parse(startDate);
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+
+                        format = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+
+                        String newDate = null;
+                        if (oldDate != null) {
+                            newDate = format.format(oldDate);
+                        }
+
+                        eventRecord.start_date = newDate;
                     }
 
                     if (spans.get(m).text().equals("Дата окончания:")) {

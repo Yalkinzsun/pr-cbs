@@ -146,7 +146,7 @@ class EventFragment : Fragment(), LoadAllActualEventsAsyncTask.LoadAllActualEven
 
         event_reload_icon.setOnClickListener {
             actualEvents = true
-            this.loadAllActualEvents(true)
+            this.loadAllActualEvents(false)
         }
 
 
@@ -186,6 +186,7 @@ class EventFragment : Fragment(), LoadAllActualEventsAsyncTask.LoadAllActualEven
 
 
     override fun moreEventsLoaded(position: Int) {
+        hideEventProgressBar()
         val size = EventStorage.Instance().localEventRecords.size
 
         for (i in position + 1..size) {
@@ -236,6 +237,7 @@ class EventFragment : Fragment(), LoadAllActualEventsAsyncTask.LoadAllActualEven
 
 
     private fun loadEventsList() {
+        showEventProgressBar()
         preparingForSearching()
         val internetConnection = (activity as MainActivity).isNetworkConnected()
         LoadAllEventMFNsAsyncTask(

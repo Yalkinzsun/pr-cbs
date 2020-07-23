@@ -25,7 +25,7 @@ class ShortEventAdapter(private val context: Context?) :
 
 
     override fun getItemCount(): Int {
-        return 3
+        return 2
     }
 
 

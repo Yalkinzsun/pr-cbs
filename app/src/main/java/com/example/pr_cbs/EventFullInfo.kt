@@ -102,10 +102,10 @@ class EventFullInfo : AppCompatActivity() {
         }
 
 
-        event_full_CL_tv_2.setOnClickListener {
-            val mapIntent = Intent(this, MapActivity::class.java)
-            startActivity(mapIntent)
-        }
+//        event_full_CL_tv_2.setOnClickListener {
+//            val mapIntent = Intent(this, MapActivity::class.java)
+//            startActivity(mapIntent)
+//        }
 
 
 //        event_full_CL_iv_info.setOnClickListener {

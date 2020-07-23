@@ -183,7 +183,6 @@ class MainActivity : AppCompatActivity() {
 
 
 
-
     fun isNetworkConnected(): Boolean {
         var result = false
         val cm = this.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager

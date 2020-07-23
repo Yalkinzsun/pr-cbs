@@ -37,6 +37,8 @@ class LoadAllEventMFNsAsyncTask(
     override fun onPostExecute(result: Unit?) {
         super.onPostExecute(result)
 
+        notifyDataSetChanged()
+
         callback.allEventMFNsLoaded(hasResult)
 
     }

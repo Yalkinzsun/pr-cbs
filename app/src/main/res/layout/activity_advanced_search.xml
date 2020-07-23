@@ -79,7 +79,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:ems="10"
-                    android:hint="За Путина!"
+                    android:hint="Ослиный мост"
                     android:inputType="text"
                     android:textSize="18sp" />
 
@@ -99,7 +99,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:ems="10"
-                    android:hint="Бродский"
+                    android:hint="Ленин Владимир Ильич"
                     android:inputType="text"
                     android:textSize="18sp" />
 
@@ -118,7 +118,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:ems="10"
-                    android:hint="Военная проза"
+                    android:hint="Марксизм-ленинизм"
                     android:inputType="text"
                     android:textSize="18sp" />
 
@@ -137,7 +137,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:ems="10"
-                    android:hint="Серия ФФФ"
+                    android:hint="Серия"
                     android:inputType="text"
                     android:textSize="18sp" />
 
@@ -156,7 +156,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:ems="10"
-                    android:hint="Персоналия"
+                    android:hint="Ленин В. И."
                     android:inputType="text"
                     android:textSize="18sp" />
 

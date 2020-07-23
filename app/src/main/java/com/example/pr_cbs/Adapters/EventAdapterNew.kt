@@ -17,6 +17,7 @@ import com.example.pr_cbs.RecordStorage.EventStorage
 
 
 import com.example.pr_cbs.ResultMainSearch
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.adapter_event_item.view.*
 import kotlinx.android.synthetic.main.adapter_main_search_item.view.*
 import java.text.SimpleDateFormat
@@ -89,15 +90,12 @@ class EventAdapterNew(private val context: Context?) :
             if (event.link != "nullnull") {
                 if (context != null) {
 
-//                    Picasso.with(context)
-//                        .load(event.link)
-//                        .into(itemView.event_cover)
-
-               //     Glide.clear(viewHolder.imageView);
                     Glide.with(context)
                         .load(event.link)
+                        .error(R.drawable.cover_event_2)
                         .into(itemView.event_cover)
-                }
+               }
+
 
             } else {
                 itemView.event_cover.setBackgroundResource(R.drawable.cover_event_2)
